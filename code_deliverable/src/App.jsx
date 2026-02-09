@@ -1,7 +1,7 @@
-import React, { useState, Suspense } from 'react'
+import React, { useState, Suspense, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls, PerspectiveCamera, Environment, ContactShadows, GizmoHelper, GizmoViewport, PivotControls } from '@react-three/drei'
-import { useControls, folder } from 'leva'
+import { useControls, folder, button } from 'leva'
 import { Desk } from './components/Desk'
 import { CameraRig } from './components/CameraRig'
 import './index.css'
@@ -9,6 +9,8 @@ import * as THREE from 'three'
 
 export default function App() {
   const [target, setTarget] = useState(null)
+  const [showExport, setShowExport] = useState(false)
+  const [exportJson, setExportJson] = useState('')
 
   // Leva Controls configuration
   const [config, set, get] = useControls(() => ({
@@ -34,11 +36,26 @@ export default function App() {
       phoneDist: { value: 0.15, label: 'Dist Factor', min: 0.01, max: 1, step: 0.01 }
     }),
     "New Assets": folder({
-      gavelPos: { value: [-1, 0.91, -4], label: 'Gavel Position', step: 0.01 },
-      msgBoardPos: { value: [0, 1.5, -6], label: 'Msg Board Position', step: 0.01 },
-      notebookPos: { value: [-0.5, 0.91, -4.2], label: 'Notebook Position', step: 0.01 },
-      thinBookPos: { value: [1.5, 0.95, -4.5], label: 'Thin Book Position', step: 0.01 },
-      thinBookRot: { value: [0, 0, 0], label: 'Thin Book Rotation', step: 0.1 }
+      gavel: folder({
+        gavelPos: { value: [-1, 0.91, -4], label: 'Position', step: 0.01 },
+        gavelRot: { value: [0, 0, 0], label: 'Rotation', step: 0.1 },
+        gavelScale: { value: 0.01, label: 'Scale', min: 0.0001, max: 1, step: 0.0001 }
+      }),
+      msgBoard: folder({
+        msgBoardPos: { value: [0, 1.5, -6], label: 'Position', step: 0.01 },
+        msgBoardRot: { value: [0, 0, 0], label: 'Rotation', step: 0.1 },
+        msgBoardScale: { value: 0.01, label: 'Scale', min: 0.0001, max: 1, step: 0.0001 }
+      }),
+      notebook: folder({
+        notebookPos: { value: [-0.5, 0.91, -4.2], label: 'Position', step: 0.01 },
+        notebookRot: { value: [0, 0, 0], label: 'Rotation', step: 0.1 },
+        notebookScale: { value: 0.01, label: 'Scale', min: 0.0001, max: 1, step: 0.0001 }
+      }),
+      thinBook: folder({
+        thinBookPos: { value: [1.5, 0.95, -4.5], label: 'Position', step: 0.01 },
+        thinBookRot: { value: [0, 0, 0], label: 'Rotation', step: 0.1 },
+        thinBookScale: { value: 0.01, label: 'Scale', min: 0.0001, max: 1, step: 0.0001 }
+      })
     }),
     Camera: folder({
       camInitial: { value: [5, 2, 5], label: 'Initial Pos', step: 0.1 },
@@ -50,8 +67,28 @@ export default function App() {
         phoneFocusPos: { value: [1.2, 1.2, -4.5], label: 'Focus Pos', step: 0.1 },
         phoneLookAt: { value: [-5.25, 0.9, -0.72], label: 'Look At', step: 0.1 }
       })
-    })
+    }),
   }))
+
+  // Ref to store the latest export logic to avoid Leva closure staleness
+  const exportRef = useRef(null)
+
+  // Update ref on every render
+  exportRef.current = () => {
+    try {
+      const json = JSON.stringify(config, null, 2)
+      setExportJson(json)
+      setShowExport(true)
+    } catch (e) {
+      console.error("Export failed:", e)
+    }
+  }
+
+  useControls('Utilities', {
+    "Export Config": button(() => {
+      if (exportRef.current) exportRef.current()
+    })
+  })
 
   const handlePivotEnd = (type, matrix) => {
     const position = new THREE.Vector3()
@@ -82,7 +119,7 @@ export default function App() {
   }
 
   return (
-    <div className="w-full h-full bg-[#050505] overflow-hidden">
+    <div className="relative w-full h-full bg-[#050505] overflow-hidden">
 
       <Canvas shadows dpr={[1, 2]} bg="#050505">
         <CameraRig target={target} config={{
@@ -149,6 +186,41 @@ export default function App() {
         >
           Back to Desktop
         </button>
+      )}
+
+      {/* Export Overlay */}
+      {showExport && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div className="bg-[#111] p-6 rounded-xl border border-white/10 w-[600px] max-w-full shadow-2xl">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-white font-bold tracking-widest uppercase text-sm">Layout Configuration</h2>
+              <button
+                onClick={() => setShowExport(false)}
+                className="text-white/50 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
+            <p className="text-white/40 text-xs mb-4">Copy this JSON and paste it into your INITIAL_CONFIG or useControls default values.</p>
+            <textarea
+              readOnly
+              value={exportJson}
+              className="w-full h-64 bg-black/50 border border-white/10 rounded-lg p-4 text-xs font-mono text-[#4af] focus:outline-none focus:border-[#4af]"
+              onClick={(e) => e.target.select()}
+            />
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(exportJson)
+                  setShowExport(false)
+                }}
+                className="px-6 py-2 bg-white text-black text-xs font-bold uppercase tracking-widest rounded hover:bg-[#ccc]"
+              >
+                Copy & Close
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

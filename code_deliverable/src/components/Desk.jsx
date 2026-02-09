@@ -18,8 +18,7 @@ export function Desk({ onFocus, config, handlePivotEnd }) {
     const vapCover = useTexture('/VAP-cover.jpg')
     const ctSky = useTexture('/cornell-tech-sky.jpg')
 
-    // Reverse texture Y-axis for standard mapping if needed, 
-    // but typically useTexture handles this.
+    // Reverse texture Y-axis for standard mapping
     vapCover.flipY = false
     ctSky.flipY = false
 
@@ -121,24 +120,23 @@ export function Desk({ onFocus, config, handlePivotEnd }) {
             {/* NEW ASSETS INTEGRATION */}
 
             {/* Gavel */}
-            <group position={config.gavelPos}>
-                <primitive object={gavel.scene} scale={0.5} />
+            <group position={config.gavelPos} rotation={config.gavelRot} scale={config.gavelScale}>
+                <primitive object={gavel.scene} />
             </group>
 
             {/* Message Board */}
-            <group position={config.msgBoardPos}>
-                <primitive object={msgBoard.scene} scale={1} />
+            <group position={config.msgBoardPos} rotation={config.msgBoardRot} scale={config.msgBoardScale}>
+                <primitive object={msgBoard.scene} />
             </group>
 
             {/* Notebook */}
-            <group position={config.notebookPos}>
-                <primitive object={notebook.scene} scale={1} />
+            <group position={config.notebookPos} rotation={config.notebookRot} scale={config.notebookScale}>
+                <primitive object={notebook.scene} />
             </group>
 
             {/* Thin Book with Custom VAP Cover */}
-            <group position={config.thinBookPos} rotation={config.thinBookRot}>
+            <group position={config.thinBookPos} rotation={config.thinBookRot} scale={config.thinBookScale}>
                 <primitive object={thinBook.scene} />
-                {/* Find the cover mesh and apply texture - assuming it's the first mesh for now */}
                 <mesh position={[0, 0, 0]} rotation={[0, 0, 0]} scale={1.01}>
                     <planeGeometry args={[0.2, 0.3]} />
                     <meshStandardMaterial map={vapCover} />
@@ -219,12 +217,26 @@ export function Desk({ onFocus, config, handlePivotEnd }) {
                     />
                 </DragControls>
 
-                {/* Table / Cabinet Base */}
+                {/* Table / Cabinet Base - Forced Material Traversal */}
                 <group position={[-0.897, 0.308, -3.493]} rotation={[-Math.PI / 2, 0, -Math.PI]} scale={212.203}>
-                    <mesh geometry={nodes.Cabinet_Bed_Drawer_Tabl_1.geometry} material={materials.wood} />
-                    <mesh geometry={nodes.Cabinet_Bed_Drawer_Tabl_2.geometry} material={materials._defaultMat} />
-                    <mesh geometry={nodes.Cabinet_Bed_Drawer_Tabl_3.geometry} material={materials.metal} />
+                    {nodes.Cabinet_Bed_Drawer_Tabl && (
+                        <primitive
+                            object={nodes.Cabinet_Bed_Drawer_Tabl}
+                            onUpdate={(self) => {
+                                self.traverse((child) => {
+                                    if (child.isMesh) {
+                                        // FORCE VISIBILITY: Use MeshBasicMaterial to ignore lighting issues using bright colors
+                                        if (child.name.includes("Tabl_1")) child.material = new THREE.MeshBasicMaterial({ color: "#8B4513" }) // Wood
+                                        else if (child.name.includes("Tabl_2")) child.material = new THREE.MeshBasicMaterial({ color: "#333333" }) // Dark
+                                        else if (child.name.includes("Tabl_3")) child.material = new THREE.MeshBasicMaterial({ color: "#CCCCCC" }) // Metal
+                                        else child.material = new THREE.MeshBasicMaterial({ color: "#8B4513" }) // Fallback
+                                    }
+                                })
+                            }}
+                        />
+                    )}
                 </group>
+
 
                 {/* Plant */}
                 <DragControls>
