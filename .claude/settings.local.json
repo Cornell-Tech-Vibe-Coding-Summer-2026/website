@@ -6,7 +6,8 @@
       "mcp__blender__get_scene_info",
       "Bash(ls:*)",
       "Bash(npx gltfjsx:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(npx gltf-transform inspect:*)"
     ]
   }
 }
