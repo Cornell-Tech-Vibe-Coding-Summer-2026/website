@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__blender__get_viewport_screenshot",
+      "mcp__blender__execute_blender_code",
+      "mcp__blender__get_scene_info",
+      "Bash(ls:*)",
+      "Bash(npx gltfjsx:*)",
+      "Bash(npm run dev:*)"
+    ]
+  }
+}
