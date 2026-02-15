@@ -1,55 +1,65 @@
 import { useState, Suspense, useRef } from 'react'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import { OrbitControls, Environment, ContactShadows, useGLTF } from '@react-three/drei'
+import { useControls, folder } from 'leva'
 import './index.css'
 import * as THREE from 'three'
 
-// Camera positions from Blender (actual values from your scene!)
-const CAMERA_POSITIONS = {
-  default: { position: [-1.773, 1.589, -1.109], target: [0, 0.5, 0] },
-  monitor: { position: [-1.017, 1.211, -0.155], target: [-0.5, 0.7, 0] },
-  phone: { position: [-0.645, 1.058, -0.449], target: [-0.4, 0.7, -0.2] },
-}
+function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick }) {
+  const { scene } = useGLTF('/scene-unmerged.glb')
 
-function InteractiveScene({ onMonitorClick, onPhoneClick }) {
-  const { nodes, materials } = useGLTF('/scene-transformed-transformed.glb')
-
-  // Debug: log all available mesh nodes
-  console.log('Available meshes:', Object.keys(nodes))
+  // Define clickable objects (you can add more!)
+  const clickableObjects = {
+    'monitor': { handler: onMonitorClick, contains: ['monitor', 'imac'] },
+    'phone': { handler: onPhoneClick, contains: ['phone'] },
+    // Add more clickable objects here as needed
+  }
 
   return (
-    <group dispose={null}>
-      {/* Non-interactive meshes */}
-      <mesh geometry={nodes['Blank_Picture_Frame|Node007|Dupli|'].geometry} material={materials.PaletteMaterial001} />
-      <mesh geometry={nodes['cornell-tech-sky'].geometry} material={materials['cornell-tech-sky']} />
-      <mesh geometry={nodes['VAP-cover'].geometry} material={materials['VAP-cover']} />
-      <mesh geometry={nodes.Message_Board.geometry} material={materials.Mat} />
+    <primitive
+      object={scene}
+      onClick={(e) => {
+        e.stopPropagation()
+        const clickedName = e.object.name.toLowerCase()
 
-      {/* Interactive Monitor */}
-      <mesh
-        geometry={nodes['Monitor001|iMac|Dupli|'].geometry}
-        material={materials['Mat.008']}
-        onClick={(e) => {
-          e.stopPropagation()
-          onMonitorClick()
-        }}
-        onPointerOver={() => document.body.style.cursor = 'pointer'}
-        onPointerOut={() => document.body.style.cursor = 'auto'}
-      />
+        // Check against all clickable objects
+        for (const [key, config] of Object.entries(clickableObjects)) {
+          if (config.contains.some(str => clickedName.includes(str))) {
+            config.handler()
+            break
+          }
+        }
 
-      {/* Monitor Plane (screen placeholder) */}
-      <mesh geometry={nodes.Monitor_Plane.geometry} material={materials.PaletteMaterial002} />
-    </group>
+        // Log for debugging - you can add more objects to clickableObjects based on this
+        console.log('Clicked:', e.object.name)
+        if (onObjectClick) onObjectClick(e.object.name)
+      }}
+      onPointerOver={(e) => {
+        const hoveredName = e.object.name.toLowerCase()
+
+        // Check if hovering over any clickable object
+        const isClickable = Object.values(clickableObjects).some(config =>
+          config.contains.some(str => hoveredName.includes(str))
+        )
+
+        if (isClickable) {
+          document.body.style.cursor = 'pointer'
+        }
+      }}
+      onPointerOut={() => {
+        document.body.style.cursor = 'auto'
+      }}
+    />
   )
 }
 
-function CameraController({ targetView }) {
+function CameraController({ targetView, cameraPositions }) {
   const { camera } = useThree()
   const targetPosition = useRef(new THREE.Vector3())
   const targetLookAt = useRef(new THREE.Vector3())
 
   useFrame(() => {
-    const config = CAMERA_POSITIONS[targetView] || CAMERA_POSITIONS.default
+    const config = cameraPositions[targetView] || cameraPositions.default
     targetPosition.current.set(...config.position)
     targetLookAt.current.set(...config.target)
 
@@ -71,6 +81,32 @@ export default function App() {
   const [view, setView] = useState('default')
   const controlsRef = useRef()
 
+  // Leva controls for fine-tuning (with your adjusted values)
+  const config = useControls({
+    'Camera Positions': folder({
+      defaultPos: { value: [-1.773, 1.589, -1.109], label: 'Default Position', step: 0.01 },
+      defaultTarget: { value: [1.51, 0.09, 0], label: 'Default Target', step: 0.01 },
+      monitorPos: { value: [-0.86, 1.4, -0.315], label: 'Monitor Position', step: 0.01 },
+      monitorTarget: { value: [-0.5, 0.7, 0], label: 'Monitor Target', step: 0.01 },
+      phonePos: { value: [-0.645, 1.058, -0.449], label: 'Phone Position', step: 0.01 },
+      phoneTarget: { value: [-0.4, 0.7, -0.2], label: 'Phone Target', step: 0.01 },
+    }),
+    'Lighting': folder({
+      ambientIntensity: { value: 0.2, min: 0, max: 2, step: 0.1, label: 'Ambient' },
+      ceilingIntensity: { value: 5, min: 0, max: 50, step: 1, label: 'Ceiling Light' },
+      ceilingPos: { value: [-1.9, 3.1, -1.5], label: 'Ceiling Position', step: 0.1 },
+      deskIntensity: { value: 0.2, min: 0, max: 20, step: 0.5, label: 'Desk Light' },
+      deskPos: { value: [-0.7, 1.1, -0.6], label: 'Desk Position', step: 0.1 },
+    })
+  })
+
+  // Camera positions using Leva controls
+  const CAMERA_POSITIONS = {
+    default: { position: config.defaultPos, target: config.defaultTarget },
+    monitor: { position: config.monitorPos, target: config.monitorTarget },
+    phone: { position: config.phonePos, target: config.phoneTarget },
+  }
+
   const handleMonitorClick = () => {
     setView(view === 'monitor' ? 'default' : 'monitor')
   }
@@ -81,21 +117,22 @@ export default function App() {
 
   return (
     <div className="relative w-full h-full bg-[#050505] overflow-hidden">
-      <Canvas shadows camera={{ position: [-1.773, 1.589, -1.109], fov: 50 }}>
-        {/* Lights - reduced intensity */}
-        <ambientLight intensity={0.3} />
-        <pointLight position={[0, 2, 0]} intensity={15} decay={2} />
-        <pointLight position={[-0.5, 1, 0.5]} intensity={3} decay={2} />
+      <Canvas shadows camera={{ position: config.defaultPos, fov: 50 }}>
+        {/* Lights - adjustable via Leva */}
+        <ambientLight intensity={config.ambientIntensity} />
+        <pointLight position={config.ceilingPos} intensity={config.ceilingIntensity} decay={2} />
+        <pointLight position={config.deskPos} intensity={config.deskIntensity} decay={2} />
         <Environment preset="city" />
 
         {/* Camera Controller */}
-        <CameraController targetView={view} />
+        <CameraController targetView={view} cameraPositions={CAMERA_POSITIONS} />
 
         {/* Your Blender Scene */}
         <Suspense fallback={null}>
           <InteractiveScene
             onMonitorClick={handleMonitorClick}
             onPhoneClick={handlePhoneClick}
+            onObjectClick={(name) => console.log('Object clicked:', name)}
           />
           <ContactShadows
             opacity={0.4}
@@ -113,6 +150,7 @@ export default function App() {
           minPolarAngle={Math.PI / 4}
           maxPolarAngle={Math.PI / 2.1}
           enablePan={false}
+          enableZoom={false}
           autoRotate={view === 'default'}
           autoRotateSpeed={0.5}
           onUpdate={(controls) => {
