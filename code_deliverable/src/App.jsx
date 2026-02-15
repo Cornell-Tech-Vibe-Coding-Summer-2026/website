@@ -13,9 +13,13 @@ function PhoneAnimation({ scene, view }) {
     // Find phone group/mesh if not already found
     if (!phoneRef.current) {
       scene.traverse(obj => {
-        if (obj.name === 'Smartphone' || obj.name === 'Node003_1') {
-          phoneRef.current = obj
-          console.log("Found Phone node:", obj.name)
+        // Broad check for Phone object
+        if (obj.name.includes('Phone') || obj.name.includes('Smartphone') || obj.name === 'Node003_1') {
+          // Prefer Groups, but accept Meshes if no Group found yet
+          if (obj.type === 'Group' || !phoneRef.current) {
+            phoneRef.current = obj
+            console.log("Found Phone (Animation Target):", obj.name, obj.type)
+          }
         }
       })
     }
@@ -37,9 +41,9 @@ function PhoneAnimation({ scene, view }) {
       const targetRot = baseRot.clone()
 
       if (isFocused) {
-        targetPos.y += 0.1 // Lift slightly
-        targetPos.x += 0.05
-        targetRot.x -= 0.2
+        targetPos.y += 0.08 // Lift slightly
+        targetPos.x += 0.02
+        targetRot.x -= 0.15
       }
 
       easing.damp3(phoneRef.current.position, targetPos, 0.4, delta)
@@ -52,26 +56,10 @@ function PhoneAnimation({ scene, view }) {
 function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, view }) {
   const { scene } = useGLTF('/scene-unmerged.glb')
 
-  // Ref for the monitor pivot to attach content
-  const [monitorRef, setMonitorRef] = useState(null)
-
-  useEffect(() => {
-    scene.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true
-        child.receiveShadow = true
-      }
-      // Look for monitor screen to attach content
-      if (child.name === 'Monitor' || child.name === 'Message_Board') {
-        if (!monitorRef) setMonitorRef(child)
-      }
-    })
-  }, [scene])
-
-  // Define clickable objects (using correct names)
+  // Define clickable objects 
   const clickableObjects = {
-    'monitor': { handler: onMonitorClick, contains: ['monitor', 'imac', 'message_board'] },
-    'phone': { handler: onPhoneClick, contains: ['smartphone', 'phone', 'node003_1'] },
+    'monitor': { handler: onMonitorClick, contains: ['monitor', 'imac', 'message_board', 'monitor_plane'] },
+    'phone': { handler: onPhoneClick, contains: ['phone', 'smartphone', 'phone_plane'] },
   }
 
   return (
@@ -90,12 +78,10 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, view })
           let curr = clickedNode
           while (curr) {
             const name = curr.name.toLowerCase()
-            console.log(' Checking ancestor:', name)
 
-            // Check against all clickable objects
             for (const [key, config] of Object.entries(clickableObjects)) {
               if (config.contains.some(str => name.includes(str))) {
-                console.log('Triggering handler for:', key, 'on node:', name)
+                console.log('Triggering handler for:', key)
                 config.handler()
                 targetFound = true
                 break
@@ -107,33 +93,26 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, view })
 
           if (!targetFound && onObjectClick) onObjectClick(clickedNode.name)
         }}
-        onPointerOver={(e) => {
-          // similar logic for hover if needed
-          document.body.style.cursor = 'pointer'
-        }}
+        onPointerOver={() => document.body.style.cursor = 'pointer'}
         onPointerOut={() => document.body.style.cursor = 'auto'}
       />
 
-      {/* Inject Monitor Content */}
-      {monitorRef && (
-        <primitive object={monitorRef}>
-          <Html
-            transform
-            distanceFactor={0.1}
-            position={[0, 0, 0.05]}
-            rotation={[-1.57, 0, 0]}
-            style={{
-              width: '1024px',
-              height: '768px',
-              transform: 'scale(0.1)',
-              background: '#000',
-              pointerEvents: 'none'
-            }}
-          >
-            <MonitorContent />
-          </Html>
-        </primitive>
-      )}
+      {/* Manual Placement of Monitor Content with Tuned Scale */}
+      <group position={[-0.43, 1.25, 0.0]} rotation={[0, -1.57, 0]}>
+        <Html
+          transform
+          distanceFactor={0.5}
+          style={{
+            width: '1024px',
+            height: '768px',
+            background: '#1a1a1a',
+            borderRadius: '8px',
+            pointerEvents: 'none'
+          }}
+        >
+          <MonitorContent />
+        </Html>
+      </group>
     </group>
   )
 }
