@@ -3,9 +3,51 @@ import { useGLTF, Html, useCursor, PivotControls, DragControls, useTexture } fro
 import { MonitorContent } from './MonitorContent'
 import { PhoneContent } from './PhoneContent'
 import { NotepadContent } from './NotepadContent'
-import * as THREE from 'three'
+import { easing } from 'maath'
+import { useFrame } from '@react-three/fiber'
 
-export function Desk({ onFocus, config, handlePivotEnd }) {
+function PhoneGroup({ config, view }) {
+    const group = React.useRef()
+    const { nodes, materials } = useGLTF('/Desk.glb')
+
+    useFrame((state, delta) => {
+        if (!group.current) return
+
+        // Target position/rotation based on view
+        const isFocused = view === 'phone'
+
+        // Base values from config
+        const basePos = new THREE.Vector3(...config.phoneMeshPos)
+        const baseRot = new THREE.Euler(...config.phoneMeshRot)
+
+        // Target values
+        const targetPos = basePos.clone()
+        const targetRot = baseRot.clone()
+
+        if (isFocused) {
+            // Lift up and tilt towards camera
+            targetPos.y += 0.5
+            targetPos.z += 0.5
+            targetRot.x -= 0.5 // Tilt up
+        }
+
+        // Smooth interpolation
+        easing.damp3(group.current.position, targetPos, 0.4, delta)
+        easing.dampE(group.current.rotation, targetRot, 0.4, delta)
+    })
+
+    return (
+        <group ref={group} position={config.phoneMeshPos} rotation={config.phoneMeshRot}>
+            <group scale={5618.099}>
+                <mesh castShadow receiveShadow geometry={nodes.Phone_1.geometry} material={materials['White.001']} />
+                <mesh castShadow receiveShadow geometry={nodes.Phone_2.geometry} material={materials['Grey.001']} />
+                <mesh castShadow receiveShadow geometry={nodes.Phone_3.geometry} material={materials['Black.003']} />
+            </group>
+        </group>
+    )
+}
+
+export function Desk({ onFocus, config, handlePivotEnd, view }) {
     const { nodes, materials } = useGLTF('/Desk.glb')
 
     // Load new assets
@@ -83,13 +125,7 @@ export function Desk({ onFocus, config, handlePivotEnd }) {
             </group>
 
             {/* Smartphone Section - INDEPENDENT MESH AND SCREEN */}
-            <group position={config.phoneMeshPos} rotation={config.phoneMeshRot}>
-                <group scale={5618.099}>
-                    <mesh castShadow receiveShadow geometry={nodes.Phone_1.geometry} material={materials['White.001']} />
-                    <mesh castShadow receiveShadow geometry={nodes.Phone_2.geometry} material={materials['Grey.001']} />
-                    <mesh castShadow receiveShadow geometry={nodes.Phone_3.geometry} material={materials['Black.003']} />
-                </group>
-            </group>
+            <PhoneGroup config={config} view={config.view} />
 
             <group position={config.phoneScreenPos} rotation={config.phoneScreenRot}>
                 <PivotControls
