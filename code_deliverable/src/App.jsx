@@ -8,6 +8,14 @@ import * as THREE from 'three'
 function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick }) {
   const { scene } = useGLTF('/scene-unmerged.glb')
 
+  // Enable shadows on all meshes
+  scene.traverse((child) => {
+    if (child.isMesh) {
+      child.castShadow = true
+      child.receiveShadow = true
+    }
+  })
+
   // Define clickable objects (you can add more!)
   const clickableObjects = {
     'monitor': { handler: onMonitorClick, contains: ['monitor', 'imac'] },
@@ -84,12 +92,12 @@ export default function App() {
   // Leva controls for fine-tuning (with your adjusted values)
   const config = useControls({
     'Camera Positions': folder({
-      defaultPos: { value: [-1.773, 1.589, -1.109], label: 'Default Position', step: 0.01 },
+      defaultPos: { value: [-1.643, 1.589, 0.361], label: 'Default Position', step: 0.01 },
       defaultTarget: { value: [1.51, 0.09, 0], label: 'Default Target', step: 0.01 },
-      monitorPos: { value: [-0.86, 1.4, -0.315], label: 'Monitor Position', step: 0.01 },
-      monitorTarget: { value: [-0.5, 0.7, 0], label: 'Monitor Target', step: 0.01 },
-      phonePos: { value: [-0.645, 1.058, -0.449], label: 'Phone Position', step: 0.01 },
-      phoneTarget: { value: [-0.4, 0.7, -0.2], label: 'Phone Target', step: 0.01 },
+      monitorPos: { value: [-0.93, 1.25, -0.065], label: 'Monitor Position', step: 0.01 },
+      monitorTarget: { value: [5.61, 0.18, 0], label: 'Monitor Target', step: 0.01 },
+      phonePos: { value: [-0.805, 1.208, -0.319], label: 'Phone Position', step: 0.01 },
+      phoneTarget: { value: [-0.43, 0.66, -0.48], label: 'Phone Target', step: 0.01 },
     }),
     'Lighting': folder({
       ambientIntensity: { value: 0.2, min: 0, max: 2, step: 0.1, label: 'Ambient' },
@@ -120,8 +128,22 @@ export default function App() {
       <Canvas shadows camera={{ position: config.defaultPos, fov: 50 }}>
         {/* Lights - adjustable via Leva */}
         <ambientLight intensity={config.ambientIntensity} />
-        <pointLight position={config.ceilingPos} intensity={config.ceilingIntensity} decay={2} />
-        <pointLight position={config.deskPos} intensity={config.deskIntensity} decay={2} />
+        <pointLight
+          position={config.ceilingPos}
+          intensity={config.ceilingIntensity}
+          decay={2}
+          castShadow
+          shadow-mapSize-width={1024}
+          shadow-mapSize-height={1024}
+        />
+        <pointLight
+          position={config.deskPos}
+          intensity={config.deskIntensity}
+          decay={2}
+          castShadow
+          shadow-mapSize-width={512}
+          shadow-mapSize-height={512}
+        />
         <Environment preset="city" />
 
         {/* Camera Controller */}
@@ -135,12 +157,13 @@ export default function App() {
             onObjectClick={(name) => console.log('Object clicked:', name)}
           />
           <ContactShadows
-            opacity={0.4}
-            scale={20}
-            blur={2.4}
-            far={10}
-            resolution={256}
+            opacity={0.6}
+            scale={10}
+            blur={1.5}
+            far={5}
+            resolution={512}
             color="#000000"
+            position={[0, 0, 0]}
           />
         </Suspense>
 
