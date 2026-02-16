@@ -43,6 +43,7 @@ function ContentPlane({
                     borderRadius: config.radius || '8px',
                     overflow: 'hidden'
                 }}
+                zIndexRange={[10, 0]}
                 // Occlusion creates the "hidden behind handle" effect
                 occlude="blending"
             >

@@ -1,7 +1,7 @@
 import { useState, Suspense, useRef, useEffect } from 'react'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import { OrbitControls, Environment, ContactShadows, useGLTF, Html } from '@react-three/drei'
-import { useControls, folder, button } from 'leva'
+import { useControls, folder, button, Leva } from 'leva'
 import { easing } from 'maath'
 import { SceneLayout } from './components/SceneLayout'
 import * as THREE from 'three'
@@ -56,6 +56,16 @@ function PhoneAnimation({ scene, view, config }) {
 
 function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggleLight, view, overlayConfig, onBack }) {
   const { scene } = useGLTF('/scene-unmerged.glb')
+
+  // Enable shadows on all meshes
+  useEffect(() => {
+    scene.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true
+        child.receiveShadow = true
+      }
+    })
+  }, [scene])
 
   // Define clickable objects 
   const clickableObjects = {
@@ -119,7 +129,7 @@ function CameraController({ targetView, cameraPositions }) {
 
     // Apply Parallax ONLY in default view (Orbit around desktop)
     if (targetView === 'default') {
-      const offsetAngle = pointer.x * 0.15 // Slight rotation strength
+      const offsetAngle = pointer.x * 0.015 // Extremely subtle rotation strength
       const basePos = new THREE.Vector3(...config.position)
       const targetVec = new THREE.Vector3(...config.target)
 
@@ -269,16 +279,16 @@ export default function App() {
       </Canvas>
 
       {/* UI Overlay */}
-      <div className="absolute top-8 left-8 z-10 pointer-events-none">
-        <h1 className="text-white text-5xl font-black tracking-tighter uppercase mb-2">Vibe Coding Ethics</h1>
-        <p className="text-white/40 text-sm font-mono tracking-widest uppercase">Designing with Character • Cornell Tech 2026</p>
+      <div className="absolute top-8 left-8 z-50 pointer-events-none">
+        <h1 className="text-white text-5xl font-black tracking-tighter uppercase mb-2 drop-shadow-lg">Vibe Coding Ethics</h1>
+        <p className="text-white/60 text-sm font-mono tracking-widest uppercase drop-shadow-md">Designing with Character • Cornell Tech 2026</p>
       </div>
 
       {/* View indicator and back button */}
       {view !== 'default' && (
         <button
           onClick={() => setView('default')}
-          className="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 px-8 py-3 bg-white text-black text-sm font-bold tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-transform"
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 z-50 px-8 py-3 bg-white text-black text-sm font-bold tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-transform shadow-xl"
         >
           Back to Desktop
         </button>
@@ -286,10 +296,27 @@ export default function App() {
 
       {/* Instructions */}
       {view === 'default' && (
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-white/60 text-xs pointer-events-none">
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40 text-white/60 text-xs pointer-events-none">
           Click on monitor, phone, or lamp to interact
         </div>
       )}
+
+      {/* Explicit Leva Panel with high z-index */}
+      <div className="absolute top-0 right-0 z-[10000]">
+        <Leva flat fill={false} titleBar={false} theme={{
+          colors: {
+            highlight1: '#ffffff',
+            highlight2: '#f0f0f0',
+            highlight3: '#f0f0f0',
+          }
+        }} />
+      </div>
+      <style>{`
+        #leva__root {
+          z-index: 100000 !important;
+          position: relative;
+        }
+      `}</style>
     </div>
   )
 }
