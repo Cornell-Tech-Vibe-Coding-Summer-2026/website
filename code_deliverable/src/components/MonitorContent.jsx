@@ -34,7 +34,7 @@ function Window({ title, icon: Icon, children, onClose, isOpen, x, y, width, hei
     )
 }
 
-export function MonitorContent() {
+export function MonitorContent({ onBack }) {
     const [openWindows, setOpenWindows] = useState({
         [WINDOWS.TERMINAL]: true,
         [WINDOWS.SYLLABUS]: false,
@@ -69,7 +69,7 @@ export function MonitorContent() {
     }, [])
 
     return (
-        <div className="w-[1024px] h-[640px] bg-[#050505] overflow-hidden relative font-mono select-none border-4 border-[#1a1a1a] rounded-sm">
+        <div className="w-[1024px] h-[640px] bg-[#050505] overflow-hidden relative font-mono select-none border-4 border-[#1a1a1a] rounded-sm cursor-auto pointer-events-auto">
             {/* Desktop Wallpaper */}
             <div className="absolute inset-0 opacity-20 pointer-events-none"
                 style={{
@@ -153,8 +153,12 @@ export function MonitorContent() {
             {/* Taskbar */}
             <div className="absolute bottom-0 w-full h-10 bg-[#0e101a]/90 backdrop-blur-md border-t border-white/5 flex items-center px-4 justify-between z-50">
                 <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 flex items-center justify-center hover:bg-white/5 rounded transition-colors group">
-                        <div className="w-4 h-4 bg-gradient-to-tr from-blue-500 to-purple-500 rounded-sm group-hover:rotate-45 transition-transform" />
+                    <div
+                        className="w-8 h-8 flex items-center justify-center hover:bg-red-500/20 rounded transition-colors group cursor-pointer"
+                        title="Log Off (Back)"
+                        onClick={onBack}
+                    >
+                        <div className="w-4 h-4 bg-gradient-to-tr from-blue-500 to-purple-500 rounded-sm group-hover:from-red-500 group-hover:to-pink-500 transition-all" />
                     </div>
                     <div className="w-[1px] h-4 bg-white/10 mx-2" />
 
