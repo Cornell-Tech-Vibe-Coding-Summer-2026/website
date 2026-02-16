@@ -5,6 +5,7 @@ import { useFrame } from '@react-three/fiber'
 import { MonitorContent } from './MonitorContent'
 import { PhoneContent } from './PhoneContent'
 import * as THREE from 'three'
+import { easing } from 'maath'
 
 // Simple text component for Notepad
 function NotepadText() {
@@ -33,7 +34,10 @@ function ContentPlane({
     children,
     name,
     config,
-    layoutMode
+    layoutMode,
+    gizmoMode, // 'translate' | 'rotate'
+    view, // Current view state for animation
+    phoneCofig // Overlay config for Phone animation
 }) {
     const groupRef = useRef()
 
@@ -52,16 +56,46 @@ function ContentPlane({
         }
     }, [layoutMode, name])
 
-    // Standard static transform application
+    // Animation Logic (Mirroring App.jsx)
+    useFrame((state, delta) => {
+        // Only animate if NOT in layout mode (layout mode overrides position)
+        if (!layoutMode && groupRef.current) {
+            const targetPos = new THREE.Vector3(config.x, config.y, config.z)
+            const targetRot = new THREE.Euler(config.rotX, config.rotY, config.rotZ)
+
+            // Phone specific animation
+            if (name === 'Phone' && phoneCofig) {
+                const isFocused = view === 'phone'
+
+                if (isFocused) {
+                    targetPos.y += phoneCofig.phoneLift || 0.18
+                    targetPos.x += phoneCofig.phoneSlideX || -0.1
+                    targetPos.z += phoneCofig.phoneSlideZ || 0.06
+                    targetRot.x += phoneCofig.phoneTilt || 0.01
+                }
+            }
+
+            // Smoothly move to target
+            easing.damp3(groupRef.current.position, targetPos, 0.4, delta)
+            easing.dampE(groupRef.current.rotation, targetRot, 0.4, delta)
+        } else if (layoutMode && groupRef.current) {
+            // Look, if we are in layout mode, TransformControls handles it.
+            // But if we toggle layout mode off, we want it to snap back or animate?
+            // For now, let's assume config *is* the source of truth, updated via Leva.
+            // If user drags gizmo, they should copy values to Leva.
+            // (We don't support two-way binding from Gizmo -> Leva automatically here without complex logic)
+        }
+    })
+
     const content = (
         <group
             ref={groupRef}
+            // Initial pos/rot (animated via useFrame later)
             position={[config.x, config.y, config.z]}
             rotation={[config.rotX, config.rotY, config.rotZ]}
-            scale={name === 'Notepad' ? [1, 1, 1] : undefined} // Text handles its own scale better usually
+            scale={name === 'Notepad' ? [1, 1, 1] : undefined}
         >
             {name === 'Notepad' ? (
-                // Render children directly for Text (no HTML wrapper)
                 <group scale={config.scale}>
                     {children}
                 </group>
@@ -75,7 +109,7 @@ function ContentPlane({
                         background: config.bg || '#1a1a1a',
                         borderRadius: config.radius || '8px',
                         overflow: 'hidden',
-                        pointerEvents: 'none' // Html container shouldn't block, children should
+                        pointerEvents: 'none'
                     }}
                     zIndexRange={[10, 0]}
                     occlude="blending"
@@ -90,7 +124,7 @@ function ContentPlane({
 
     if (layoutMode) {
         return (
-            <TransformControls object={groupRef} mode="translate">
+            <TransformControls object={groupRef} mode={gizmoMode}>
                 {content}
             </TransformControls>
         )
@@ -99,10 +133,11 @@ function ContentPlane({
     return content
 }
 
-export function SceneLayout({ view, onBack, scene }) {
-    const { layoutMode } = useControls({
+export function SceneLayout({ view, onBack, scene, config: overlayConfig }) {
+    const { layoutMode, gizmoMode } = useControls({
         'Layout Mode': folder({
-            layoutMode: { value: false, label: 'Enable Gizmos' }
+            layoutMode: { value: false, label: 'Enable Gizmos' },
+            gizmoMode: { value: 'translate', options: ['translate', 'rotate'], label: 'Gizmo Mode' }
         })
     })
 
@@ -120,11 +155,9 @@ export function SceneLayout({ view, onBack, scene }) {
         radius: '4px'
     })
 
-    // Phone: Reverted to manual positioning (no sync)
-    // Adjusted defaults to ensure visibility (slightly higher Y)
     const { ...phoneConfig } = useControls('Layout - Phone', {
         x: { value: -0.57, min: -2, max: 2, step: 0.01 },
-        y: { value: 0.85, min: 0, max: 3, step: 0.01 }, // Lifted slightly
+        y: { value: 0.85, min: 0, max: 3, step: 0.01 },
         z: { value: -0.46, min: -2, max: 2, step: 0.01 },
         rotX: { value: -1.51, min: -3.14, max: 3.14 },
         rotY: { value: -0.06, min: -3.14, max: 3.14 },
@@ -136,31 +169,49 @@ export function SceneLayout({ view, onBack, scene }) {
         radius: '40px'
     })
 
+    // Updated Notepad Config based on User Feedback
     const { ...notepadConfig } = useControls('Layout - Notepad', {
-        x: { value: -0.64, min: -2, max: 2 },
+        x: { value: -0.52, min: -2, max: 2, step: 0.01 }, // Updated
         y: { value: 0.8, min: 0, max: 3 },
         z: { value: 0.06, min: -2, max: 2 },
         rotX: { value: -1.57, min: -3.14, max: 3.14 },
         rotY: { value: 0, min: -3.14, max: 3.14 },
         rotZ: { value: -2.16, min: -3.14, max: 3.14 },
-        scale: { value: 1, min: 0.1, max: 2 }, // Adjusted for Text component scale
-        width: '400px', // Unused for Text
-        height: '500px', // Unused for Text
-        bg: 'transparent', // Unused for Text
-        radius: '2px' // Unused for Text
+        scale: { value: 0.1, min: 0.01, max: 1 }, // Updated
+        width: '400px',
+        height: '500px',
+        bg: 'transparent',
+        radius: '2px'
     })
 
     return (
         <>
-            <ContentPlane name="Monitor" config={monitorConfig} layoutMode={layoutMode}>
+            <ContentPlane
+                name="Monitor"
+                config={monitorConfig}
+                layoutMode={layoutMode}
+                gizmoMode={gizmoMode}
+            >
                 <MonitorContent onBack={onBack} />
             </ContentPlane>
 
-            <ContentPlane name="Phone" config={phoneConfig} layoutMode={layoutMode}>
+            <ContentPlane
+                name="Phone"
+                config={phoneConfig}
+                layoutMode={layoutMode}
+                gizmoMode={gizmoMode}
+                view={view}
+                phoneCofig={overlayConfig} // Pass for animation
+            >
                 <PhoneContent />
             </ContentPlane>
 
-            <ContentPlane name="Notepad" config={notepadConfig} layoutMode={layoutMode}>
+            <ContentPlane
+                name="Notepad"
+                config={notepadConfig}
+                layoutMode={layoutMode}
+                gizmoMode={gizmoMode}
+            >
                 <NotepadText />
             </ContentPlane>
         </>

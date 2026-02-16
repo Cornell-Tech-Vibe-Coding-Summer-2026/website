@@ -101,7 +101,7 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
       />
 
       {/* Visual Scene Layout for Content Planes */}
-      <SceneLayout view={view} onBack={onBack} scene={scene} />
+      <SceneLayout view={view} onBack={onBack} scene={scene} config={overlayConfig} />
     </group>
   )
 }
@@ -162,8 +162,8 @@ export default function App() {
       monitorTarget: { value: [5.61, 0.18, 0], label: 'Monitor Target', step: 0.01 },
       phonePos: { value: [-0.695, 1.22, -0.339], label: 'Phone Position', step: 0.01 },
       phoneTarget: { value: [-0.43, 0.07, -0.48], label: 'Phone Target', step: 0.01 },
-      notepadPos: { value: [-0.64, 1.3, 0.4], label: 'Notepad Position', step: 0.01 },
-      notepadTarget: { value: [-0.64, 0.8, 0.06], label: 'Notepad Target', step: 0.01 },
+      notepadPos: { value: [-1.01, 1.04, 0.1], label: 'Notepad Position', step: 0.01 },
+      notepadTarget: { value: [-0.21, 0.43, 0.47], label: 'Notepad Target', step: 0.01 },
     }),
     'Lighting': folder({
       ambientIntensity: { value: 0.2, min: 0, max: 2, step: 0.1, label: 'Ambient' },
