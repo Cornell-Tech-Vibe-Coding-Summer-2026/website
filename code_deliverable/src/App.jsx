@@ -54,7 +54,7 @@ function PhoneAnimation({ scene, view, config }) {
   return null
 }
 
-function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggleLight, view, overlayConfig }) {
+function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggleLight, view, overlayConfig, onBack }) {
   const { scene } = useGLTF('/scene-unmerged.glb')
 
   // Define clickable objects 
@@ -100,28 +100,30 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
       />
 
       {/* Manual Placement of Monitor Content with Tuned Scale */}
-      <group
-        position={[overlayConfig.monX, overlayConfig.monY, overlayConfig.monZ]}
-        rotation={[overlayConfig.monRotX, overlayConfig.monRotY, overlayConfig.monRotZ]}
-      >
-        <Html
-          transform
-          distanceFactor={overlayConfig.monScale}
-          style={{
-            width: '1024px',
-            height: '768px',
-            background: '#1a1a1a',
-            borderRadius: '8px',
-            cursor: 'auto', // Ensure cursor is visible/interactive
-            zIndex: 100
-          }}
-          zIndexRange={[100, 0]}
+      {view === 'monitor' && (
+        <group
+          position={[overlayConfig.monX, overlayConfig.monY, overlayConfig.monZ]}
+          rotation={[overlayConfig.monRotX, overlayConfig.monRotY, overlayConfig.monRotZ]}
         >
-          <div className="w-full h-full pointer-events-auto" onPointerDown={e => e.stopPropagation()}>
-            <MonitorContent />
-          </div>
-        </Html>
-      </group>
+          <Html
+            transform
+            distanceFactor={overlayConfig.monScale}
+            style={{
+              width: '1024px',
+              height: '768px',
+              background: '#1a1a1a',
+              borderRadius: '8px',
+              cursor: 'auto', // Ensure cursor is visible/interactive
+              zIndex: 100
+            }}
+            zIndexRange={[100, 0]}
+          >
+            <div className="w-full h-full pointer-events-auto" onPointerDown={e => e.stopPropagation()}>
+              <MonitorContent onBack={onBack} />
+            </div>
+          </Html>
+        </group>
+      )}
     </group>
   )
 }
@@ -138,10 +140,20 @@ function CameraController({ targetView, cameraPositions }) {
     targetPosition.current.set(...config.position)
     targetLookAt.current.set(...config.target)
 
-    // Apply Parallax ONLY in default view
+    // Apply Parallax ONLY in default view (Orbit around desktop)
     if (targetView === 'default') {
-      targetPosition.current.x += (pointer.x * 0.2)
-      targetPosition.current.y += (pointer.y * 0.2)
+      const offsetAngle = pointer.x * 0.15 // Slight rotation strength
+      const basePos = new THREE.Vector3(...config.position)
+      const targetVec = new THREE.Vector3(...config.target)
+
+      // Vector from Target to Camera
+      const relativePos = basePos.clone().sub(targetVec)
+
+      // Rotate around Y-axis
+      relativePos.applyAxisAngle(new THREE.Vector3(0, 1, 0), -offsetAngle)
+
+      // Apply new position
+      targetPosition.current.copy(targetVec.clone().add(relativePos))
     }
 
     // Smooth camera movement
@@ -170,8 +182,8 @@ export default function App() {
       defaultTarget: { value: [1.51, 0.09, 0], label: 'Default Target', step: 0.01 },
       monitorPos: { value: [-0.93, 1.25, -0.065], label: 'Monitor Position', step: 0.01 },
       monitorTarget: { value: [5.61, 0.18, 0], label: 'Monitor Target', step: 0.01 },
-      phonePos: { value: [-0.805, 1.208, -0.319], label: 'Phone Position', step: 0.01 },
-      phoneTarget: { value: [-0.43, 0.66, -0.48], label: 'Phone Target', step: 0.01 },
+      phonePos: { value: [-0.695, 1.22, -0.339], label: 'Phone Position', step: 0.01 },
+      phoneTarget: { value: [-0.43, 0.07, -0.48], label: 'Phone Target', step: 0.01 },
     }),
     'Lighting': folder({
       ambientIntensity: { value: 0.2, min: 0, max: 2, step: 0.1, label: 'Ambient' },
@@ -188,10 +200,10 @@ export default function App() {
       monRotY: { value: -1.57, min: -3.14, max: 3.14 },
       monRotZ: { value: 0, min: -3.14, max: 3.14 },
       monScale: { value: 0.5, min: 0.1, max: 2 },
-      phoneLift: { value: 0.2, min: 0, max: 1 },
-      phoneTilt: { value: -0.15, min: -1, max: 1 },
-      phoneSlideX: { value: 0.02, min: -0.5, max: 0.5 },
-      phoneSlideZ: { value: 0, min: -0.5, max: 0.5 },
+      phoneLift: { value: 0.18, min: 0, max: 1 },
+      phoneTilt: { value: 0.01, min: -1.5, max: 1.5 },
+      phoneSlideX: { value: -0.1, min: -0.5, max: 0.5 },
+      phoneSlideZ: { value: 0.06, min: -0.5, max: 0.5 },
     })
   })
 
@@ -259,6 +271,7 @@ export default function App() {
             onToggleLight={handleToggleLight}
             onObjectClick={(name) => console.log('Object clicked:', name)}
             overlayConfig={config}
+            onBack={() => setView('default')}
           />
           <ContactShadows
             opacity={0.6}
