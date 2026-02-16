@@ -54,10 +54,10 @@ function ContentPlane({
                 const isFocused = view === 'phone'
 
                 if (isFocused) {
-                    targetPos.y += phoneCofig.phoneLift || 0.18
-                    targetPos.x += phoneCofig.phoneSlideX || -0.1
-                    targetPos.z += phoneCofig.phoneSlideZ || 0.06
-                    targetRot.x += phoneCofig.phoneTilt || 0.01
+                    targetPos.y += phoneCofig.phoneLift || 0.185
+                    targetPos.x += phoneCofig.phoneSlideX || -0.098
+                    targetPos.z += phoneCofig.phoneSlideZ || 0.067
+                    targetRot.x += phoneCofig.phoneTilt || 0.004
                 }
             }
 
@@ -127,8 +127,7 @@ function ContentPlane({
             <TransformControls
                 object={groupRef}
                 mode={gizmoMode}
-                // Only update on drag interactions to avoid loops/spam
-                onObjectChange={handleTransformChange}
+                onMouseUp={handleTransformChange}
             >
                 {content}
             </TransformControls>
@@ -146,42 +145,45 @@ export function SceneLayout({ view, onBack, scene, config: overlayConfig }) {
         })
     })
 
+    // Monitor Config (Updated from User)
     const [monitorConfig, setMonitorConfig] = useControls('Layout - Monitor', () => ({
-        x: { value: -0.43, min: -2, max: 2, step: 0.01 },
-        y: { value: 1.16, min: 0, max: 3, step: 0.01 },
-        z: { value: -0.14, min: -2, max: 2, step: 0.01 },
-        rotX: { value: 0, min: -3.14, max: 3.14 },
-        rotY: { value: -1.63, min: -3.14, max: 3.14 },
-        rotZ: { value: 0, min: -3.14, max: 3.14 },
-        scale: { value: 0.26, min: 0.1, max: 2 },
-        width: { value: '1024px', render: () => false }, // Hide internal props
+        x: { value: -0.424, min: -2, max: 2, step: 0.001 },
+        y: { value: 1.18, min: 0, max: 3, step: 0.001 },
+        z: { value: -0.151, min: -2, max: 2, step: 0.001 },
+        rotX: { value: -1.764, min: -3.14, max: 3.14 },
+        rotY: { value: -1.387, min: -3.14, max: 3.14 },
+        rotZ: { value: -1.764, min: -3.14, max: 3.14 },
+        scale: { value: 0.25, min: 0.1, max: 2 },
+        width: { value: '1024px', render: () => false },
         height: { value: '640px', render: () => false },
         bg: { value: '#050505', render: () => false },
         radius: { value: '4px', render: () => false }
     }))
 
+    // Phone Config (Updated with "Zoomed Out" Defaults for Resting State)
     const [phoneConfig, setPhoneConfig] = useControls('Layout - Phone', () => ({
-        x: { value: -0.57, min: -2, max: 2, step: 0.01 },
-        y: { value: 0.85, min: 0, max: 3, step: 0.01 },
-        z: { value: -0.46, min: -2, max: 2, step: 0.01 },
-        rotX: { value: -1.51, min: -3.14, max: 3.14 },
-        rotY: { value: -0.06, min: -3.14, max: 3.14 },
-        rotZ: { value: -1.13, min: -3.14, max: 3.14 },
-        scale: { value: 0.13, min: 0.01, max: 1 },
+        x: { value: -0.54, min: -2, max: 2, step: 0.001 },
+        y: { value: 0.778, min: 0, max: 3, step: 0.001 },
+        z: { value: -0.475, min: -2, max: 2, step: 0.001 },
+        rotX: { value: -1.562, min: -3.14, max: 3.14 },
+        rotY: { value: 0.008, min: -3.14, max: 3.14 },
+        rotZ: { value: -1.095, min: -3.14, max: 3.14 },
+        scale: { value: 0.14, min: 0.01, max: 1 },
         width: { value: '320px', render: () => false },
         height: { value: '640px', render: () => false },
         bg: { value: 'transparent', render: () => false },
         radius: { value: '40px', render: () => false }
     }))
 
+    // Notepad Config (Updated from User)
     const [notepadConfig, setNotepadConfig] = useControls('Layout - Notepad', () => ({
-        x: { value: -0.52, min: -2, max: 2, step: 0.01 },
-        y: { value: 0.8, min: 0, max: 3 },
-        z: { value: 0.06, min: -2, max: 2 },
+        x: { value: -0.477, min: -2, max: 2, step: 0.001 },
+        y: { value: 0.771, min: 0, max: 3, step: 0.001 },
+        z: { value: 0.05, min: -2, max: 2, step: 0.001 },
         rotX: { value: -1.57, min: -3.14, max: 3.14 },
         rotY: { value: 0, min: -3.14, max: 3.14 },
-        rotZ: { value: -2.16, min: -3.14, max: 3.14 },
-        scale: { value: 0.1, min: 0.01, max: 1 },
+        rotZ: { value: -2.186, min: -3.14, max: 3.14 },
+        scale: { value: 0.13, min: 0.01, max: 1 },
         width: { value: '400px', render: () => false },
         height: { value: '500px', render: () => false },
         bg: { value: 'transparent', render: () => false },

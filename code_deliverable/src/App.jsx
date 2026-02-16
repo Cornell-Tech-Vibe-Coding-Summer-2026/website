@@ -173,10 +173,10 @@ export default function App() {
       deskPos: { value: [-0.6, 1.0, -0.5], label: 'Desk Position', step: 0.1 },
     }),
     'Phone Interaction': folder({
-      phoneLift: { value: 0.18, min: 0, max: 1 },
-      phoneTilt: { value: 0.01, min: -1.5, max: 1.5 },
-      phoneSlideX: { value: -0.1, min: -0.5, max: 0.5 },
-      phoneSlideZ: { value: 0.06, min: -0.5, max: 0.5 },
+      phoneLift: { value: 0.185, min: 0, max: 1 },
+      phoneTilt: { value: 0.004, min: -1.5, max: 1.5 },
+      phoneSlideX: { value: -0.098, min: -0.5, max: 0.5 },
+      phoneSlideZ: { value: 0.067, min: -0.5, max: 0.5 },
     })
   })
 
