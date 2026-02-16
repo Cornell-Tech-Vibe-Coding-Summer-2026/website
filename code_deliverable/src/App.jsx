@@ -6,7 +6,7 @@ import { easing } from 'maath'
 import { MonitorContent } from './components/MonitorContent'
 import * as THREE from 'three'
 
-function PhoneAnimation({ scene, view }) {
+function PhoneAnimation({ scene, view, config }) {
   const phoneRef = useRef()
 
   useFrame((state, delta) => {
@@ -41,9 +41,10 @@ function PhoneAnimation({ scene, view }) {
       const targetRot = baseRot.clone()
 
       if (isFocused) {
-        targetPos.y += 0.08 // Lift slightly
-        targetPos.x += 0.02
-        targetRot.x -= 0.15
+        targetPos.y += config.phoneLift || 0.08
+        targetPos.x += config.phoneSlideX || 0.02
+        targetPos.z += config.phoneSlideZ || 0
+        targetRot.x += config.phoneTilt || -0.15
       }
 
       easing.damp3(phoneRef.current.position, targetPos, 0.4, delta)
@@ -53,18 +54,19 @@ function PhoneAnimation({ scene, view }) {
   return null
 }
 
-function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, view }) {
+function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggleLight, view, overlayConfig }) {
   const { scene } = useGLTF('/scene-unmerged.glb')
 
   // Define clickable objects 
   const clickableObjects = {
     'monitor': { handler: onMonitorClick, contains: ['monitor', 'imac', 'message_board', 'monitor_plane'] },
     'phone': { handler: onPhoneClick, contains: ['phone', 'smartphone', 'phone_plane'] },
+    'lamp': { handler: onToggleLight, contains: ['lamp', 'light', 'bulb'] }
   }
 
   return (
     <group>
-      <PhoneAnimation scene={scene} view={view} />
+      <PhoneAnimation scene={scene} view={view} config={overlayConfig} />
       <primitive
         object={scene}
         onClick={(e) => {
@@ -98,19 +100,26 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, view })
       />
 
       {/* Manual Placement of Monitor Content with Tuned Scale */}
-      <group position={[-0.43, 1.25, 0.0]} rotation={[0, -1.57, 0]}>
+      <group
+        position={[overlayConfig.monX, overlayConfig.monY, overlayConfig.monZ]}
+        rotation={[overlayConfig.monRotX, overlayConfig.monRotY, overlayConfig.monRotZ]}
+      >
         <Html
           transform
-          distanceFactor={0.5}
+          distanceFactor={overlayConfig.monScale}
           style={{
             width: '1024px',
             height: '768px',
             background: '#1a1a1a',
             borderRadius: '8px',
-            pointerEvents: 'none'
+            cursor: 'auto', // Ensure cursor is visible/interactive
+            zIndex: 100
           }}
+          zIndexRange={[100, 0]}
         >
-          <MonitorContent />
+          <div className="w-full h-full pointer-events-auto" onPointerDown={e => e.stopPropagation()}>
+            <MonitorContent />
+          </div>
         </Html>
       </group>
     </group>
@@ -151,9 +160,10 @@ function CameraController({ targetView, cameraPositions }) {
 
 export default function App() {
   const [view, setView] = useState('default')
+  const [deskLightOn, setDeskLightOn] = useState(false)
   const controlsRef = useRef()
 
-  // Leva controls for fine-tuning (with your adjusted values)
+  // Leva controls 
   const config = useControls({
     'Camera Positions': folder({
       defaultPos: { value: [-1.643, 1.589, 0.361], label: 'Default Position', step: 0.01 },
@@ -167,8 +177,21 @@ export default function App() {
       ambientIntensity: { value: 0.2, min: 0, max: 2, step: 0.1, label: 'Ambient' },
       ceilingIntensity: { value: 5, min: 0, max: 50, step: 1, label: 'Ceiling Light' },
       ceilingPos: { value: [-1.9, 3.1, -1.5], label: 'Ceiling Position', step: 0.1 },
-      deskIntensity: { value: 0.2, min: 0, max: 20, step: 0.5, label: 'Desk Light' },
-      deskPos: { value: [-0.7, 1.1, -0.6], label: 'Desk Position', step: 0.1 },
+      deskIntensity: { value: 1.2, min: 0, max: 20, step: 0.1, label: 'Desk Light' },
+      deskPos: { value: [-0.6, 1.0, -0.5], label: 'Desk Position', step: 0.1 },
+    }),
+    'Overlay Tuning': folder({
+      monX: { value: -0.43, min: -2, max: 2, step: 0.01 },
+      monY: { value: 1.25, min: 0, max: 3, step: 0.01 },
+      monZ: { value: 0.0, min: -2, max: 2, step: 0.01 },
+      monRotX: { value: 0, min: -3.14, max: 3.14 },
+      monRotY: { value: -1.57, min: -3.14, max: 3.14 },
+      monRotZ: { value: 0, min: -3.14, max: 3.14 },
+      monScale: { value: 0.5, min: 0.1, max: 2 },
+      phoneLift: { value: 0.2, min: 0, max: 1 },
+      phoneTilt: { value: -0.15, min: -1, max: 1 },
+      phoneSlideX: { value: 0.02, min: -0.5, max: 0.5 },
+      phoneSlideZ: { value: 0, min: -0.5, max: 0.5 },
     })
   })
 
@@ -185,6 +208,11 @@ export default function App() {
 
   const handlePhoneClick = () => {
     if (view === 'default') setView('phone')
+  }
+
+  const handleToggleLight = () => {
+    setDeskLightOn(prev => !prev)
+    console.log("Toggled Desk Light")
   }
 
   // Back on Escape
@@ -211,7 +239,7 @@ export default function App() {
         />
         <pointLight
           position={config.deskPos}
-          intensity={config.deskIntensity}
+          intensity={deskLightOn ? config.deskIntensity : 0}
           decay={2}
           castShadow
           shadow-mapSize-width={512}
@@ -228,7 +256,9 @@ export default function App() {
             view={view}
             onMonitorClick={handleMonitorClick}
             onPhoneClick={handlePhoneClick}
+            onToggleLight={handleToggleLight}
             onObjectClick={(name) => console.log('Object clicked:', name)}
+            overlayConfig={config}
           />
           <ContactShadows
             opacity={0.6}
@@ -274,7 +304,7 @@ export default function App() {
       {/* Instructions */}
       {view === 'default' && (
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-white/60 text-xs pointer-events-none">
-          Click on monitor or phone to focus
+          Click on monitor, phone, or lamp to interact
         </div>
       )}
     </div>
