@@ -1,7 +1,7 @@
 import { useState, Suspense, useRef, useEffect } from 'react'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
-import { OrbitControls, Environment, ContactShadows, useGLTF, Html } from '@react-three/drei'
-import { useControls, folder, button, Leva } from 'leva'
+import { OrbitControls, Environment, ContactShadows, useGLTF } from '@react-three/drei'
+import { useControls, folder, Leva } from 'leva'
 import { easing } from 'maath'
 import { SceneLayout } from './components/SceneLayout'
 import * as THREE from 'three'
@@ -54,24 +54,15 @@ function PhoneAnimation({ scene, view, config }) {
   return null
 }
 
-function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggleLight, view, overlayConfig, onBack }) {
+function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggleLight, onNotepadClick, view, overlayConfig, onBack }) {
   const { scene } = useGLTF('/scene-unmerged.glb')
-
-  // Enable shadows on all meshes
-  useEffect(() => {
-    scene.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true
-        child.receiveShadow = true
-      }
-    })
-  }, [scene])
 
   // Define clickable objects 
   const clickableObjects = {
-    'monitor': { handler: onMonitorClick, contains: ['monitor', 'imac', 'message_board', 'monitor_plane'] },
+    'notepad': { handler: onNotepadClick, contains: ['notebook', 'paper', 'notepad', 'notepad_plane'] },
     'phone': { handler: onPhoneClick, contains: ['phone', 'smartphone', 'phone_plane'] },
-    'lamp': { handler: onToggleLight, contains: ['lamp', 'light', 'bulb'] }
+    'lamp': { handler: onToggleLight, contains: ['lamp', 'light', 'bulb'] },
+    'monitor': { handler: onMonitorClick, contains: ['monitor', 'imac', 'message_board', 'monitor_plane'] }
   }
 
   return (
@@ -110,7 +101,7 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
       />
 
       {/* Visual Scene Layout for Content Planes */}
-      <SceneLayout view={view} onBack={onBack} />
+      <SceneLayout view={view} onBack={onBack} scene={scene} />
     </group>
   )
 }
@@ -171,6 +162,8 @@ export default function App() {
       monitorTarget: { value: [5.61, 0.18, 0], label: 'Monitor Target', step: 0.01 },
       phonePos: { value: [-0.695, 1.22, -0.339], label: 'Phone Position', step: 0.01 },
       phoneTarget: { value: [-0.43, 0.07, -0.48], label: 'Phone Target', step: 0.01 },
+      notepadPos: { value: [-0.64, 1.3, 0.4], label: 'Notepad Position', step: 0.01 },
+      notepadTarget: { value: [-0.64, 0.8, 0.06], label: 'Notepad Target', step: 0.01 },
     }),
     'Lighting': folder({
       ambientIntensity: { value: 0.2, min: 0, max: 2, step: 0.1, label: 'Ambient' },
@@ -192,6 +185,7 @@ export default function App() {
     default: { position: config.defaultPos, target: config.defaultTarget },
     monitor: { position: config.monitorPos, target: config.monitorTarget },
     phone: { position: config.phonePos, target: config.phoneTarget },
+    notepad: { position: config.notepadPos, target: config.notepadTarget },
   }
 
   const handleMonitorClick = () => {
@@ -200,6 +194,10 @@ export default function App() {
 
   const handlePhoneClick = () => {
     if (view === 'default') setView('phone')
+  }
+
+  const handleNotepadClick = () => {
+    if (view === 'default') setView('notepad')
   }
 
   const handleToggleLight = () => {
@@ -218,7 +216,7 @@ export default function App() {
 
   return (
     <div className="relative w-full h-full bg-[#050505] overflow-hidden">
-      <Canvas shadows camera={{ position: config.defaultPos, fov: 50 }}>
+      <Canvas shadows camera={{ position: config.defaultPos, fov: 50 }} gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.0 }}>
         {/* Lights - adjustable via Leva */}
         <ambientLight intensity={config.ambientIntensity} />
         <pointLight
@@ -248,6 +246,7 @@ export default function App() {
             view={view}
             onMonitorClick={handleMonitorClick}
             onPhoneClick={handlePhoneClick}
+            onNotepadClick={handleNotepadClick}
             onToggleLight={handleToggleLight}
             onObjectClick={(name) => console.log('Object clicked:', name)}
             overlayConfig={config}

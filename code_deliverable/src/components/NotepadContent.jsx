@@ -2,7 +2,7 @@ import React from 'react'
 
 export function NotepadContent() {
     return (
-        <div className="w-[400px] h-[500px] bg-[#fdfdfd] text-[#1a1a1a] p-10 flex flex-col font-serif shadow-2xl border border-[#e0e0e0] select-none">
+        <div className="w-[400px] h-[500px] bg-transparent text-zinc-800 p-10 flex flex-col font-serif select-none">
             <div className="flex justify-between items-start mb-8 opacity-40">
                 <span className="text-[10px] font-mono uppercase tracking-[0.2em] font-bold">Project Notes</span>
                 <span className="text-[10px] font-mono">02/06/2026</span>
