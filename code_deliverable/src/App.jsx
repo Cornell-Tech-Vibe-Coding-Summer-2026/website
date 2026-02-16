@@ -3,7 +3,7 @@ import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import { OrbitControls, Environment, ContactShadows, useGLTF, Html } from '@react-three/drei'
 import { useControls, folder, button } from 'leva'
 import { easing } from 'maath'
-import { MonitorContent } from './components/MonitorContent'
+import { SceneLayout } from './components/SceneLayout'
 import * as THREE from 'three'
 
 function PhoneAnimation({ scene, view, config }) {
@@ -99,31 +99,8 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
         onPointerOut={() => document.body.style.cursor = 'auto'}
       />
 
-      {/* Manual Placement of Monitor Content with Tuned Scale */}
-      {view === 'monitor' && (
-        <group
-          position={[overlayConfig.monX, overlayConfig.monY, overlayConfig.monZ]}
-          rotation={[overlayConfig.monRotX, overlayConfig.monRotY, overlayConfig.monRotZ]}
-        >
-          <Html
-            transform
-            distanceFactor={overlayConfig.monScale}
-            style={{
-              width: '1024px',
-              height: '768px',
-              background: '#1a1a1a',
-              borderRadius: '8px',
-              cursor: 'auto', // Ensure cursor is visible/interactive
-              zIndex: 100
-            }}
-            zIndexRange={[100, 0]}
-          >
-            <div className="w-full h-full pointer-events-auto" onPointerDown={e => e.stopPropagation()}>
-              <MonitorContent onBack={onBack} />
-            </div>
-          </Html>
-        </group>
-      )}
+      {/* Visual Scene Layout for Content Planes */}
+      <SceneLayout view={view} onBack={onBack} />
     </group>
   )
 }
@@ -192,14 +169,7 @@ export default function App() {
       deskIntensity: { value: 1.2, min: 0, max: 20, step: 0.1, label: 'Desk Light' },
       deskPos: { value: [-0.6, 1.0, -0.5], label: 'Desk Position', step: 0.1 },
     }),
-    'Overlay Tuning': folder({
-      monX: { value: -0.43, min: -2, max: 2, step: 0.01 },
-      monY: { value: 1.25, min: 0, max: 3, step: 0.01 },
-      monZ: { value: 0.0, min: -2, max: 2, step: 0.01 },
-      monRotX: { value: 0, min: -3.14, max: 3.14 },
-      monRotY: { value: -1.57, min: -3.14, max: 3.14 },
-      monRotZ: { value: 0, min: -3.14, max: 3.14 },
-      monScale: { value: 0.5, min: 0.1, max: 2 },
+    'Phone Interaction': folder({
       phoneLift: { value: 0.18, min: 0, max: 1 },
       phoneTilt: { value: 0.01, min: -1.5, max: 1.5 },
       phoneSlideX: { value: -0.1, min: -0.5, max: 0.5 },
