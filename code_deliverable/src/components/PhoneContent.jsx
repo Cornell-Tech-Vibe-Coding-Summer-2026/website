@@ -8,7 +8,7 @@ export function PhoneContent() {
     ]
 
     return (
-        <div className="w-[320px] h-[640px] bg-black text-white flex flex-col overflow-y-auto snap-y snap-mandatory select-none custom-scrollbar-none rounded-[40px] border-8 border-[#0b0b0b]">
+        <div className="w-[320px] h-[640px] bg-black text-white flex flex-col overflow-y-auto snap-y snap-mandatory select-none custom-scrollbar-none border-8 border-[#0b0b0b]">
             {reels.map((reel) => (
                 <div key={reel.id} className="flex-shrink-0 w-full h-full snap-start relative flex items-center justify-center border-b border-white/5">
                     <div className={`absolute inset-0 ${reel.color} opacity-40`} />

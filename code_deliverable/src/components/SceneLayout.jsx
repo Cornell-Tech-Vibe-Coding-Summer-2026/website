@@ -31,7 +31,7 @@ function NotepadText() {
     )
 }
 
-function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode, trackObject }) {
+function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode, trackObject, onClick }) {
     const offsetGroupRef = useRef()
 
     const handleTransformChange = () => {
@@ -82,14 +82,15 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                         overflow: 'hidden',
                         pointerEvents: 'none'
                     }}
-                    zIndexRange={[name === 'Phone' ? 100 : 10, 0]}
-                    // Occlusion disabled to prevent black screen regression
-                    occlude={false}
+                    zIndexRange={[name === 'Phone' ? 50 : 10, 0]}
+                    // Occlusion enabled via "blending" for correct depth sorting (fixes visible-through-meshes)
+                    occlude="blending"
                 >
                     <div
                         className="w-full h-full"
-                        style={{ pointerEvents: layoutMode ? 'none' : 'auto' }}
+                        style={{ pointerEvents: layoutMode ? 'none' : 'auto', cursor: onClick ? 'pointer' : 'auto' }}
                         onPointerDown={e => !layoutMode && e.stopPropagation()}
+                        onClick={!layoutMode ? onClick : undefined}
                     >
                         {children}
                     </div>
@@ -116,7 +117,7 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
     return content
 }
 
-export function SceneLayout({ view, onBack, scene, config: overlayConfig, trackObject, phoneContentRef }) {
+export function SceneLayout({ view, onBack, onPhoneClick, scene, config: overlayConfig, trackObject, phoneContentRef }) {
     const { layoutMode, gizmoMode } = useControls({
         'Layout Mode': folder({
             layoutMode: { value: false, label: 'Enable Gizmos' },
@@ -141,17 +142,17 @@ export function SceneLayout({ view, onBack, scene, config: overlayConfig, trackO
 
     // Phone Config - Restored for Layout Mode
     const [phoneConfig, setPhoneConfig] = useControls('Layout - Phone', () => ({
-        x: { value: 0.0, min: -0.2, max: 0.2, step: 0.0001 },
-        y: { value: 0.002, min: -0.2, max: 0.2, step: 0.0001 },
-        z: { value: 0.0, min: -0.2, max: 0.2, step: 0.0001 },
-        rotX: { value: 0, min: -3.14, max: 3.14 },
-        rotY: { value: 0, min: -3.14, max: 3.14 },
-        rotZ: { value: 0, min: -3.14, max: 3.14 },
+        x: { value: -0.2, min: -0.2, max: 0.2, step: 0.0001 },
+        y: { value: 0.2, min: -0.2, max: 0.2, step: 0.0001 },
+        z: { value: -0.2, min: -0.2, max: 2, step: 0.0001 },
+        rotX: { value: -1.552, min: -3.14, max: 3.14 },
+        rotY: { value: -0.07, min: -3.14, max: 3.14 },
+        rotZ: { value: -1.106, min: -3.14, max: 3.14 },
         scale: { value: 0.14, min: 0.01, max: 0.5 },
         width: { value: '320px', render: () => false },
         height: { value: '640px', render: () => false },
         bg: { value: 'transparent', render: () => false },
-        radius: { value: '40px', render: () => false }
+        radius: { value: '0px', render: () => false }
     }))
 
     // Notepad Config (Updated from User)
@@ -189,6 +190,7 @@ export function SceneLayout({ view, onBack, scene, config: overlayConfig, trackO
                     setConfig={setPhoneConfig}
                     layoutMode={layoutMode}
                     gizmoMode={gizmoMode}
+                    onClick={onPhoneClick}
                 >
                     <PhoneContent />
                 </ContentPlane>

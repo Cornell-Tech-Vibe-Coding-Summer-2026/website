@@ -137,7 +137,7 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
 
 
       {/* Visual Scene Layout for Content Planes (Phone restored) */}
-      <SceneLayout view={view} onBack={onBack} scene={scene} config={overlayConfig} phoneContentRef={contentRef} />
+      <SceneLayout view={view} onBack={onBack} onPhoneClick={onPhoneClick} scene={scene} config={overlayConfig} phoneContentRef={contentRef} />
     </group>
   )
 }
@@ -319,7 +319,7 @@ export default function App() {
       </Canvas>
 
       {/* UI Overlay */}
-      <div className="absolute top-8 left-8 z-50 pointer-events-none">
+      <div className="absolute top-8 left-8 z-[100] pointer-events-none">
         <h1 className="text-white text-5xl font-black tracking-tighter uppercase mb-2 drop-shadow-lg">Vibe Coding Ethics</h1>
         <p className="text-white/60 text-sm font-mono tracking-widest uppercase drop-shadow-md">Designing with Character • Cornell Tech 2026</p>
       </div>
@@ -328,7 +328,7 @@ export default function App() {
       {view !== 'default' && (
         <button
           onClick={() => setView('default')}
-          className="absolute bottom-12 left-1/2 -translate-x-1/2 z-50 px-8 py-3 bg-white text-black text-sm font-bold tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-transform shadow-xl"
+          className="absolute bottom-12 left-1/2 -translate-x-1/2 z-[100] px-8 py-3 bg-white text-black text-sm font-bold tracking-widest uppercase rounded-full hover:scale-105 active:scale-95 transition-transform shadow-xl"
         >
           Back to Desktop
         </button>
