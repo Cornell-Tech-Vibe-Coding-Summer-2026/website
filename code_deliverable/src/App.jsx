@@ -3,6 +3,7 @@ import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import { OrbitControls, Environment, ContactShadows, useGLTF, Html } from '@react-three/drei'
 import { useControls, folder, Leva } from 'leva'
 import { easing } from 'maath'
+import { Perf } from 'r3f-perf'
 import { SceneLayout } from './components/SceneLayout'
 import { PhoneContent } from './components/PhoneContent'
 import * as THREE from 'three'
@@ -84,7 +85,7 @@ function PhoneAnimation({ scene, view, config, contentRef }) {
 
 
 
-function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggleLight, onNotepadClick, view, overlayConfig, onBack, setPhoneMesh, phoneMesh }) {
+function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggleLight, onNotepadClick, view, overlayConfig, shadowConfig, onBack, setPhoneMesh, phoneMesh }) {
   const { scene } = useGLTF('/scene-unmerged.glb')
   const contentRef = useRef()
 
@@ -92,8 +93,26 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
   useEffect(() => {
     scene.traverse((child) => {
       if (child.isMesh) {
-        child.castShadow = true
-        child.receiveShadow = true
+
+        // Shadow Logic based on Config
+        const isEnabled = shadowConfig.enabled
+        const mode = shadowConfig.mode // 'all', 'essential', 'none'
+
+        if (!isEnabled || mode === 'none') {
+          child.castShadow = false
+          child.receiveShadow = false
+        } else if (mode === 'all') {
+          child.castShadow = true
+          child.receiveShadow = true
+        } else if (mode === 'essential') {
+          // Essential: Desk receives, Key Objects cast
+          const name = child.name.toLowerCase()
+          const isDesk = name.includes('desk') || name.includes('wall') || name.includes('floor')
+          const isKeyObject = name.includes('phone') || name.includes('monitor') || name.includes('lamp') || name.includes('book') || name.includes('keyboard') || name.includes('mouse') || name.includes('cup')
+
+          child.receiveShadow = true // Most things should receive for grounding
+          child.castShadow = isKeyObject
+        }
 
         // If material is Basic, it won't receive shadows. Upgrade to Standard.
         if (child.material.type === 'MeshBasicMaterial') {
@@ -114,7 +133,7 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
         }
       }
     })
-  }, [scene])
+  }, [scene, shadowConfig])
 
   // Define clickable objects 
   const clickableObjects = {
@@ -243,6 +262,12 @@ export default function App() {
       phoneSlideX: { value: -0.098, min: -0.5, max: 0.5 },
       phoneSlideZ: { value: 0.067, min: -0.5, max: 0.5 },
     }),
+    'Shadows & Performance': folder({
+      perfVisible: { value: false, label: 'Show Perf Monitor' },
+      shadowsEnabled: { value: true, label: 'Enable Shadows' },
+      shadowMode: { value: 'essential', options: ['all', 'essential', 'none'], label: 'Shadow Mode' },
+      contactOpacity: { value: 0.7, min: 0, max: 1, label: 'Contact Opacity' },
+    })
   })
 
   // Camera positions using Leva controls
@@ -317,12 +342,13 @@ export default function App() {
             onToggleLight={handleToggleLight}
             onObjectClick={(name) => console.log('Object clicked:', name)}
             overlayConfig={config}
+            shadowConfig={{ enabled: config.shadowsEnabled, mode: config.shadowMode }}
             onBack={() => setView('default')}
             setPhoneMesh={setPhoneMesh}
             phoneMesh={phoneMesh}
           />
           <ContactShadows
-            opacity={0.7}
+            opacity={config.contactOpacity}
             scale={12}
             blur={2}
             far={5}
@@ -330,6 +356,7 @@ export default function App() {
             color="#000000"
             position={[0, 0.02, 0]}
           />
+          {config.perfVisible && <Perf position="bottom-left" />}
         </Suspense>
 
         <OrbitControls
