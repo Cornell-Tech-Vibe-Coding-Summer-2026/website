@@ -83,11 +83,132 @@ function PhoneAnimation({ scene, view, config, contentRef }) {
   return null
 }
 
+function ReadingView({ onClose }) {
+  return (
+    <div className="absolute inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-[#f4e4bc] text-gray-900 w-full max-w-4xl h-[90vh] p-12 rounded shadow-2xl overflow-y-auto relative font-serif" onClick={e => e.stopPropagation()}>
+        <button onClick={onClose} className="absolute top-8 right-8 text-2xl opacity-50 hover:opacity-100">✕</button>
+
+        <h1 className="text-5xl font-bold mb-4 font-serif text-[#2a2a2a]">Values at Play in Digital Games</h1>
+        <h2 className="text-2xl italic mb-12 text-[#5a5a5a]">Mary Flanagan and Helen Nissenbaum</h2>
+
+        <div className="grid grid-cols-2 gap-12 text-lg leading-relaxed">
+          <div>
+            <p className="mb-6 first-letter:text-5xl first-letter:font-bold first-letter:float-left first-letter:mr-3">
+              Values are not just added to technology; they are embedded within it. This core insight drives the "Values at Play" (VAP) framework, offering a systematic approach to identifying, negotiating, and implementing ethical values in game design.
+            </p>
+            <p className="mb-6">
+              Designers must move beyond "neutrality" and recognize that every design choice—from mechanics to narrative to character representation—expresses a value system. The VAP framework empowers creators to make these choices intentional.
+            </p>
+            <h3 className="text-xl font-bold mt-8 mb-4 border-b border-gray-400 pb-2">Core VAP Heuristics</h3>
+            <ul className="list-disc pl-5 space-y-2">
+              <li><strong>Discovery:</strong> Translating values into design elements.</li>
+              <li><strong>Translation:</strong> Implement values via mechanics.</li>
+              <li><strong>Verification:</strong> resolving conflicts.</li>
+            </ul>
+          </div>
+          <div className="space-y-8">
+            <div className="p-6 bg-white/50 rounded border border-gray-300">
+              <h4 className="font-bold uppercase tracking-widest text-sm mb-2">Suggested Reading</h4>
+              <ul className="space-y-3 text-base">
+                <li><a href="#" className="text-blue-800 underline hover:text-blue-600">Introduction to Values at Play</a></li>
+                <li><a href="#" className="text-blue-800 underline hover:text-blue-600">Bias in Computer Systems (Friedman)</a></li>
+                <li><a href="#" className="text-blue-800 underline hover:text-blue-600">Download Full Syllabus (PDF)</a></li>
+              </ul>
+            </div>
+
+            <div className="p-6 bg-[#2a2a2a] text-white rounded">
+              <h4 className="font-bold uppercase tracking-widest text-sm mb-2 text-yellow-500">Public Interest Tech</h4>
+              <p className="text-sm opacity-80 mb-4">
+                Explore how technology can serve the public good. Vibe Coding integrates these principles directly into the technical workflow.
+              </p>
+              <a href="https://pitechethics.github.io/" target="_blank" rel="noreferrer" className="inline-block px-4 py-2 border border-white/30 hover:bg-white hover:text-black transition-colors text-sm uppercase tracking-wider">
+                Visit PiTech Ethics
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function HoverLiftManager({ scene, hoveredName }) {
+  const originalPos = useRef({})
+
+  useFrame((state, delta) => {
+    scene.traverse((obj) => {
+      // Apply lift if object matches hoveredName
+      if (obj.isMesh && hoveredName) {
+        // Check if this object is part of the hovered group
+        // We use a loose check because 'hoveredName' is the key from clickableObjects
+        // which might match a parent or specific node.
+
+        // We need a way to map 'hoveredName' (e.g. 'keyboard') to actual meshes.
+        // The cleanest way is to use the same 'contains' logic.
+      }
+    })
+  })
+
+  // Easier approach: animate specific known names
+  // We can't easily traverse every frame for 1000 meshes.
+  // Instead, let's pre-find the target roots.
+  return null
+}
 
 
-function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggleLight, onNotepadClick, view, overlayConfig, shadowConfig, onBack, setPhoneMesh, phoneMesh }) {
+
+function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggleLight, onNotepadClick, view, overlayConfig, shadowConfig, onBack, setPhoneMesh, phoneMesh, onReadingClick }) {
   const { scene } = useGLTF('/scene-unmerged.glb')
   const contentRef = useRef()
+  const [hoveredTarget, setHoveredTarget] = useState(null)
+
+  // Define clickable objects 
+  const clickableObjects = {
+    'notepad': { handler: onNotepadClick, contains: ['notebook', 'paper', 'notepad', 'notepad_plane'], lift: false },
+    'phone': { handler: onPhoneClick, contains: ['phone', 'smartphone', 'phone_plane'], lift: true },
+    'lamp': { handler: onToggleLight, contains: ['lamp', 'light', 'bulb'], lift: false },
+    'monitor': { handler: onMonitorClick, contains: ['monitor', 'imac', 'message_board', 'monitor_plane', 'screen'], lift: false },
+    'keyboard': { handler: onMonitorClick, contains: ['keyboard', 'keys'], lift: true },
+    'mouse': { handler: onMonitorClick, contains: ['mouse'], lift: true },
+    'book': { handler: onReadingClick, contains: ['book', 'values_at_play'], lift: true },
+    'paper_stack': { handler: onReadingClick, contains: ['stack', 'papers'], lift: true }
+  }
+
+  // Animation Loop for Hover Lift
+  // We use a ref map to store initial Y positions to avoid drift
+  const initialY = useRef({})
+
+  useFrame((state, delta) => {
+    scene.traverse((child) => {
+      if (child.isMesh || child.type === 'Group') {
+        // Identify if this child belongs to a "liftable" interaction
+        let targetKey = null
+        const name = child.name.toLowerCase()
+
+        for (const [key, config] of Object.entries(clickableObjects)) {
+          if (config.lift && config.contains.some(str => name.includes(str))) {
+            targetKey = key
+            break
+          }
+        }
+
+        if (targetKey) {
+          // Initialize base position
+          if (initialY.current[child.uuid] === undefined) {
+            initialY.current[child.uuid] = child.position.y
+          }
+
+          const targetY = (hoveredTarget === targetKey)
+            ? initialY.current[child.uuid] + 0.05 // Lift amount
+            : initialY.current[child.uuid]
+
+          // Smoothly damp to target
+          easing.damp(child.position, 'y', targetY, 0.1, delta)
+        }
+      }
+    })
+  })
 
   // Enable shadows on all meshes and fix materials
   useEffect(() => {
@@ -135,13 +256,7 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
     })
   }, [scene, shadowConfig])
 
-  // Define clickable objects 
-  const clickableObjects = {
-    'notepad': { handler: onNotepadClick, contains: ['notebook', 'paper', 'notepad', 'notepad_plane'] },
-    'phone': { handler: onPhoneClick, contains: ['phone', 'smartphone', 'phone_plane'] },
-    'lamp': { handler: onToggleLight, contains: ['lamp', 'light', 'bulb'] },
-    'monitor': { handler: onMonitorClick, contains: ['monitor', 'imac', 'message_board', 'monitor_plane'] }
-  }
+
 
   return (
     <group>
@@ -177,8 +292,27 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
 
           if (!targetFound && onObjectClick) onObjectClick(clickedNode.name)
         }}
-        onPointerOver={() => document.body.style.cursor = 'pointer'}
-        onPointerOut={() => document.body.style.cursor = 'auto'}
+        onPointerOver={(e) => {
+          e.stopPropagation()
+          document.body.style.cursor = 'pointer'
+
+          // Find hover target
+          let curr = e.object
+          while (curr) {
+            const name = curr.name.toLowerCase()
+            for (const [key, config] of Object.entries(clickableObjects)) {
+              if (config.contains.some(str => name.includes(str))) {
+                setHoveredTarget(key)
+                return
+              }
+            }
+            curr = curr.parent
+          }
+        }}
+        onPointerOut={() => {
+          document.body.style.cursor = 'auto'
+          setHoveredTarget(null)
+        }}
       />
 
 
@@ -223,6 +357,20 @@ function CameraController({ targetView, cameraPositions }) {
     // Update OrbitControls target
     const controls = camera.userData.controls
     if (controls) {
+      if (targetView === 'reading') {
+        // Auto-position for reading (overhead or zoomed)
+        // Actually, reading view is an overlay, so we might want to stay in default or zoom to book?
+        // Let's keep camera static or move to a "reading" position.
+        // For now, let's reuse 'notepad' position or a new one.
+        // Let's just use 'default' but maybe slightly zoomed?
+        // The user didn't specify strict camera for reading, just "nice looking page".
+        // The Overlay covers the screen, so camera position matters less, 
+        // but let's drift to "notepad" for context.
+
+        // Let's actually NOT move camera for reading overlay, 
+        // or move to a generic "desk focus".
+      }
+
       easing.damp3(controls.target, targetLookAt.current, 0.4, delta)
       controls.update()
     }
@@ -290,6 +438,10 @@ export default function App() {
     if (view === 'default') setView('notepad')
   }
 
+  const handleReadingClick = () => {
+    if (view === 'default') setView('reading')
+  }
+
   const handleToggleLight = () => {
     setDeskLightOn(prev => !prev)
     console.log("Toggled Desk Light")
@@ -339,6 +491,7 @@ export default function App() {
             onMonitorClick={handleMonitorClick}
             onPhoneClick={handlePhoneClick}
             onNotepadClick={handleNotepadClick}
+            onReadingClick={handleReadingClick}
             onToggleLight={handleToggleLight}
             onObjectClick={(name) => console.log('Object clicked:', name)}
             overlayConfig={config}
@@ -378,6 +531,11 @@ export default function App() {
         <h1 className="text-white text-5xl font-black tracking-tighter uppercase mb-2 drop-shadow-lg">Vibe Coding Ethics</h1>
         <p className="text-white/60 text-sm font-mono tracking-widest uppercase drop-shadow-md">Designing with Character • Cornell Tech 2026</p>
       </div>
+
+      {/* Reading View Overlay */}
+      {view === 'reading' && (
+        <ReadingView onClose={() => setView('default')} />
+      )}
 
       {/* View indicator and back button */}
       {view !== 'default' && (
