@@ -8,7 +8,7 @@ import { SceneLayout } from './components/SceneLayout'
 import { PhoneContent } from './components/PhoneContent'
 import * as THREE from 'three'
 
-function PhoneAnimation({ scene, view, config, contentRef }) {
+function PhoneAnimation({ scene, view, config, contentRef, hovered }) {
   const phoneRef = useRef()
 
   // Reusable vectors to avoid GC in loop
@@ -20,7 +20,8 @@ function PhoneAnimation({ scene, view, config, contentRef }) {
     if (!phoneRef.current) {
       scene.traverse(obj => {
         // Broad check for Phone object
-        if (obj.name.includes('Phone') || obj.name.includes('Smartphone') || obj.name === 'Node003_1') {
+        // REMOVED Node003_1 as it likely refers to the Desk/Surface
+        if (obj.name.includes('Phone') || obj.name.includes('Smartphone')) {
           // Prefer Groups, but accept Meshes if no Group found yet
           if (obj.type === 'Group' || !phoneRef.current) {
             phoneRef.current = obj
@@ -33,6 +34,7 @@ function PhoneAnimation({ scene, view, config, contentRef }) {
 
     if (phoneRef.current) {
       const isFocused = view === 'phone'
+      const isHovered = hovered
 
       // Store base transform
       if (!phoneRef.current.userData.basePos) {
@@ -51,6 +53,9 @@ function PhoneAnimation({ scene, view, config, contentRef }) {
         targetPos.x += config.phoneSlideX || -0.098
         targetPos.z += config.phoneSlideZ || 0.067
         targetRot.x += config.phoneTilt || 0.004
+      } else if (isHovered && view === 'default') {
+        // Hover lift (smaller, just vertical)
+        targetPos.y += 0.05
       }
 
       // 1. Animate Phone Mesh (Local Transform)
@@ -69,14 +74,6 @@ function PhoneAnimation({ scene, view, config, contentRef }) {
         // Apply to Content Group (which is at Scene Root)
         contentRef.current.position.copy(vec.current)
         contentRef.current.quaternion.copy(quat.current)
-
-        // Apply Local Offset: "Sit on Screen"
-        // We translate in local space of the Content Group (which matches Phone orientation)
-        // +Y is "up" relative to phone face usually.
-        // Apply Local Offset: "Sit on Screen"
-        // We translate in local space of the Content Group (which matches Phone orientation)
-        // With Gizmos restored in SceneLayout, we don't need manual offsets here anymore.
-        // contentRef.current.translateY(0.002)
       }
     }
   })
@@ -189,45 +186,66 @@ function ReadingView({ onClose }) {
 
 
 
-function HoverLiftManager({ scene, hoveredName }) {
-  const originalPos = useRef({})
+// Debug: Print Scene Hierarchy once
 
-  useFrame((state, delta) => {
+
+function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggleLight, onNotepadClick, view, overlayConfig, shadowConfig, onBack, setPhoneMesh, phoneMesh, onReadingClick, onPapersClick, paperStackPos }) {
+  const { scene } = useGLTF('/scene-unmerged.glb')
+
+  // Fix: Lift Book and Notebook slightly to avoid Z-fighting/Occlusion with Desk
+  useEffect(() => {
     scene.traverse((obj) => {
-      // Apply lift if object matches hoveredName
-      if (obj.isMesh && hoveredName) {
-        // Check if this object is part of the hovered group
-        // We use a loose check because 'hoveredName' is the key from clickableObjects
-        // which might match a parent or specific node.
-
-        // We need a way to map 'hoveredName' (e.g. 'keyboard') to actual meshes.
-        // The cleanest way is to use the same 'contains' logic.
+      const name = obj.name.toLowerCase()
+      // Lift Book Group
+      if (name.includes('book') || name.includes('values')) {
+        // Apply to Groups or Meshes
+        if (obj.isMesh || obj.type === 'Group') {
+          // Check if already corrected
+          if (!obj.userData.correctedHeight) {
+            obj.position.y += 0.015
+            obj.updateMatrixWorld()
+            obj.userData.correctedHeight = true
+          }
+        }
+      }
+      // Lift Notebook Group slightly
+      if (name.includes('notebook')) {
+        if ((obj.isMesh || obj.type === 'Group') && !obj.userData.correctedHeight) {
+          obj.position.y += 0.005
+          obj.updateMatrixWorld()
+          obj.userData.correctedHeight = true
+        }
       }
     })
-  })
+  }, [scene])
 
-  // Easier approach: animate specific known names
-  // We can't easily traverse every frame for 1000 meshes.
-  // Instead, let's pre-find the target roots.
-  return null
-}
-
-
-
-function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggleLight, onNotepadClick, view, overlayConfig, shadowConfig, onBack, setPhoneMesh, phoneMesh, onReadingClick, onPapersClick }) {
-  const { scene } = useGLTF('/scene-unmerged.glb')
   const contentRef = useRef()
   const [hoveredTarget, setHoveredTarget] = useState(null)
+  const stackRef = useRef()
+
+  // Apply Paper Stack Position
+  useFrame(() => {
+    if (paperStackPos && stackRef.current) {
+      stackRef.current.position.set(...paperStackPos)
+    } else if (!stackRef.current) {
+      // Try to find stack
+      const stack = scene.getObjectByName('Paper_1') || scene.getObjectByName('Stack')
+      if (stack) {
+        stackRef.current = stack
+        // Save initial pos if needed, but Leva overrides
+      }
+    }
+  })
 
   // Define clickable objects 
   const clickableObjects = {
-    'notepad': { handler: onNotepadClick, contains: ['notebook', 'paper', 'notepad', 'notepad_plane'], excludes: ['stack', 'paper_1', 'papers'], lift: false },
-    'phone': { handler: onPhoneClick, contains: ['phone', 'smartphone', 'phone_plane'], lift: true },
+    'notepad': { handler: onNotepadClick, contains: ['notebook', 'notepad', 'notepad_plane'], excludes: ['stack', 'paper', 'papers'], lift: false },
+    'phone': { handler: onPhoneClick, contains: ['phone', 'smartphone', 'phone_plane', 'node003_1'], lift: false }, // Lift handled by PhoneAnimation
     'lamp': { handler: onToggleLight, contains: ['lamp', 'light', 'bulb'], lift: false },
     // Monitor mesh itself is no longer clickable/hoverable, only peripherals
     'keyboard': { handler: onMonitorClick, contains: ['keyboard', 'keys'], lift: true },
     'mouse': { handler: onMonitorClick, contains: ['mouse'], excludes: ['pad'], lift: true },
-    'book': { handler: onReadingClick, contains: ['book', 'values_at_play'], lift: true },
+    'book': { handler: onReadingClick, contains: ['book', 'values', 'play'], excludes: ['notebook', 'phone', 'node003'], lift: true },
     'paper_stack': { handler: onPapersClick, contains: ['stack', 'paper_1', 'papers'], lift: true }
   }
 
@@ -319,7 +337,7 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
 
   return (
     <group>
-      <PhoneAnimation scene={scene} view={view} config={{ ...overlayConfig, onPhoneFound: setPhoneMesh }} contentRef={contentRef} />
+      <PhoneAnimation scene={scene} view={view} config={{ ...overlayConfig, onPhoneFound: setPhoneMesh }} contentRef={contentRef} hovered={hoveredTarget === 'phone'} />
 
 
 
@@ -355,17 +373,32 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
         }}
         onPointerOver={(e) => {
           e.stopPropagation()
-          document.body.style.cursor = 'pointer'
+
+          // Disable hover interactions when zoomed in specific views
+          if (view === 'phone' || view === 'monitor') {
+            document.body.style.cursor = 'auto'
+            return
+          }
+
+          const clickedNode = e.object
+          console.log('Hovered Mesh:', clickedNode.name, 'Parent:', clickedNode.parent ? clickedNode.parent.name : 'None')
 
           // Find hover target
           let curr = e.object
           while (curr) {
             const name = curr.name.toLowerCase()
+
+            // Debugging Book/Notebook overlap
+            if (name.includes('book') || name.includes('values') || name.includes('notebook')) {
+              console.log('Hover Check:', name, 'on', curr.name)
+            }
             for (const [key, config] of Object.entries(clickableObjects)) {
               if (config.contains.some(str => name.includes(str))) {
                 // Check excludes
                 if (config.excludes && config.excludes.some(str => name.includes(str))) continue
 
+                // Only change cursor if we found a valid target
+                document.body.style.cursor = 'pointer'
                 setHoveredTarget(key)
                 return
               }
@@ -460,6 +493,7 @@ export default function App() {
       phoneTarget: { value: [-0.43, 0.07, -0.48], label: 'Phone Target', step: 0.01 },
       notepadPos: { value: [-1.01, 1.04, 0.1], label: 'Notepad Position', step: 0.01 },
       notepadTarget: { value: [-0.21, 0.43, 0.47], label: 'Notepad Target', step: 0.01 },
+      paperStackPos: { value: [0, 0, 0], label: 'Paper Stack Pos', step: 0.01 }, // Placeholder default, will need tuning
     }),
     'Lighting': folder({
       ambientIntensity: { value: 0.6, min: 0, max: 2, step: 0.1, label: 'Ambient' },
@@ -568,6 +602,7 @@ export default function App() {
             onBack={() => setView('default')}
             setPhoneMesh={setPhoneMesh}
             phoneMesh={phoneMesh}
+            paperStackPos={config.paperStackPos}
           />
           <ContactShadows
             opacity={config.contactOpacity}
