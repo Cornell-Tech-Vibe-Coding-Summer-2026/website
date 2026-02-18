@@ -8,7 +8,51 @@ import { PhoneContent } from './PhoneContent'
 import * as THREE from 'three'
 import { easing } from 'maath'
 
-// Simple text component for Notepad
+// --- Configuration Defaults ---
+const LAYOUT_DEFAULTS = {
+    Monitor: {
+        x: { value: -0.424, min: -2, max: 2, step: 0.001 },
+        y: { value: 1.18, min: 0, max: 3, step: 0.001 },
+        z: { value: -0.151, min: -2, max: 2, step: 0.001 },
+        rotX: { value: -1.764, min: -3.14, max: 3.14 },
+        rotY: { value: -1.387, min: -3.14, max: 3.14 },
+        rotZ: { value: -1.764, min: -3.14, max: 3.14 },
+        scale: { value: 0.25, min: 0.1, max: 2 },
+        width: { value: '1024px', render: () => false },
+        height: { value: '640px', render: () => false },
+        bg: { value: '#050505', render: () => false },
+        radius: { value: '4px', render: () => false }
+    },
+    Phone: {
+        x: { value: -0.537, min: -1, max: 1, step: 0.0001 },
+        y: { value: 0.778, min: -1, max: 1, step: 0.0001 },
+        z: { value: -0.477, min: -1, max: 1, step: 0.0001 },
+        rotX: { value: -1.569, min: -3.14, max: 3.14 },
+        rotY: { value: 0.003, min: -3.14, max: 3.14 },
+        rotZ: { value: -1.098, min: -3.14, max: 3.14 },
+        scale: { value: 0.14, min: 0.01, max: 0.5 },
+        width: { value: '320px', render: () => false },
+        height: { value: '640px', render: () => false },
+        bg: { value: 'transparent', render: () => false },
+        radius: { value: '0px', render: () => false }
+    },
+    Notepad: {
+        x: { value: -0.483, min: -2, max: 2, step: 0.001 },
+        y: { value: 0.771, min: 0, max: 3, step: 0.001 },
+        z: { value: 0.043, min: -2, max: 2, step: 0.001 },
+        rotX: { value: -1.57, min: -3.14, max: 3.14 },
+        rotY: { value: 0, min: -3.14, max: 3.14 },
+        rotZ: { value: -2.16, min: -3.14, max: 3.14 },
+        scale: { value: 0.12, min: 0.01, max: 1 },
+        width: { value: '400px', render: () => false },
+        height: { value: '500px', render: () => false },
+        bg: { value: 'transparent', render: () => false },
+        radius: { value: '2px', render: () => false }
+    }
+}
+
+// --- Components ---
+
 function NotepadText() {
     return (
         <group>
@@ -31,7 +75,12 @@ function NotepadText() {
     )
 }
 
-function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode, trackObject, onClick }) {
+function useLayoutPlane(name, defaults) {
+    const [config, setConfig] = useControls(`Layout - ${name}`, () => defaults)
+    return { config, setConfig }
+}
+
+function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode, onClick }) {
     const offsetGroupRef = useRef()
 
     const handleTransformChange = () => {
@@ -45,14 +94,15 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                 rotY: Number(rotation.y.toFixed(3)),
                 rotZ: Number(rotation.z.toFixed(3))
             }
-            // Avoid infinite loops / redundant updates
+
+            // Check for meaningful changes before updating
             if (
-                newConfig.x !== config.x ||
-                newConfig.y !== config.y ||
-                newConfig.z !== config.z ||
-                newConfig.rotX !== config.rotX ||
-                newConfig.rotY !== config.rotY ||
-                newConfig.rotZ !== config.rotZ
+                Math.abs(newConfig.x - config.x) > 0.0001 ||
+                Math.abs(newConfig.y - config.y) > 0.0001 ||
+                Math.abs(newConfig.z - config.z) > 0.0001 ||
+                Math.abs(newConfig.rotX - config.rotX) > 0.0001 ||
+                Math.abs(newConfig.rotY - config.rotY) > 0.0001 ||
+                Math.abs(newConfig.rotZ - config.rotZ) > 0.0001
             ) {
                 setConfig(newConfig)
             }
@@ -99,7 +149,7 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
         </group>
     )
 
-    if (layoutMode && (name === 'Monitor' || name === 'Notepad' || name === 'Phone')) {
+    if (layoutMode) {
         return (
             <TransformControls
                 object={offsetGroupRef}
@@ -125,50 +175,10 @@ export function SceneLayout({ view, onBack, onPhoneClick, scene, config: overlay
         })
     })
 
-    // Monitor Config 
-    const [monitorConfig, setMonitorConfig] = useControls('Layout - Monitor', () => ({
-        x: { value: -0.424, min: -2, max: 2, step: 0.001 },
-        y: { value: 1.18, min: 0, max: 3, step: 0.001 },
-        z: { value: -0.151, min: -2, max: 2, step: 0.001 },
-        rotX: { value: -1.764, min: -3.14, max: 3.14 },
-        rotY: { value: -1.387, min: -3.14, max: 3.14 },
-        rotZ: { value: -1.764, min: -3.14, max: 3.14 },
-        scale: { value: 0.25, min: 0.1, max: 2 },
-        width: { value: '1024px', render: () => false },
-        height: { value: '640px', render: () => false },
-        bg: { value: '#050505', render: () => false },
-        radius: { value: '4px', render: () => false }
-    }))
-
-    // Phone Config - Restored for Layout Mode
-    const [phoneConfig, setPhoneConfig] = useControls('Layout - Phone', () => ({
-        x: { value: -0.2, min: -0.2, max: 0.2, step: 0.0001 },
-        y: { value: 0.2, min: -0.2, max: 0.2, step: 0.0001 },
-        z: { value: -0.2, min: -0.2, max: 2, step: 0.0001 },
-        rotX: { value: -1.552, min: -3.14, max: 3.14 },
-        rotY: { value: -0.07, min: -3.14, max: 3.14 },
-        rotZ: { value: -1.106, min: -3.14, max: 3.14 },
-        scale: { value: 0.14, min: 0.01, max: 0.5 },
-        width: { value: '320px', render: () => false },
-        height: { value: '640px', render: () => false },
-        bg: { value: 'transparent', render: () => false },
-        radius: { value: '0px', render: () => false }
-    }))
-
-    // Notepad Config (Updated from User)
-    const [notepadConfig, setNotepadConfig] = useControls('Layout - Notepad', () => ({
-        x: { value: -0.483, min: -2, max: 2, step: 0.001 },
-        y: { value: 0.771, min: 0, max: 3, step: 0.001 },
-        z: { value: 0.043, min: -2, max: 2, step: 0.001 },
-        rotX: { value: -1.57, min: -3.14, max: 3.14 },
-        rotY: { value: 0, min: -3.14, max: 3.14 },
-        rotZ: { value: -2.16, min: -3.14, max: 3.14 },
-        scale: { value: 0.12, min: 0.01, max: 1 },
-        width: { value: '400px', render: () => false },
-        height: { value: '500px', render: () => false },
-        bg: { value: 'transparent', render: () => false },
-        radius: { value: '2px', render: () => false }
-    }))
+    // Layout Configurations
+    const { config: monitorConfig, setConfig: setMonitorConfig } = useLayoutPlane('Monitor', LAYOUT_DEFAULTS.Monitor)
+    const { config: phoneConfig, setConfig: setPhoneConfig } = useLayoutPlane('Phone', LAYOUT_DEFAULTS.Phone)
+    const { config: notepadConfig, setConfig: setNotepadConfig } = useLayoutPlane('Notepad', LAYOUT_DEFAULTS.Notepad)
 
     return (
         <>
