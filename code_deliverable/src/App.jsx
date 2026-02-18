@@ -83,6 +83,60 @@ function PhoneAnimation({ scene, view, config, contentRef }) {
   return null
 }
 
+function SuggestedReadingsView({ onClose }) {
+  return (
+    <div className="absolute inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm" onClick={onClose}>
+      <div className="bg-[#eaeaea] text-gray-900 w-full max-w-5xl h-[90vh] p-8 rounded shadow-2xl overflow-hidden relative flex flex-col" onClick={e => e.stopPropagation()}>
+        <button onClick={onClose} className="absolute top-6 right-6 text-2xl opacity-50 hover:opacity-100 z-10">✕</button>
+
+        <h2 className="text-3xl font-bold mb-6 text-center text-[#333]">Suggested Readings</h2>
+
+        <div className="flex-1 overflow-x-auto overflow-y-hidden flex items-center space-x-8 px-4 pb-4 snap-x">
+          {/* Paper 1 */}
+          <div className="flex-shrink-0 w-[400px] h-[600px] bg-white shadow-lg transform transition-transform hover:scale-105 cursor-pointer border border-gray-200 p-8 flex flex-col relative snap-center group">
+            <div className="absolute top-0 right-0 p-4 opacity-50 font-mono text-xs text-right">PDF</div>
+            <h3 className="text-xl font-bold mb-2 font-serif">Bias in Computer Systems</h3>
+            <p className="text-sm text-gray-500 italic mb-6">Batya Friedman and Helen Nissenbaum (1996)</p>
+            <div className="flex-1 bg-gray-50 text-[10px] text-gray-400 p-4 font-serif leading-relaxed overflow-hidden text-justify select-none">
+              <p>ABSTRACT: From an analysis of bias in computer systems, we identify three categories: preexisting, technical, and emergent. Preexisting bias has its roots in social institutions, practices, and attitudes. Technical bias arises from technical constraints or considerations. Emergent bias arises in a context of use...</p>
+              <div className="mt-4 h-full w-full bg-linear-to-b from-transparent to-white/90 absolute bottom-0 left-0"></div>
+            </div>
+            <div className="mt-4 pt-4 border-t border-gray-100 text-center">
+              <span className="text-blue-600 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity">Read Full Paper →</span>
+            </div>
+          </div>
+
+          {/* Paper 2 */}
+          <div className="flex-shrink-0 w-[400px] h-[600px] bg-white shadow-lg transform transition-transform hover:scale-105 cursor-pointer border border-gray-200 p-8 flex flex-col relative snap-center group">
+            <div className="absolute top-0 right-0 p-4 opacity-50 font-mono text-xs text-right">PDF</div>
+            <h3 className="text-xl font-bold mb-2 font-serif">Value Sensitive Design</h3>
+            <p className="text-sm text-gray-500 italic mb-6">Batya Friedman et al.</p>
+            <div className="flex-1 bg-gray-50 text-[10px] text-gray-400 p-4 font-serif leading-relaxed overflow-hidden text-justify select-none">
+              <p>Value Sensitive Design (VSD) is a theoretically grounded approach to the design of technology that accounts for human values in a principled and comprehensive manner. Throughout the design process, VSD emphasizes the ethical import of design decisions...</p>
+              <div className="mt-4 h-full w-full bg-linear-to-b from-transparent to-white/90 absolute bottom-0 left-0"></div>
+            </div>
+            <div className="mt-4 pt-4 border-t border-gray-100 text-center">
+              <span className="text-blue-600 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity">Read Full Paper →</span>
+            </div>
+          </div>
+
+          {/* Paper 3 - Placeholder */}
+          <div className="flex-shrink-0 w-[400px] h-[600px] bg-gray-50 shadow-inner flex items-center justify-center border-2 border-dashed border-gray-300">
+            <div className="text-center text-gray-400">
+              <p className="font-bold text-lg">More Resources</p>
+              <p className="text-sm">Public Interest Tech</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="text-center mt-4 text-gray-400 text-xs">
+          Scroll horizontally to view papers
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function ReadingView({ onClose }) {
   return (
     <div className="absolute inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm" onClick={onClose}>
@@ -133,6 +187,8 @@ function ReadingView({ onClose }) {
   )
 }
 
+
+
 function HoverLiftManager({ scene, hoveredName }) {
   const originalPos = useRef({})
 
@@ -158,21 +214,21 @@ function HoverLiftManager({ scene, hoveredName }) {
 
 
 
-function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggleLight, onNotepadClick, view, overlayConfig, shadowConfig, onBack, setPhoneMesh, phoneMesh, onReadingClick }) {
+function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggleLight, onNotepadClick, view, overlayConfig, shadowConfig, onBack, setPhoneMesh, phoneMesh, onReadingClick, onPapersClick }) {
   const { scene } = useGLTF('/scene-unmerged.glb')
   const contentRef = useRef()
   const [hoveredTarget, setHoveredTarget] = useState(null)
 
   // Define clickable objects 
   const clickableObjects = {
-    'notepad': { handler: onNotepadClick, contains: ['notebook', 'paper', 'notepad', 'notepad_plane'], lift: false },
+    'notepad': { handler: onNotepadClick, contains: ['notebook', 'paper', 'notepad', 'notepad_plane'], excludes: ['stack', 'paper_1', 'papers'], lift: false },
     'phone': { handler: onPhoneClick, contains: ['phone', 'smartphone', 'phone_plane'], lift: true },
     'lamp': { handler: onToggleLight, contains: ['lamp', 'light', 'bulb'], lift: false },
-    'monitor': { handler: onMonitorClick, contains: ['monitor', 'imac', 'message_board', 'monitor_plane', 'screen'], lift: false },
+    // Monitor mesh itself is no longer clickable/hoverable, only peripherals
     'keyboard': { handler: onMonitorClick, contains: ['keyboard', 'keys'], lift: true },
-    'mouse': { handler: onMonitorClick, contains: ['mouse'], lift: true },
+    'mouse': { handler: onMonitorClick, contains: ['mouse'], excludes: ['pad'], lift: true },
     'book': { handler: onReadingClick, contains: ['book', 'values_at_play'], lift: true },
-    'paper_stack': { handler: onReadingClick, contains: ['stack', 'papers'], lift: true }
+    'paper_stack': { handler: onPapersClick, contains: ['stack', 'paper_1', 'papers'], lift: true }
   }
 
   // Animation Loop for Hover Lift
@@ -188,6 +244,9 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
 
         for (const [key, config] of Object.entries(clickableObjects)) {
           if (config.lift && config.contains.some(str => name.includes(str))) {
+            // Check excludes
+            if (config.excludes && config.excludes.some(str => name.includes(str))) continue
+
             targetKey = key
             break
           }
@@ -273,13 +332,15 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
 
           console.log('Clicked Leaf:', clickedNode.name)
 
-          // Traverse up to find a matching interactive parent
-          let curr = clickedNode
+          let curr = e.object
           while (curr) {
             const name = curr.name.toLowerCase()
 
             for (const [key, config] of Object.entries(clickableObjects)) {
               if (config.contains.some(str => name.includes(str))) {
+                // Check excludes
+                if (config.excludes && config.excludes.some(str => name.includes(str))) continue
+
                 console.log('Triggering handler for:', key)
                 config.handler()
                 targetFound = true
@@ -302,6 +363,9 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
             const name = curr.name.toLowerCase()
             for (const [key, config] of Object.entries(clickableObjects)) {
               if (config.contains.some(str => name.includes(str))) {
+                // Check excludes
+                if (config.excludes && config.excludes.some(str => name.includes(str))) continue
+
                 setHoveredTarget(key)
                 return
               }
@@ -442,6 +506,10 @@ export default function App() {
     if (view === 'default') setView('reading')
   }
 
+  const handlePapersClick = () => {
+    if (view === 'default') setView('papers')
+  }
+
   const handleToggleLight = () => {
     setDeskLightOn(prev => !prev)
     console.log("Toggled Desk Light")
@@ -492,6 +560,7 @@ export default function App() {
             onPhoneClick={handlePhoneClick}
             onNotepadClick={handleNotepadClick}
             onReadingClick={handleReadingClick}
+            onPapersClick={handlePapersClick}
             onToggleLight={handleToggleLight}
             onObjectClick={(name) => console.log('Object clicked:', name)}
             overlayConfig={config}
@@ -536,6 +605,12 @@ export default function App() {
       {view === 'reading' && (
         <ReadingView onClose={() => setView('default')} />
       )}
+      {/* Suggested Readings View Overlay */}
+      {view === 'papers' && (
+        <SuggestedReadingsView onClose={() => setView('default')} />
+      )}
+
+
 
       {/* View indicator and back button */}
       {view !== 'default' && (

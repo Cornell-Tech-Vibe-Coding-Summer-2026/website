@@ -80,7 +80,7 @@ function useLayoutPlane(name, defaults) {
     return { config, setConfig }
 }
 
-function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode, onClick }) {
+function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode, onClick, view }) {
     const offsetGroupRef = useRef()
 
     const handleTransformChange = () => {
@@ -138,7 +138,10 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                 >
                     <div
                         className="w-full h-full"
-                        style={{ pointerEvents: layoutMode ? 'none' : 'auto', cursor: onClick ? 'pointer' : 'auto' }}
+                        style={{
+                            pointerEvents: (layoutMode || (name === 'Phone' && view !== 'phone')) ? 'none' : 'auto',
+                            cursor: onClick ? 'pointer' : 'auto'
+                        }}
                         onPointerDown={e => !layoutMode && e.stopPropagation()}
                         onClick={!layoutMode ? onClick : undefined}
                     >
@@ -188,6 +191,7 @@ export function SceneLayout({ view, onBack, onPhoneClick, scene, config: overlay
                 setConfig={setMonitorConfig}
                 layoutMode={layoutMode}
                 gizmoMode={gizmoMode}
+                view={view}
             >
                 <MonitorContent onBack={onBack} />
             </ContentPlane>
@@ -201,6 +205,7 @@ export function SceneLayout({ view, onBack, onPhoneClick, scene, config: overlay
                     layoutMode={layoutMode}
                     gizmoMode={gizmoMode}
                     onClick={onPhoneClick}
+                    view={view}
                 >
                     <PhoneContent />
                 </ContentPlane>
