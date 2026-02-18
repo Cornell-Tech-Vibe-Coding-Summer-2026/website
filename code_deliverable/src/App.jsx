@@ -1,13 +1,18 @@
 import { useState, Suspense, useRef, useEffect } from 'react'
 import { Canvas, useThree, useFrame } from '@react-three/fiber'
-import { OrbitControls, Environment, ContactShadows, useGLTF } from '@react-three/drei'
+import { OrbitControls, Environment, ContactShadows, useGLTF, Html } from '@react-three/drei'
 import { useControls, folder, Leva } from 'leva'
 import { easing } from 'maath'
 import { SceneLayout } from './components/SceneLayout'
+import { PhoneContent } from './components/PhoneContent'
 import * as THREE from 'three'
 
-function PhoneAnimation({ scene, view, config }) {
+function PhoneAnimation({ scene, view, config, contentRef }) {
   const phoneRef = useRef()
+
+  // Reusable vectors to avoid GC in loop
+  const vec = useRef(new THREE.Vector3())
+  const quat = useRef(new THREE.Quaternion())
 
   useFrame((state, delta) => {
     // Find phone group/mesh if not already found
@@ -18,6 +23,7 @@ function PhoneAnimation({ scene, view, config }) {
           // Prefer Groups, but accept Meshes if no Group found yet
           if (obj.type === 'Group' || !phoneRef.current) {
             phoneRef.current = obj
+            if (config && config.onPhoneFound) config.onPhoneFound(obj)
             console.log("Found Phone (Animation Target):", obj.name, obj.type)
           }
         }
@@ -25,7 +31,6 @@ function PhoneAnimation({ scene, view, config }) {
     }
 
     if (phoneRef.current) {
-      // Simple "pick up" animation
       const isFocused = view === 'phone'
 
       // Store base transform
@@ -41,21 +46,47 @@ function PhoneAnimation({ scene, view, config }) {
       const targetRot = baseRot.clone()
 
       if (isFocused) {
-        targetPos.y += config.phoneLift || 0.08
-        targetPos.x += config.phoneSlideX || 0.02
-        targetPos.z += config.phoneSlideZ || 0
-        targetRot.x += config.phoneTilt || -0.15
+        targetPos.y += config.phoneLift || 0.185
+        targetPos.x += config.phoneSlideX || -0.098
+        targetPos.z += config.phoneSlideZ || 0.067
+        targetRot.x += config.phoneTilt || 0.004
       }
 
+      // 1. Animate Phone Mesh (Local Transform)
       easing.damp3(phoneRef.current.position, targetPos, 0.4, delta)
       easing.dampE(phoneRef.current.rotation, targetRot, 0.4, delta)
+
+      // 2. Sync Content to WORLD Position (Crucial fix for nested GLTF)
+      if (contentRef && contentRef.current) {
+        // Force update local transform to world matrix so we get fresh data
+        phoneRef.current.updateMatrixWorld()
+
+        // Get exact world position/rotation
+        phoneRef.current.getWorldPosition(vec.current)
+        phoneRef.current.getWorldQuaternion(quat.current)
+
+        // Apply to Content Group (which is at Scene Root)
+        contentRef.current.position.copy(vec.current)
+        contentRef.current.quaternion.copy(quat.current)
+
+        // Apply Local Offset: "Sit on Screen"
+        // We translate in local space of the Content Group (which matches Phone orientation)
+        // +Y is "up" relative to phone face usually.
+        // Apply Local Offset: "Sit on Screen"
+        // We translate in local space of the Content Group (which matches Phone orientation)
+        // With Gizmos restored in SceneLayout, we don't need manual offsets here anymore.
+        // contentRef.current.translateY(0.002)
+      }
     }
   })
   return null
 }
 
-function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggleLight, onNotepadClick, view, overlayConfig, onBack }) {
+
+
+function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggleLight, onNotepadClick, view, overlayConfig, onBack, setPhoneMesh, phoneMesh }) {
   const { scene } = useGLTF('/scene-unmerged.glb')
+  const contentRef = useRef()
 
   // Define clickable objects 
   const clickableObjects = {
@@ -67,7 +98,10 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
 
   return (
     <group>
-      <PhoneAnimation scene={scene} view={view} config={overlayConfig} />
+      <PhoneAnimation scene={scene} view={view} config={{ ...overlayConfig, onPhoneFound: setPhoneMesh }} contentRef={contentRef} />
+
+
+
       <primitive
         object={scene}
         onClick={(e) => {
@@ -100,8 +134,10 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
         onPointerOut={() => document.body.style.cursor = 'auto'}
       />
 
-      {/* Visual Scene Layout for Content Planes */}
-      <SceneLayout view={view} onBack={onBack} scene={scene} config={overlayConfig} />
+
+
+      {/* Visual Scene Layout for Content Planes (Phone restored) */}
+      <SceneLayout view={view} onBack={onBack} scene={scene} config={overlayConfig} phoneContentRef={contentRef} />
     </group>
   )
 }
@@ -151,6 +187,7 @@ function CameraController({ targetView, cameraPositions }) {
 export default function App() {
   const [view, setView] = useState('default')
   const [deskLightOn, setDeskLightOn] = useState(false)
+  const [phoneMesh, setPhoneMesh] = useState(null)
   const controlsRef = useRef()
 
   // Leva controls 
@@ -166,7 +203,7 @@ export default function App() {
       notepadTarget: { value: [-0.21, 0.43, 0.47], label: 'Notepad Target', step: 0.01 },
     }),
     'Lighting': folder({
-      ambientIntensity: { value: 0.2, min: 0, max: 2, step: 0.1, label: 'Ambient' },
+      ambientIntensity: { value: 2.0, min: 0, max: 2, step: 0.1, label: 'Ambient' },
       ceilingIntensity: { value: 5, min: 0, max: 50, step: 1, label: 'Ceiling Light' },
       ceilingPos: { value: [-1.9, 3.1, -1.5], label: 'Ceiling Position', step: 0.1 },
       deskIntensity: { value: 1.2, min: 0, max: 20, step: 0.1, label: 'Desk Light' },
@@ -177,7 +214,7 @@ export default function App() {
       phoneTilt: { value: 0.004, min: -1.5, max: 1.5 },
       phoneSlideX: { value: -0.098, min: -0.5, max: 0.5 },
       phoneSlideZ: { value: 0.067, min: -0.5, max: 0.5 },
-    })
+    }),
   })
 
   // Camera positions using Leva controls
@@ -217,6 +254,8 @@ export default function App() {
   return (
     <div className="relative w-full h-full bg-[#050505] overflow-hidden">
       <Canvas shadows camera={{ position: config.defaultPos, fov: 50 }} gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.0 }}>
+
+
         {/* Lights - adjustable via Leva */}
         <ambientLight intensity={config.ambientIntensity} />
         <pointLight
@@ -241,7 +280,7 @@ export default function App() {
         <CameraController targetView={view} cameraPositions={CAMERA_POSITIONS} />
 
         {/* Your Blender Scene */}
-        <Suspense fallback={null}>
+        <Suspense fallback={<Html center>Loading 3D Scene...</Html>}>
           <InteractiveScene
             view={view}
             onMonitorClick={handleMonitorClick}
@@ -251,6 +290,8 @@ export default function App() {
             onObjectClick={(name) => console.log('Object clicked:', name)}
             overlayConfig={config}
             onBack={() => setView('default')}
+            setPhoneMesh={setPhoneMesh}
+            phoneMesh={phoneMesh}
           />
           <ContactShadows
             opacity={0.6}
