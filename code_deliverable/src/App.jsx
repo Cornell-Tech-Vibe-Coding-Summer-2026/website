@@ -88,6 +88,34 @@ function InteractiveScene({ onMonitorClick, onPhoneClick, onObjectClick, onToggl
   const { scene } = useGLTF('/scene-unmerged.glb')
   const contentRef = useRef()
 
+  // Enable shadows on all meshes and fix materials
+  useEffect(() => {
+    scene.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true
+        child.receiveShadow = true
+
+        // If material is Basic, it won't receive shadows. Upgrade to Standard.
+        if (child.material.type === 'MeshBasicMaterial') {
+          child.material = new THREE.MeshStandardMaterial({
+            map: child.material.map,
+            color: child.material.color,
+            transparent: child.material.transparent,
+            opacity: child.material.opacity,
+            side: child.material.side,
+            roughness: 0.5,
+            metalness: 0.1
+          })
+        }
+        // Ensure material interacts with light
+        if (child.material) {
+          child.material.envMapIntensity = 0.5
+          child.material.needsUpdate = true
+        }
+      }
+    })
+  }, [scene])
+
   // Define clickable objects 
   const clickableObjects = {
     'notepad': { handler: onNotepadClick, contains: ['notebook', 'paper', 'notepad', 'notepad_plane'] },
@@ -203,7 +231,7 @@ export default function App() {
       notepadTarget: { value: [-0.21, 0.43, 0.47], label: 'Notepad Target', step: 0.01 },
     }),
     'Lighting': folder({
-      ambientIntensity: { value: 2.0, min: 0, max: 2, step: 0.1, label: 'Ambient' },
+      ambientIntensity: { value: 0.6, min: 0, max: 2, step: 0.1, label: 'Ambient' },
       ceilingIntensity: { value: 5, min: 0, max: 50, step: 1, label: 'Ceiling Light' },
       ceilingPos: { value: [-1.9, 3.1, -1.5], label: 'Ceiling Position', step: 0.1 },
       deskIntensity: { value: 1.2, min: 0, max: 20, step: 0.1, label: 'Desk Light' },
@@ -294,13 +322,13 @@ export default function App() {
             phoneMesh={phoneMesh}
           />
           <ContactShadows
-            opacity={0.6}
-            scale={10}
-            blur={1.5}
+            opacity={0.7}
+            scale={12}
+            blur={2}
             far={5}
-            resolution={512}
+            resolution={1024}
             color="#000000"
-            position={[0, 0, 0]}
+            position={[0, 0.02, 0]}
           />
         </Suspense>
 
