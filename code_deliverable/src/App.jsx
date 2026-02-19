@@ -14,8 +14,11 @@ function Loader() {
   return <Html center>{progress.toFixed(1)} % loaded</Html>
 }
 
+import { AnimatePresence } from 'framer-motion'
+
 export default function App() {
   const [view, setView] = useState('default')
+  const [overlayOrigin, setOverlayOrigin] = useState({ x: 0, y: 0 })
   const [deskLightOn, setDeskLightOn] = useState(false)
   const [phoneMesh, setPhoneMesh] = useState(null)
   const controlsRef = useRef()
@@ -74,11 +77,13 @@ export default function App() {
     if (view === 'default') setView('notepad')
   }
 
-  const handleReadingClick = () => {
+  const handleReadingClick = (origin) => {
+    if (origin) setOverlayOrigin(origin)
     if (view === 'default') setView('reading')
   }
 
-  const handlePapersClick = () => {
+  const handlePapersClick = (origin) => {
+    if (origin) setOverlayOrigin(origin)
     if (view === 'default') setView('papers')
   }
 
@@ -174,13 +179,15 @@ export default function App() {
       </div>
 
       {/* Reading View Overlay */}
-      {view === 'reading' && (
-        <ReadingView onClose={() => setView('default')} />
-      )}
-      {/* Suggested Readings View Overlay */}
-      {view === 'papers' && (
-        <SuggestedReadingsView onClose={() => setView('default')} />
-      )}
+      <AnimatePresence>
+        {view === 'reading' && (
+          <ReadingView onClose={() => setView('default')} origin={overlayOrigin} />
+        )}
+        {/* Suggested Readings View Overlay */}
+        {view === 'papers' && (
+          <SuggestedReadingsView onClose={() => setView('default')} origin={overlayOrigin} />
+        )}
+      </AnimatePresence>
 
       {/* View indicator and back button */}
       {view !== 'default' && (

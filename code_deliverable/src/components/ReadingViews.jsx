@@ -1,7 +1,25 @@
-export function SuggestedReadingsView({ onClose }) {
+import { motion } from 'framer-motion'
+
+export function SuggestedReadingsView({ onClose, origin }) {
+    // Default origin if not provided (center screen fallback)
+    const initial = origin ? { x: origin.x - window.innerWidth / 2, y: origin.y - window.innerHeight / 2, scale: 0, opacity: 0 } : { scale: 0.8, opacity: 0 }
+
     return (
-        <div className="absolute inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm" onClick={onClose}>
-            <div className="bg-[#eaeaea] text-gray-900 w-full max-w-5xl h-[90vh] p-8 rounded shadow-2xl overflow-hidden relative flex flex-col" onClick={e => e.stopPropagation()}>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            onClick={onClose}
+        >
+            <motion.div
+                initial={initial}
+                animate={{ x: 0, y: 0, scale: 1, opacity: 1 }}
+                exit={initial}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                className="bg-[#eaeaea] text-gray-900 w-full max-w-5xl h-[90vh] p-8 rounded shadow-2xl overflow-hidden relative flex flex-col origin-center"
+                onClick={e => e.stopPropagation()}
+            >
                 <button onClick={onClose} className="absolute top-6 right-6 text-2xl opacity-50 hover:opacity-100 z-10">✕</button>
 
                 <h2 className="text-3xl font-bold mb-6 text-center text-[#333]">Suggested Readings</h2>
@@ -47,15 +65,31 @@ export function SuggestedReadingsView({ onClose }) {
                 <div className="text-center mt-4 text-gray-400 text-xs">
                     Scroll horizontally to view papers
                 </div>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     )
 }
 
-export function ReadingView({ onClose }) {
+export function ReadingView({ onClose, origin }) {
+    // Default origin if not provided
+    const initial = origin ? { x: origin.x - window.innerWidth / 2, y: origin.y - window.innerHeight / 2, scale: 0, opacity: 0 } : { scale: 0.8, opacity: 0 }
+
     return (
-        <div className="absolute inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm" onClick={onClose}>
-            <div className="bg-[#f4e4bc] text-gray-900 w-full max-w-4xl h-[90vh] p-12 rounded shadow-2xl overflow-y-auto relative font-serif" onClick={e => e.stopPropagation()}>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            onClick={onClose}
+        >
+            <motion.div
+                initial={initial}
+                animate={{ x: 0, y: 0, scale: 1, opacity: 1 }}
+                exit={initial}
+                transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                className="bg-[#f4e4bc] text-gray-900 w-full max-w-4xl h-[90vh] p-12 rounded shadow-2xl overflow-y-auto relative font-serif origin-center"
+                onClick={e => e.stopPropagation()}
+            >
                 <button onClick={onClose} className="absolute top-8 right-8 text-2xl opacity-50 hover:opacity-100">✕</button>
 
                 <h1 className="text-5xl font-bold mb-4 font-serif text-[#2a2a2a]">Values at Play in Digital Games</h1>
@@ -97,7 +131,7 @@ export function ReadingView({ onClose }) {
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     )
 }

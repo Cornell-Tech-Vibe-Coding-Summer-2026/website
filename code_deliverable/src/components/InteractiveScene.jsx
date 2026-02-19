@@ -186,21 +186,41 @@ export function InteractiveScene({
                 onClick={(e) => {
                     e.stopPropagation()
                     const clickedNode = e.object
-                    let targetFound = false
+                    const name = clickedNode.name.toLowerCase()
 
-                    console.log('Clicked Leaf:', clickedNode.name)
+                    // Strict exclusion of environment meshes to prevent loose targeting
+                    if (name.includes('desk') || name.includes('wall') || name.includes('floor')) {
+                        return
+                    }
+
+                    let targetFound = false
+                    // console.log('Clicked Leaf:', clickedNode.name)
 
                     let curr = e.object
                     while (curr) {
-                        const name = curr.name.toLowerCase()
+                        const currName = curr.name.toLowerCase()
 
                         for (const [key, config] of Object.entries(clickableObjects)) {
-                            if (config.contains.some(str => name.includes(str))) {
+                            if (config.contains.some(str => currName.includes(str))) {
                                 // Check excludes
-                                if (config.excludes && config.excludes.some(str => name.includes(str))) continue
+                                if (config.excludes && config.excludes.some(str => currName.includes(str))) continue
 
-                                console.log('Triggering handler for:', key, 'on node:', curr.name)
-                                config.handler()
+                                // console.log('Triggering handler for:', key, 'on node:', curr.name)
+
+                                // Calculate Screen Position for Transitions
+                                let screenPos = null
+                                if (key === 'paper_stack' || key === 'book') {
+                                    const vector = new THREE.Vector3()
+                                    curr.getWorldPosition(vector)
+                                    vector.project(e.camera)
+
+                                    // Convert NDC to pixel coordinates
+                                    const x = (vector.x + 1) / 2 * window.innerWidth
+                                    const y = -(vector.y - 1) / 2 * window.innerHeight
+                                    screenPos = { x, y }
+                                }
+
+                                config.handler(screenPos)
                                 targetFound = true
                                 break
                             }
