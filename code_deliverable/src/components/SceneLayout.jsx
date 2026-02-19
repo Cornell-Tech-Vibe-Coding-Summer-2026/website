@@ -139,7 +139,8 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                     <div
                         className="w-full h-full"
                         style={{
-                            pointerEvents: (layoutMode || (name === 'Phone' && view !== 'phone')) ? 'none' : 'auto',
+                            // Fix: Allow pointer events if onClick is present (e.g. for Zoom), unless in layout mode
+                            pointerEvents: (layoutMode || (name === 'Phone' && view !== 'phone' && !onClick) || (name === 'Monitor' && view !== 'monitor' && !onClick)) ? 'none' : 'auto',
                             cursor: onClick ? 'pointer' : 'auto'
                         }}
                         onPointerDown={e => !layoutMode && e.stopPropagation()}
@@ -170,7 +171,7 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
     return content
 }
 
-export function SceneLayout({ view, onBack, onPhoneClick, scene, config: overlayConfig, trackObject, phoneContentRef }) {
+export function SceneLayout({ view, onBack, onPhoneClick, onMonitorClick, scene, config: overlayConfig, trackObject, phoneContentRef }) {
     const { layoutMode, gizmoMode } = useControls({
         'Layout Mode': folder({
             layoutMode: { value: false, label: 'Enable Gizmos' },
@@ -192,6 +193,7 @@ export function SceneLayout({ view, onBack, onPhoneClick, scene, config: overlay
                 layoutMode={layoutMode}
                 gizmoMode={gizmoMode}
                 view={view}
+                onClick={onMonitorClick}
             >
                 <MonitorContent onBack={onBack} />
             </ContentPlane>

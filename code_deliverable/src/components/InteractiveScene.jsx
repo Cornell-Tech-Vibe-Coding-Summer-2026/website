@@ -249,7 +249,7 @@ export function InteractiveScene({
             />
 
             {/* Visual Scene Layout for Content Planes (Phone restored) */}
-            <SceneLayout view={view} onBack={onBack} onPhoneClick={onPhoneClick} scene={scene} config={overlayConfig} phoneContentRef={contentRef} />
+            <SceneLayout view={view} onBack={onBack} onPhoneClick={onPhoneClick} onMonitorClick={onMonitorClick} scene={scene} config={overlayConfig} phoneContentRef={contentRef} />
         </group>
     )
 }
