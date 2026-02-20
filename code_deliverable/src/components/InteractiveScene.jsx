@@ -11,9 +11,9 @@ import { PhoneAnimation } from './PhoneAnimation'
 function Hitbox({ name, onHover, onUnhover, onClick, debug }) {
     // Defaults for different items (Updated with User values)
     const defaults = {
-        'Paper Stack': { pos: [-0.76, 0.78, -0.57], scale: [0.34, 0.04, 0.28] }, // User Provided
-        'Lamp': { pos: [-0.3, 0.98, -0.8], scale: [0.16, 0.52, 0.14] }, // User Provided
-        'Phone': { pos: [-0.56, 0.79, -0.45], scale: [0.34, 0.04, 0.28] }, // User Provided
+        'Paper Stack': { pos: [-0.76, 0.78, -0.57], scale: [0.34, 0.08, 0.28] }, // Slightly thicker for reliability
+        'Lamp': { pos: [-0.3, 0.98, -0.8], scale: [0.16, 0.52, 0.14] },
+        'Phone': { pos: [-0.56, 0.81, -0.45], scale: [0.34, 0.08, 0.28] }, // Moved slightly up and thicker
         // Book Removed as requested
     }
 
@@ -112,13 +112,22 @@ export function InteractiveScene({
             const name = obj.name.toLowerCase()
             // Lift Book Group
             if (name.includes('book') || name.includes('values')) {
-                // Apply to Groups or Meshes
                 if (obj.isMesh || obj.type === 'Group') {
-                    // Check if already corrected
                     if (!obj.userData.correctedHeight) {
                         obj.position.y += 0.015
                         obj.updateMatrixWorld()
                         obj.userData.correctedHeight = true
+                    }
+                }
+            }
+            // Push Notebook deeper and fix height
+            if (name.includes('notebook') || name.includes('notepad')) {
+                if (obj.isMesh || obj.type === 'Group') {
+                    if (!obj.userData.correctedPlacement) {
+                        obj.position.y += 0.01
+                        obj.position.z -= 0.05 // Push deeper into the desk
+                        obj.updateMatrixWorld()
+                        obj.userData.correctedPlacement = true
                     }
                 }
             }
@@ -166,7 +175,7 @@ export function InteractiveScene({
                 // Check Hitbox targets for lift
                 if (!targetKey) {
                     if (name.includes('stack') || name.includes('paper')) targetKey = 'Paper Stack'
-                    else if (name.includes('book') || name.includes('values')) targetKey = 'book' // using classic key 'book' for matching below
+                    else if ((name.includes('book') || name.includes('values')) && !name.includes('notebook')) targetKey = 'book'
                 }
 
                 if (targetKey) {
@@ -216,7 +225,7 @@ export function InteractiveScene({
                 } else if (mode === 'essential') {
                     const name = child.name.toLowerCase()
                     const isDesk = name.includes('desk') || name.includes('wall') || name.includes('floor')
-                    const isKeyObject = name.includes('phone') || name.includes('monitor') || name.includes('lamp') || name.includes('book') || name.includes('keyboard') || name.includes('mouse') || name.includes('cup')
+                    const isKeyObject = name.includes('phone') || name.includes('monitor') || name.includes('lamp') || name.includes('book') || name.includes('keyboard') || name.includes('mouse') || name.includes('cup') || name.includes('stack') || name.includes('paper') || name.includes('frame') || name.includes('photo')
                     child.receiveShadow = true
                     child.castShadow = isKeyObject
                 }
