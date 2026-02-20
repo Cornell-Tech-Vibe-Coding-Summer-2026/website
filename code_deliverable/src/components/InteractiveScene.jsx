@@ -145,6 +145,49 @@ export function InteractiveScene({
         }
     })
 
+    // Animation Loop for Hover Lift
+    const initialY = useRef({})
+
+    useFrame((state, delta) => {
+        scene.traverse((child) => {
+            if (child.isMesh || child.type === 'Group') {
+                let targetKey = null
+                const name = child.name.toLowerCase()
+
+                // Check classic clickable objects for lift
+                for (const [key, config] of Object.entries(clickableObjects)) {
+                    if (config.lift && config.contains.some(str => name.includes(str))) {
+                        if (config.excludes && config.excludes.some(str => name.includes(str))) continue
+                        targetKey = key
+                        break
+                    }
+                }
+
+                // Check Hitbox targets for lift
+                if (!targetKey) {
+                    if (name.includes('stack') || name.includes('paper')) targetKey = 'Paper Stack'
+                    else if (name.includes('book') || name.includes('values')) targetKey = 'book' // using classic key 'book' for matching below
+                }
+
+                if (targetKey) {
+                    if (initialY.current[child.uuid] === undefined) {
+                        initialY.current[child.uuid] = child.position.y
+                    }
+
+                    // For Book, we use 'book' from classic or 'Book' from Hitbox
+                    const isHovered = hoveredTarget === targetKey || (targetKey === 'book' && hoveredTarget === 'Book')
+
+                    const targetY = isHovered
+                        ? initialY.current[child.uuid] + 0.05 // Lift amount
+                        : initialY.current[child.uuid]
+
+                    // Smoothly damp to target
+                    easing.damp(child.position, 'y', targetY, 0.1, delta)
+                }
+            }
+        })
+    })
+
 
     // Enable shadows on all meshes, fix materials, and disable raycasting on Hitbox items
     useEffect(() => {
@@ -189,6 +232,18 @@ export function InteractiveScene({
                         metalness: 0.1
                     })
                 }
+
+                // Specific Polish Fixes for Coffee Cup
+                if (name.includes('cup') || name.includes('mug')) {
+                    if (child.geometry) {
+                        child.geometry.computeVertexNormals() // Force smooth shading normals
+                    }
+                    if (child.material) {
+                        child.material.roughness = 0.2 // Make it glossy
+                        child.material.metalness = 0.0
+                    }
+                }
+
                 if (child.material) {
                     child.material.envMapIntensity = 0.5
                     child.material.needsUpdate = true
@@ -199,7 +254,8 @@ export function InteractiveScene({
 
     return (
         <group>
-            <PhoneAnimation scene={scene} view={view} config={{ ...overlayConfig, onPhoneFound: setPhoneMesh }} contentRef={contentRef} hovered={hoveredTarget === 'Phone'} />
+            {/* Added dampFactor to config for snappier animation */}
+            <PhoneAnimation scene={scene} view={view} config={{ ...overlayConfig, dampFactor: 0.05, onPhoneFound: setPhoneMesh }} contentRef={contentRef} hovered={hoveredTarget === 'Phone'} />
 
             {/* Primitive Scene - Restore Generic Interactions for Untroubled Items */}
             <primitive
