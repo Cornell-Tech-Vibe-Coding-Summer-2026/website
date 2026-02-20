@@ -17,6 +17,12 @@ function Hitbox({ name, onHover, onUnhover, onClick, debug }) {
         // Book Removed as requested
     }
 
+    // Notepad controls for fine-tuning
+    const { notepadPos, notepadRot } = useControls('Hitboxes.Notepad', {
+        notepadPos: { value: [-0.4, 0.88, 0.25], step: 0.01 },
+        notepadRot: { value: [0, 0, 0], step: 0.01 },
+    })
+
     // Leva controls
     const { position, scale, enabled } = useControls(`Hitboxes.${name}`, {
         enabled: { value: true, label: 'Active' },
@@ -120,15 +126,12 @@ export function InteractiveScene({
                     }
                 }
             }
-            // Push Notebook deeper and fix height
+            // Push Notebook deeper and fix height - UPDATED with Leva controls
             if (name.includes('notebook') || name.includes('notepad')) {
                 if (obj.isMesh || obj.type === 'Group') {
-                    if (!obj.userData.correctedPlacement) {
-                        obj.position.y += 0.01
-                        obj.position.z -= 0.05 // Push deeper into the desk
-                        obj.updateMatrixWorld()
-                        obj.userData.correctedPlacement = true
-                    }
+                    obj.position.set(...notepadPos)
+                    obj.rotation.set(...notepadRot)
+                    obj.updateMatrixWorld()
                 }
             }
         })
@@ -176,6 +179,7 @@ export function InteractiveScene({
                 if (!targetKey) {
                     if (name.includes('stack') || name.includes('paper')) targetKey = 'Paper Stack'
                     else if ((name.includes('book') || name.includes('values')) && !name.includes('notebook')) targetKey = 'book'
+                    else if (name.includes('phone') || name.includes('smartphone') || name.includes('screen')) targetKey = 'Phone'
                 }
 
                 if (targetKey) {
