@@ -8,27 +8,26 @@ import { SceneLayout } from './SceneLayout'
 import { PhoneAnimation } from './PhoneAnimation'
 
 // --- Hitbox Component ---
-function Hitbox({ name, onHover, onUnhover, onClick, debug }) {
+function Hitbox({ name, onHover, onUnhover, onClick, debug, position, scale }) {
     // Defaults for different items (Updated with User values)
     const defaults = {
-        'Paper Stack': { pos: [-0.76, 0.78, -0.57], scale: [0.34, 0.08, 0.28] }, // Slightly thicker for reliability
+        'Paper Stack': { pos: [-0.76, 0.78, -0.57], scale: [0.34, 0.08, 0.28] },
         'Lamp': { pos: [-0.3, 0.98, -0.8], scale: [0.16, 0.52, 0.14] },
-        'Phone': { pos: [-0.56, 0.81, -0.45], scale: [0.34, 0.08, 0.28] }, // Moved slightly up and thicker
-        // Book Removed as requested
+        'Phone': { pos: [-0.56, 0.81, -0.45], scale: [0.34, 0.08, 0.28] },
     }
 
-    // Leva controls
-    const { position, scale, enabled } = useControls(`Hitboxes.${name}`, {
+    // Leva controls - use passed props as defaults
+    const { position: finalPosition, scale: finalScale, enabled } = useControls(`Hitboxes.${name}`, {
         enabled: { value: true, label: 'Active' },
-        position: { value: defaults[name]?.pos || [0, 0, 0], step: 0.01 },
-        scale: { value: defaults[name]?.scale || [0.1, 0.1, 0.1], step: 0.01 },
+        position: { value: position || defaults[name]?.pos || [0, 0, 0], step: 0.001 },
+        scale: { value: scale || defaults[name]?.scale || [0.1, 0.1, 0.1], step: 0.001 },
     })
 
     if (!enabled) return null
 
     return (
         <mesh
-            position={position}
+            position={finalPosition}
             onClick={(e) => {
                 e.stopPropagation()
                 if (onClick) onClick(e)
@@ -44,7 +43,7 @@ function Hitbox({ name, onHover, onUnhover, onClick, debug }) {
                 if (onUnhover) onUnhover()
             }}
         >
-            <boxGeometry args={scale} />
+            <boxGeometry args={finalScale} />
             <meshBasicMaterial
                 color="red"
                 transparent
@@ -69,17 +68,26 @@ export function InteractiveScene({
     phoneMesh,
     onReadingClick,
     onPapersClick,
-    paperStackPos
+    paperStackPos,
+    setShowLeva
 }) {
     const { scene } = useGLTF('/scene-unmerged.glb')
 
-    // Debugging controls for Hitboxes
+    // Debugging and Specialized controls
     const { debugHitboxes } = useControls('Debugging', {
-        debugHitboxes: { value: true, label: 'Show Hitboxes' }
+        debugHitboxes: { value: false, label: 'Show Hitboxes' }
+    })
+
+    const notebookConfig = useControls('Notebook Tuning', {
+        position: { value: [-0.322, 0.771, 0.44], step: 0.001 },
+        rotation: { value: [0, -2.16, 0], step: 0.01 },
+        scale: { value: 1.0, step: 0.01 }
     })
 
     // Interaction State
     const [hoveredTarget, setHoveredTarget] = useState(null)
+    const liftableMeshes = useRef([])
+    const initialY = useRef({})
 
     // Helper to calculate screen position for zoom transitions
     const getScreenPos = (obj, camera) => {
@@ -97,20 +105,21 @@ export function InteractiveScene({
         onPapersClick(screenPos)
     }
 
-    // Define clickable objects (Restored for Book, Notepad, Keyboard, Mouse)
+    // Define clickable objects
     const clickableObjects = {
         'notepad': { handler: onNotepadClick, contains: ['notebook', 'notepad', 'notepad_plane'], excludes: ['stack', 'paper', 'papers'], lift: false },
         'keyboard': { handler: onMonitorClick, contains: ['keyboard', 'keys'], lift: true },
         'mouse': { handler: onMonitorClick, contains: ['mouse'], excludes: ['pad'], lift: true },
         'book': { handler: onReadingClick, contains: ['book', 'values', 'play'], excludes: ['notebook', 'phone', 'node003'], lift: true },
-        // Phone, Lamp, Paper Stack handled by Hitboxes
     }
 
-    // Fix: Lift Book and Notebook slightly to avoid Z-fighting/Occlusion with Desk
+    // 1. Initial Traversal: Cache meshes for lift and apply fixed transforms
     useEffect(() => {
+        const meshes = []
         scene.traverse((obj) => {
             const name = obj.name.toLowerCase()
-            // Lift Book Group
+
+            // Fix: Lift Book Group
             if (name.includes('book') || name.includes('values')) {
                 if (obj.isMesh || obj.type === 'Group') {
                     if (!obj.userData.correctedHeight) {
@@ -120,50 +129,12 @@ export function InteractiveScene({
                     }
                 }
             }
-            // Push Notebook deeper and fix height
-            if (name.includes('notebook') || name.includes('notepad')) {
-                if (obj.isMesh || obj.type === 'Group') {
-                    if (!obj.userData.correctedPlacement) {
-                        obj.position.y += 0.01
-                        obj.position.z -= 0.05 // Push deeper into the desk
-                        obj.updateMatrixWorld()
-                        obj.userData.correctedPlacement = true
-                    }
-                }
-            }
-        })
-    }, [scene])
 
-    const contentRef = useRef()
-    const stackRef = useRef()
+            // Notebook handled by Leva directly in useFrame or another Effect
 
-    // Apply Paper Stack Position
-    useFrame(() => {
-        if (!stackRef.current) {
-            const paperGroup = scene.getObjectByName('Paper')
-            if (paperGroup) {
-                stackRef.current = paperGroup
-            } else {
-                const stack = scene.getObjectByName('Paper_1') || scene.getObjectByName('Stack')
-                if (stack) stackRef.current = stack
-            }
-        }
-        // Sync Mesh Stack to Config
-        if (paperStackPos && stackRef.current) {
-            stackRef.current.position.set(...paperStackPos)
-        }
-    })
-
-    // Animation Loop for Hover Lift
-    const initialY = useRef({})
-
-    useFrame((state, delta) => {
-        scene.traverse((child) => {
-            if (child.isMesh || child.type === 'Group') {
+            // Performance: Filter meshes for lift animation
+            if (obj.isMesh || obj.type === 'Group') {
                 let targetKey = null
-                const name = child.name.toLowerCase()
-
-                // Check classic clickable objects for lift
                 for (const [key, config] of Object.entries(clickableObjects)) {
                     if (config.lift && config.contains.some(str => name.includes(str))) {
                         if (config.excludes && config.excludes.some(str => name.includes(str))) continue
@@ -171,102 +142,102 @@ export function InteractiveScene({
                         break
                     }
                 }
-
-                // Check Hitbox targets for lift
                 if (!targetKey) {
                     if (name.includes('stack') || name.includes('paper')) targetKey = 'Paper Stack'
                     else if ((name.includes('book') || name.includes('values')) && !name.includes('notebook')) targetKey = 'book'
+                    else if (name.includes('phone') || name.includes('smartphone') || name.includes('node003_1')) targetKey = 'Phone'
                 }
 
                 if (targetKey) {
-                    if (initialY.current[child.uuid] === undefined) {
-                        initialY.current[child.uuid] = child.position.y
+                    meshes.push({ node: obj, key: targetKey })
+                    if (initialY.current[obj.uuid] === undefined) {
+                        initialY.current[obj.uuid] = obj.position.y
                     }
-
-                    // For Book, we use 'book' from classic or 'Book' from Hitbox
-                    const isHovered = hoveredTarget === targetKey || (targetKey === 'book' && hoveredTarget === 'Book')
-
-                    const targetY = isHovered
-                        ? initialY.current[child.uuid] + 0.05 // Lift amount
-                        : initialY.current[child.uuid]
-
-                    // Smoothly damp to target
-                    easing.damp(child.position, 'y', targetY, 0.1, delta)
                 }
             }
         })
+        liftableMeshes.current = meshes
+    }, [scene])
+
+    // 2. Notebook Tuning Effect
+    useEffect(() => {
+        scene.traverse((obj) => {
+            const name = obj.name.toLowerCase()
+            if (name.includes('notebook') || name.includes('notepad')) {
+                if (obj.isMesh || obj.type === 'Group') {
+                    obj.position.set(...notebookConfig.position)
+                    obj.rotation.set(...notebookConfig.rotation)
+                    obj.scale.setScalar(notebookConfig.scale)
+                    obj.updateMatrixWorld()
+                }
+            }
+        })
+    }, [scene, notebookConfig])
+
+    const contentRef = useRef()
+    const stackRef = useRef()
+
+    // 3. Animation Loop
+    useFrame((state, delta) => {
+        // Sync Paper Stack Position from Leva
+        if (!stackRef.current) {
+            stackRef.current = scene.getObjectByName('Paper') || scene.getObjectByName('Paper_1') || scene.getObjectByName('Stack')
+        }
+        if (paperStackPos && stackRef.current) {
+            stackRef.current.position.set(...paperStackPos)
+        }
+
+        // Lift Animation
+        liftableMeshes.current.forEach(({ node, key }) => {
+            const isHovered = hoveredTarget === key || (key === 'book' && hoveredTarget === 'Book')
+            const targetY = isHovered ? initialY.current[node.uuid] + 0.05 : initialY.current[node.uuid]
+            easing.damp(node.position, 'y', targetY, 0.1, delta)
+        })
     })
 
-
-    // Enable shadows on all meshes, fix materials, and disable raycasting on Hitbox items
+    // 4. Material and Shadow Setup
     useEffect(() => {
         scene.traverse((child) => {
             if (child.isMesh) {
                 const name = child.name.toLowerCase()
 
-                // Disable raycasting for meshes purely covered by Hitboxes
-                // This lets the raycaster pass right through the visible model and hit our invisible box
-                const isHitboxItem = ['lamp', 'light', 'phone', 'screen', 'node003_1', 'stack', 'paper'].some(str => name.includes(str))
-                const isSafeToDisable = isHitboxItem && !name.includes('notepad') && !name.includes('wall')
-
-                if (isSafeToDisable) {
+                // Disable raycasting for meshes covered by Hitboxes
+                const isHitboxItem = ['lamp', 'phone', 'screen', 'node003_1', 'stack', 'paper'].some(str => name.includes(str))
+                if (isHitboxItem && !name.includes('notepad')) {
                     child.raycast = () => null
                 }
 
+                // Shadows
                 const isEnabled = shadowConfig.enabled
                 const mode = shadowConfig.mode
-
-                if (!isEnabled || mode === 'none') {
-                    child.castShadow = false
-                    child.receiveShadow = false
-                } else if (mode === 'all') {
+                child.receiveShadow = isEnabled && mode !== 'none'
+                if (isEnabled && mode === 'all') {
                     child.castShadow = true
-                    child.receiveShadow = true
-                } else if (mode === 'essential') {
-                    const name = child.name.toLowerCase()
-                    const isDesk = name.includes('desk') || name.includes('wall') || name.includes('floor')
-                    const isKeyObject = name.includes('phone') || name.includes('monitor') || name.includes('lamp') || name.includes('book') || name.includes('keyboard') || name.includes('mouse') || name.includes('cup') || name.includes('stack') || name.includes('paper') || name.includes('frame') || name.includes('photo')
-                    child.receiveShadow = true
-                    child.castShadow = isKeyObject
+                } else if (isEnabled && mode === 'essential') {
+                    const isKey = ['phone', 'monitor', 'lamp', 'book', 'keyboard', 'mouse', 'cup', 'stack', 'paper', 'frame'].some(str => name.includes(str))
+                    child.castShadow = isKey
+                } else {
+                    child.castShadow = false
                 }
 
-                if (child.material.type === 'MeshBasicMaterial') {
-                    child.material = new THREE.MeshStandardMaterial({
-                        map: child.material.map,
-                        color: child.material.color,
-                        transparent: child.material.transparent,
-                        opacity: child.material.opacity,
-                        side: child.material.side,
-                        roughness: 0.5,
-                        metalness: 0.1
-                    })
+                // Smooth shading for small items
+                if (name.includes('cup') && !child.userData.normalsComputed) {
+                    child.geometry.computeVertexNormals()
+                    child.userData.normalsComputed = true
                 }
 
-                // Specific Polish Fixes for Coffee Cup
-                if (name.includes('cup') || name.includes('mug')) {
-                    if (child.geometry) {
-                        child.geometry.computeVertexNormals() // Force smooth shading normals
-                    }
-                    if (child.material) {
-                        child.material.roughness = 0.2 // Make it glossy
-                        child.material.metalness = 0.0
-                    }
-                }
-
-                if (child.material) {
-                    child.material.envMapIntensity = 0.5
-                    child.material.needsUpdate = true
+                // Mug Toggle
+                if (name.includes('cup')) {
+                    child.userData.onMugClick = () => setShowLeva(v => !v)
                 }
             }
         })
-    }, [scene, shadowConfig])
+    }, [scene, shadowConfig, setShowLeva])
 
     return (
         <group>
-            {/* Added dampFactor to config for snappier animation */}
             <PhoneAnimation scene={scene} view={view} config={{ ...overlayConfig, dampFactor: 0.05, onPhoneFound: setPhoneMesh }} contentRef={contentRef} hovered={hoveredTarget === 'Phone'} />
 
-            {/* Primitive Scene - Restore Generic Interactions for Untroubled Items */}
             <primitive
                 object={scene}
                 onClick={(e) => {
@@ -274,35 +245,16 @@ export function InteractiveScene({
                     const clickedNode = e.object
                     const name = clickedNode.name.toLowerCase()
 
-                    // Strict exclusion of environment meshes to prevent loose targeting
-                    if (name.includes('desk') || name.includes('wall') || name.includes('floor')) {
-                        return
-                    }
+                    if (name.includes('desk') || name.includes('wall') || name.includes('floor')) return
 
                     let targetFound = false
-                    let curr = e.object
+                    let curr = clickedNode
                     while (curr) {
                         const currName = curr.name.toLowerCase()
-
                         for (const [key, config] of Object.entries(clickableObjects)) {
                             if (config.contains.some(str => currName.includes(str))) {
-                                // Check excludes
                                 if (config.excludes && config.excludes.some(str => currName.includes(str))) continue
-
-                                // Calculate Screen Position for Transitions (Book/Notepad)
-                                let screenPos = null
-                                if (key === 'book' || key === 'notepad') {
-                                    const vector = new THREE.Vector3()
-                                    curr.getWorldPosition(vector)
-                                    vector.project(e.camera)
-
-                                    // Convert NDC to pixel coordinates
-                                    const x = (vector.x + 1) / 2 * window.innerWidth
-                                    const y = -(vector.y - 1) / 2 * window.innerHeight
-                                    screenPos = { x, y }
-                                }
-
-                                config.handler(screenPos)
+                                config.handler(key === 'book' || key === 'notepad' ? getScreenPos(curr, e.camera) : null)
                                 targetFound = true
                                 break
                             }
@@ -311,23 +263,20 @@ export function InteractiveScene({
                         curr = curr.parent
                     }
 
+                    if (!targetFound && clickedNode.userData.onMugClick) {
+                        clickedNode.userData.onMugClick()
+                        targetFound = true
+                    }
+
                     if (!targetFound && onObjectClick) onObjectClick(clickedNode.name)
                 }}
                 onPointerOver={(e) => {
-                    // Similar traversal logic for hover
                     e.stopPropagation()
+                    if (view === 'phone' || view === 'monitor') return
 
-                    // Disable hover interactions when zoomed in specific views
-                    if (view === 'phone' || view === 'monitor') {
-                        document.body.style.cursor = 'auto'
-                        return
-                    }
-
-                    // Find hover target
                     let curr = e.object
                     while (curr) {
                         const name = curr.name.toLowerCase()
-
                         for (const [key, config] of Object.entries(clickableObjects)) {
                             if (config.contains.some(str => name.includes(str))) {
                                 if (config.excludes && config.excludes.some(str => name.includes(str))) continue
@@ -345,33 +294,27 @@ export function InteractiveScene({
                 }}
             />
 
-            {/* HITBOXES (The Robust Fix for Troubled Items) */}
-            <Hitbox
-                name="Paper Stack"
-                debug={debugHitboxes}
-                onClick={handlePaperClick}
-                onHover={() => setHoveredTarget('Paper Stack')}
-                onUnhover={() => setHoveredTarget(null)}
-            />
+            {/* Hitboxes */}
+            <Hitbox name="Monitor" position={[-0.2, 0.45, -0.1]} scale={[1.2, 0.8, 0.2]} onHover={setHoveredTarget} onUnhover={() => setHoveredTarget(null)} onClick={onMonitorClick} debug={debugHitboxes} />
+            <Hitbox name="Phone" position={[-0.56, 0.81, -0.45]} scale={[0.34, 0.08, 0.28]} onHover={setHoveredTarget} onUnhover={() => setHoveredTarget(null)} onClick={onPhoneClick} debug={debugHitboxes} />
+            <Hitbox name="Notepad" position={[-0.25, 0.1, 0.45]} scale={[0.4, 0.1, 0.4]} onHover={setHoveredTarget} onUnhover={() => setHoveredTarget(null)} onClick={onNotepadClick} debug={debugHitboxes} />
+            <Hitbox name="Paper Stack" position={[-0.76, 0.78, -0.57]} scale={[0.34, 0.08, 0.28]} onHover={setHoveredTarget} onUnhover={() => setHoveredTarget(null)} onClick={handlePaperClick} debug={debugHitboxes} />
+            <Hitbox name="Lamp" position={[-0.3, 0.98, -0.8]} scale={[0.16, 0.52, 0.14]} onHover={setHoveredTarget} onUnhover={() => setHoveredTarget(null)} onClick={onToggleLight} debug={debugHitboxes} />
+            <Hitbox name="Mug" position={[-0.6, 0.8, -0.15]} scale={[0.2, 0.3, 0.2]} onClick={() => setShowLeva(prev => !prev)} debug={debugHitboxes} />
 
-            <Hitbox
-                name="Lamp"
-                debug={debugHitboxes}
-                onClick={onToggleLight}
-                onHover={() => setHoveredTarget('Lamp')}
-                onUnhover={() => setHoveredTarget(null)}
+            <SceneLayout
+                view={view}
+                onBack={onBack}
+                onPhoneClick={onPhoneClick}
+                onMonitorClick={onMonitorClick}
+                onPhoneHover={() => setHoveredTarget('Phone')}
+                onPhoneUnhover={() => setHoveredTarget(null)}
+                onMonitorHover={() => setHoveredTarget('Monitor')}
+                onMonitorUnhover={() => setHoveredTarget(null)}
+                scene={scene}
+                config={overlayConfig}
+                phoneContentRef={contentRef}
             />
-
-            <Hitbox
-                name="Phone"
-                debug={debugHitboxes}
-                onClick={onPhoneClick}
-                onHover={() => setHoveredTarget('Phone')}
-                onUnhover={() => setHoveredTarget(null)}
-            />
-
-            {/* Visual Scene Layout for Content Planes */}
-            <SceneLayout view={view} onBack={onBack} onPhoneClick={onPhoneClick} onMonitorClick={onMonitorClick} scene={scene} config={overlayConfig} phoneContentRef={contentRef} />
         </group>
     )
 }

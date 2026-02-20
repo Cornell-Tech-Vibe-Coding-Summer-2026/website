@@ -80,7 +80,7 @@ function useLayoutPlane(name, defaults) {
     return { config, setConfig }
 }
 
-function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode, onClick, view }) {
+function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode, onClick, onHover, onUnhover, view }) {
     const offsetGroupRef = useRef()
 
     const handleTransformChange = () => {
@@ -145,6 +145,8 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                         }}
                         onPointerDown={e => !layoutMode && e.stopPropagation()}
                         onClick={!layoutMode ? onClick : undefined}
+                        onMouseEnter={onHover}
+                        onMouseLeave={onUnhover}
                     >
                         {children}
                     </div>
@@ -171,7 +173,7 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
     return content
 }
 
-export function SceneLayout({ view, onBack, onPhoneClick, onMonitorClick, scene, config: overlayConfig, trackObject, phoneContentRef }) {
+export function SceneLayout({ view, onBack, onPhoneClick, onMonitorClick, onPhoneHover, onPhoneUnhover, onMonitorHover, onMonitorUnhover, scene, config: overlayConfig, trackObject, phoneContentRef }) {
     const { layoutMode, gizmoMode } = useControls({
         'Layout Mode': folder({
             layoutMode: { value: false, label: 'Enable Gizmos' },
@@ -194,6 +196,8 @@ export function SceneLayout({ view, onBack, onPhoneClick, onMonitorClick, scene,
                 gizmoMode={gizmoMode}
                 view={view}
                 onClick={onMonitorClick}
+                onHover={onMonitorHover}
+                onUnhover={onMonitorUnhover}
             >
                 <MonitorContent onBack={onBack} />
             </ContentPlane>
@@ -207,6 +211,8 @@ export function SceneLayout({ view, onBack, onPhoneClick, onMonitorClick, scene,
                     layoutMode={layoutMode}
                     gizmoMode={gizmoMode}
                     onClick={onPhoneClick}
+                    onHover={onPhoneHover}
+                    onUnhover={onPhoneUnhover}
                     view={view}
                 >
                     <PhoneContent />

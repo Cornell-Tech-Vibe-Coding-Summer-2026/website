@@ -21,6 +21,7 @@ export default function App() {
   const [overlayOrigin, setOverlayOrigin] = useState({ x: 0, y: 0 })
   const [deskLightOn, setDeskLightOn] = useState(false)
   const [phoneMesh, setPhoneMesh] = useState(null)
+  const [showLeva, setShowLeva] = useState(false) // Default hidden
   const controlsRef = useRef()
 
   // Leva controls 
@@ -145,6 +146,7 @@ export default function App() {
             setPhoneMesh={setPhoneMesh}
             phoneMesh={phoneMesh}
             paperStackPos={config.paperStackPos}
+            setShowLeva={setShowLeva}
           />
           <ContactShadows
             opacity={config.contactOpacity}
@@ -208,7 +210,7 @@ export default function App() {
 
       {/* Explicit Leva Panel with high z-index */}
       <div className="absolute top-0 right-0 z-[10000]">
-        <Leva flat fill={false} titleBar={false} theme={{
+        <Leva hidden={!showLeva} flat fill={false} titleBar={false} theme={{
           colors: {
             accent: '#ffffff',
             bg: '#1a1a1a',
