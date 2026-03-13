@@ -51,7 +51,6 @@ export function PhoneAnimation({ scene, view, config, contentRef, hovered }) {
                 targetPos.z += config.phoneSlideZ || 0.067
                 targetRot.x += config.phoneTilt || 0.004
             } else if (isHovered && view === 'default') {
-                // Hover lift (smaller, just vertical)
                 targetPos.y += 0.05
             }
 
@@ -61,8 +60,8 @@ export function PhoneAnimation({ scene, view, config, contentRef, hovered }) {
 
             // 2. Sync Content to WORLD Position (Crucial fix for nested GLTF)
             if (contentRef && contentRef.current) {
-                // Force update local transform to world matrix so we get fresh data
-                phoneRef.current.updateMatrixWorld()
+                // Force update local transform to world matrix so we get fresh data AFTER damp
+                phoneRef.current.updateMatrixWorld(true)
 
                 // Get exact world position/rotation
                 phoneRef.current.getWorldPosition(vec.current)

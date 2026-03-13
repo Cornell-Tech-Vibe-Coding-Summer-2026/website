@@ -11,8 +11,8 @@ import { PhoneAnimation } from './PhoneAnimation'
 function Hitbox({ name, onHover, onUnhover, onClick, debug, position, scale }) {
     // Defaults for different items (Updated with User values)
     const defaults = {
-        'Paper Stack': { pos: [-0.76, 0.78, -0.57], scale: [0.34, 0.08, 0.28] },
-        'Lamp': { pos: [-0.3, 0.98, -0.8], scale: [0.16, 0.52, 0.14] },
+        'Paper Stack': { pos: [-0.76, 0.78, -0.57], scale: [0.327, 0.215, 0.279] },
+        'Lamp': { pos: [-0.428, 0.997, -0.698], scale: [0.232, 0.536, 0.168] },
         'Phone': { pos: [-0.56, 0.81, -0.45], scale: [0.34, 0.08, 0.28] },
     }
 
@@ -79,8 +79,8 @@ export function InteractiveScene({
     })
 
     const notebookConfig = useControls('Notebook Tuning', {
-        position: { value: [-0.322, 0.771, 0.44], step: 0.001 },
-        rotation: { value: [0, -2.16, 0], step: 0.01 },
+        position: { value: [-0.038, 3.985, 0.89], step: 0.001 },
+        rotation: { value: [3.58, -3.17, 0], step: 0.01 },
         scale: { value: 1.0, step: 0.01 }
     })
 
@@ -145,7 +145,8 @@ export function InteractiveScene({
                 if (!targetKey) {
                     if (name.includes('stack') || name.includes('paper')) targetKey = 'Paper Stack'
                     else if ((name.includes('book') || name.includes('values')) && !name.includes('notebook')) targetKey = 'book'
-                    else if (name.includes('phone') || name.includes('smartphone') || name.includes('node003_1')) targetKey = 'Phone'
+                    // Focus: Phone explicitly excluded from generic lift loop to avoid conflicts
+                    // The phone's hover and zoom lift is handled exclusively by PhoneAnimation.jsx
                 }
 
                 if (targetKey) {
@@ -295,12 +296,11 @@ export function InteractiveScene({
             />
 
             {/* Hitboxes */}
-            <Hitbox name="Monitor" position={[-0.2, 0.45, -0.1]} scale={[1.2, 0.8, 0.2]} onHover={setHoveredTarget} onUnhover={() => setHoveredTarget(null)} onClick={onMonitorClick} debug={debugHitboxes} />
             <Hitbox name="Phone" position={[-0.56, 0.81, -0.45]} scale={[0.34, 0.08, 0.28]} onHover={setHoveredTarget} onUnhover={() => setHoveredTarget(null)} onClick={onPhoneClick} debug={debugHitboxes} />
             <Hitbox name="Notepad" position={[-0.25, 0.1, 0.45]} scale={[0.4, 0.1, 0.4]} onHover={setHoveredTarget} onUnhover={() => setHoveredTarget(null)} onClick={onNotepadClick} debug={debugHitboxes} />
-            <Hitbox name="Paper Stack" position={[-0.76, 0.78, -0.57]} scale={[0.34, 0.08, 0.28]} onHover={setHoveredTarget} onUnhover={() => setHoveredTarget(null)} onClick={handlePaperClick} debug={debugHitboxes} />
-            <Hitbox name="Lamp" position={[-0.3, 0.98, -0.8]} scale={[0.16, 0.52, 0.14]} onHover={setHoveredTarget} onUnhover={() => setHoveredTarget(null)} onClick={onToggleLight} debug={debugHitboxes} />
-            <Hitbox name="Mug" position={[-0.6, 0.8, -0.15]} scale={[0.2, 0.3, 0.2]} onClick={() => setShowLeva(prev => !prev)} debug={debugHitboxes} />
+            <Hitbox name="Paper Stack" position={[-0.76, 0.78, -0.57]} scale={[0.327, 0.215, 0.279]} onHover={setHoveredTarget} onUnhover={() => setHoveredTarget(null)} onClick={handlePaperClick} debug={debugHitboxes} />
+            <Hitbox name="Lamp" position={[-0.428, 0.997, -0.698]} scale={[0.232, 0.536, 0.168]} onHover={setHoveredTarget} onUnhover={() => setHoveredTarget(null)} onClick={onToggleLight} debug={debugHitboxes} />
+
 
             <SceneLayout
                 view={view}
@@ -314,6 +314,7 @@ export function InteractiveScene({
                 scene={scene}
                 config={overlayConfig}
                 phoneContentRef={contentRef}
+                hoveredTarget={hoveredTarget}
             />
         </group>
     )

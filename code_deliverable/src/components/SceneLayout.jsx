@@ -65,11 +65,10 @@ function NotepadText() {
                 anchorY="top"
                 color="black"
             >
-                PROJECT NOTES{'\n'}
-                - User Research{'\n'}
-                - Moral Ledger{'\n'}
-                - Vibe Check{'\n'}
-                - Final Polish
+                ToDo: {'\n'}
+                - 3D setup ✔️{'\n'}
+                - 2D interactions ✔️{'\n'}
+                - Edit content
             </Text>
         </group>
     )
@@ -173,7 +172,7 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
     return content
 }
 
-export function SceneLayout({ view, onBack, onPhoneClick, onMonitorClick, onPhoneHover, onPhoneUnhover, onMonitorHover, onMonitorUnhover, scene, config: overlayConfig, trackObject, phoneContentRef }) {
+export function SceneLayout({ view, onBack, onPhoneClick, onMonitorClick, onPhoneHover, onPhoneUnhover, onMonitorHover, onMonitorUnhover, scene, config: overlayConfig, trackObject, phoneContentRef, hoveredTarget }) {
     const { layoutMode, gizmoMode } = useControls({
         'Layout Mode': folder({
             layoutMode: { value: false, label: 'Enable Gizmos' },
