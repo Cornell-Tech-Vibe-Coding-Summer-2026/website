@@ -137,6 +137,21 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                         zIndexRange={[50, 0]}
                         occlude="blending"
                     >
+                        {/* Screen turn-on: inject keyframe style + overlay div that fades from black */}
+                        <style>{`
+                            @keyframes screenOn {
+                                0%   { opacity: 1; }
+                                30%  { opacity: 0.85; background: #000; }
+                                100% { opacity: 0; }
+                            }
+                            .phone-screen-on-overlay {
+                                position: absolute; inset: 0; z-index: 9999;
+                                background: #000;
+                                animation: screenOn 0.7s ease-out forwards;
+                                pointer-events: none;
+                            }
+                        `}</style>
+                        <div className="phone-screen-on-overlay" key={Date.now()} />
                         <div
                             className="w-full h-full"
                             style={{ pointerEvents: 'auto' }}

@@ -123,6 +123,28 @@ export function InteractiveScene({
     // 1. Initial Traversal: Cache meshes for lift and apply fixed transforms
     useEffect(() => {
         const meshes = []
+
+        // --- Direct lookup for named containers (from GLTF inspection) ---
+        // Keyboard: all keys are children of Object3D named 'Keyboard'
+        // Paper stack: all sheets are children of Group named 'Paper'
+        const namedContainers = [
+            { key: 'Paper Stack', names: ['Paper', 'paper', 'stack'] },
+            { key: 'keyboard', names: ['Keyboard'] },
+            { key: 'mouse', names: ['Mouse', 'mouse'] },
+        ]
+        for (const { key, names } of namedContainers) {
+            for (const name of names) {
+                const found = scene.getObjectByName(name)
+                if (found) {
+                    meshes.push({ node: found, key })
+                    if (initialY.current[found.uuid] === undefined) {
+                        initialY.current[found.uuid] = found.position.y
+                    }
+                    break
+                }
+            }
+        }
+
         scene.traverse((obj) => {
             const name = obj.name.toLowerCase()
 
@@ -137,39 +159,18 @@ export function InteractiveScene({
                 }
             }
 
-            // Notebook handled by Leva directly in useFrame or another Effect
-
-            // Performance: Filter meshes for lift animation
+            // Performance: Filter meshes for lift animation (book, notepad only - keyboard/paper handled above)
             if (obj.isMesh || obj.type === 'Group') {
                 let targetKey = null
-                for (const [key, config] of Object.entries(clickableObjects)) {
-                    if (config.lift && config.contains.some(str => name.includes(str))) {
-                        if (config.excludes && config.excludes.some(str => name.includes(str))) continue
-                        targetKey = key
-                        break
-                    }
-                }
-                if (!targetKey) {
-                    if (name.includes('stack') || name.includes('paper')) targetKey = 'Paper Stack'
-                    else if ((name.includes('book') || name.includes('values')) && !name.includes('notebook')) targetKey = 'book'
-                    // Focus: Phone explicitly excluded from generic lift loop to avoid conflicts
-                    // The phone's hover and zoom lift is handled exclusively by PhoneAnimation.jsx
+                // Only handle 'book' here - keyboard and paper stack use named container lookup above
+                if ((name.includes('book') || name.includes('values')) && !name.includes('notebook') && !name.includes('phone') && !name.includes('node003')) {
+                    targetKey = 'book'
                 }
 
-                if (targetKey) {
-                    // Dedup: prefer lifting the PARENT GROUP so all children move together
-                    // (avoids "one key lifts" and paper stack jitter from lifting a single mesh)
-                    // Only add if no entry for this key exists yet.
-                    if (!meshes.some(m => m.key === targetKey)) {
-                        // Walk up to the nearest Group ancestor - that's what we want to lift
-                        let liftNode = obj
-                        if (obj.parent && obj.parent.type === 'Group') {
-                            liftNode = obj.parent
-                        }
-                        meshes.push({ node: liftNode, key: targetKey })
-                        if (initialY.current[liftNode.uuid] === undefined) {
-                            initialY.current[liftNode.uuid] = liftNode.position.y
-                        }
+                if (targetKey && !meshes.some(m => m.key === targetKey)) {
+                    meshes.push({ node: obj, key: targetKey })
+                    if (initialY.current[obj.uuid] === undefined) {
+                        initialY.current[obj.uuid] = obj.position.y
                     }
                 }
             }
