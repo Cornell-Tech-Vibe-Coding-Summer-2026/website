@@ -119,7 +119,35 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                 <group scale={config.scale}>
                     {children}
                 </group>
+            ) : name === 'Phone' ? (
+                // Phone: only render Html when actively zoomed in.
+                // At distance, we render nothing so the native 3D phone mesh cleanly catches all raycasts.
+                view === 'phone' ? (
+                    <Html
+                        transform
+                        distanceFactor={config.scale}
+                        style={{
+                            width: config.width || '320px',
+                            height: config.height || '640px',
+                            background: config.bg || 'transparent',
+                            borderRadius: config.radius || '0px',
+                            overflow: 'hidden',
+                            pointerEvents: 'none'
+                        }}
+                        zIndexRange={[50, 0]}
+                        occlude="blending"
+                    >
+                        <div
+                            className="w-full h-full"
+                            style={{ pointerEvents: 'auto' }}
+                            onPointerDown={e => e.stopPropagation()}
+                        >
+                            {children}
+                        </div>
+                    </Html>
+                ) : null
             ) : (
+                // Generic HTML plane for Monitor and any other planes
                 <Html
                     transform
                     distanceFactor={config.scale}
@@ -131,14 +159,12 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                         overflow: 'hidden',
                         pointerEvents: 'none'
                     }}
-                    zIndexRange={[name === 'Phone' ? 50 : 10, 0]}
-                    // Occlusion enabled via "blending" for correct depth sorting (fixes visible-through-meshes)
+                    zIndexRange={[10, 0]}
                     occlude="blending"
                 >
                     <div
                         className="w-full h-full"
                         style={{
-                            // UI is inert when zoomed out so 3D hitboxes can catch hover events cleanly.
                             pointerEvents: (layoutMode || view !== name.toLowerCase()) ? 'none' : 'auto',
                             cursor: onClick ? 'pointer' : 'auto'
                         }}

@@ -33,14 +33,18 @@ function Hitbox({ name, onHover, onUnhover, onClick, debug, position, scale }) {
                 if (onClick) onClick(e)
             }}
             onPointerOver={(e) => {
-                e.stopPropagation()
-                document.body.style.cursor = 'pointer'
-                if (onHover) onHover(name)
+                if (onHover) {
+                    e.stopPropagation()
+                    document.body.style.cursor = 'pointer'
+                    onHover(name)
+                }
             }}
             onPointerOut={(e) => {
-                e.stopPropagation()
-                document.body.style.cursor = 'auto'
-                if (onUnhover) onUnhover()
+                if (onHover) {
+                    e.stopPropagation()
+                    document.body.style.cursor = 'auto'
+                    if (onUnhover) onUnhover()
+                }
             }}
         >
             <boxGeometry args={finalScale} />
@@ -107,10 +111,13 @@ export function InteractiveScene({
 
     // Define clickable objects
     const clickableObjects = {
+        // Phone: only match the phone body/group - no 'screen' to avoid extending hover to right/bottom
+        'Phone': { handler: onPhoneClick, contains: ['phone', 'smartphone'], excludes: ['desk', 'table', 'keyboard', 'mouse'], lift: false },
         'notepad': { handler: onNotepadClick, contains: ['notebook', 'notepad', 'notepad_plane'], excludes: ['stack', 'paper', 'papers'], lift: false },
         'keyboard': { handler: onMonitorClick, contains: ['keyboard', 'keys'], lift: true },
         'mouse': { handler: onMonitorClick, contains: ['mouse'], excludes: ['pad'], lift: true },
         'book': { handler: onReadingClick, contains: ['book', 'values', 'play'], excludes: ['notebook', 'phone', 'node003'], lift: true },
+        'Lamp': { handler: onToggleLight, contains: ['lamp', 'bulb', 'light'], excludes: ['floor', 'spot'], lift: false },
     }
 
     // 1. Initial Traversal: Cache meshes for lift and apply fixed transforms
@@ -150,9 +157,19 @@ export function InteractiveScene({
                 }
 
                 if (targetKey) {
-                    meshes.push({ node: obj, key: targetKey })
-                    if (initialY.current[obj.uuid] === undefined) {
-                        initialY.current[obj.uuid] = obj.position.y
+                    // Dedup: prefer lifting the PARENT GROUP so all children move together
+                    // (avoids "one key lifts" and paper stack jitter from lifting a single mesh)
+                    // Only add if no entry for this key exists yet.
+                    if (!meshes.some(m => m.key === targetKey)) {
+                        // Walk up to the nearest Group ancestor - that's what we want to lift
+                        let liftNode = obj
+                        if (obj.parent && obj.parent.type === 'Group') {
+                            liftNode = obj.parent
+                        }
+                        meshes.push({ node: liftNode, key: targetKey })
+                        if (initialY.current[liftNode.uuid] === undefined) {
+                            initialY.current[liftNode.uuid] = liftNode.position.y
+                        }
                     }
                 }
             }
@@ -203,7 +220,7 @@ export function InteractiveScene({
                 const name = child.name.toLowerCase()
 
                 // Disable raycasting for meshes covered by Hitboxes
-                const isHitboxItem = ['lamp', 'phone', 'screen', 'node003_1', 'stack', 'paper'].some(str => name.includes(str))
+                const isHitboxItem = ['stack', 'paper'].some(str => name.includes(str))
                 if (isHitboxItem && !name.includes('notepad')) {
                     child.raycast = () => null
                 }
@@ -297,10 +314,11 @@ export function InteractiveScene({
                 }}
             />
 
-            {/* Hitboxes */}
-            <Hitbox name="Phone" position={[-0.56, 0.81, -0.45]} scale={[0.34, 0.08, 0.28]} onHover={view === 'default' ? setHoveredTarget : undefined} onUnhover={() => setHoveredTarget(null)} onClick={view === 'default' ? onPhoneClick : undefined} debug={debugHitboxes} />
+            {/* Hitboxes - Paper Stack and Lamp only. */}
             <Hitbox name="Notepad" position={[-0.25, 0.1, 0.45]} scale={[0.4, 0.1, 0.4]} onHover={view === 'default' ? setHoveredTarget : undefined} onUnhover={() => setHoveredTarget(null)} onClick={view === 'default' ? onNotepadClick : undefined} debug={debugHitboxes} />
-            <Hitbox name="Paper Stack" position={[-0.76, 0.78, -0.57]} scale={[0.327, 0.215, 0.279]} onHover={view === 'default' ? setHoveredTarget : undefined} onUnhover={() => setHoveredTarget(null)} onClick={view === 'default' ? handlePaperClick : undefined} debug={debugHitboxes} />
+            {/* Paper Stack hitbox - shifted far right of lamp */}
+            <Hitbox name="Paper Stack" position={[-0.68, 0.78, -0.55]} scale={[0.16, 0.22, 0.20]} onHover={view === 'default' ? setHoveredTarget : undefined} onUnhover={() => setHoveredTarget(null)} onClick={view === 'default' ? handlePaperClick : undefined} debug={debugHitboxes} />
+            {/* Lamp hitbox - positioned on head/shade only, not overlapping phone or paper stack */}
             <Hitbox name="Lamp" position={[-0.428, 0.997, -0.698]} scale={[0.232, 0.536, 0.168]} onHover={view === 'default' ? setHoveredTarget : undefined} onUnhover={() => setHoveredTarget(null)} onClick={view === 'default' ? onToggleLight : undefined} debug={debugHitboxes} />
 
 
