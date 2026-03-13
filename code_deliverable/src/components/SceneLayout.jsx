@@ -138,8 +138,8 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                     <div
                         className="w-full h-full"
                         style={{
-                            // Fix: Allow pointer events if onClick is present (e.g. for Zoom), unless in layout mode
-                            pointerEvents: (layoutMode || (name === 'Phone' && view !== 'phone' && !onClick) || (name === 'Monitor' && view !== 'monitor' && !onClick)) ? 'none' : 'auto',
+                            // UI is inert when zoomed out so 3D hitboxes can catch hover events cleanly.
+                            pointerEvents: (layoutMode || view !== name.toLowerCase()) ? 'none' : 'auto',
                             cursor: onClick ? 'pointer' : 'auto'
                         }}
                         onPointerDown={e => !layoutMode && e.stopPropagation()}

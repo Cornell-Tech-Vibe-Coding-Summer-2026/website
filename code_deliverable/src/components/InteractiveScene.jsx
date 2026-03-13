@@ -243,6 +243,8 @@ export function InteractiveScene({
                 object={scene}
                 onClick={(e) => {
                     e.stopPropagation()
+                    if (view !== 'default') return // Prevent clicks on generic scene objects when zoomed in
+
                     const clickedNode = e.object
                     const name = clickedNode.name.toLowerCase()
 
@@ -273,7 +275,7 @@ export function InteractiveScene({
                 }}
                 onPointerOver={(e) => {
                     e.stopPropagation()
-                    if (view === 'phone' || view === 'monitor') return
+                    if (view !== 'default') return // Prevent hovers on generic scene objects when zoomed in
 
                     let curr = e.object
                     while (curr) {
@@ -296,10 +298,10 @@ export function InteractiveScene({
             />
 
             {/* Hitboxes */}
-            <Hitbox name="Phone" position={[-0.56, 0.81, -0.45]} scale={[0.34, 0.08, 0.28]} onHover={setHoveredTarget} onUnhover={() => setHoveredTarget(null)} onClick={onPhoneClick} debug={debugHitboxes} />
-            <Hitbox name="Notepad" position={[-0.25, 0.1, 0.45]} scale={[0.4, 0.1, 0.4]} onHover={setHoveredTarget} onUnhover={() => setHoveredTarget(null)} onClick={onNotepadClick} debug={debugHitboxes} />
-            <Hitbox name="Paper Stack" position={[-0.76, 0.78, -0.57]} scale={[0.327, 0.215, 0.279]} onHover={setHoveredTarget} onUnhover={() => setHoveredTarget(null)} onClick={handlePaperClick} debug={debugHitboxes} />
-            <Hitbox name="Lamp" position={[-0.428, 0.997, -0.698]} scale={[0.232, 0.536, 0.168]} onHover={setHoveredTarget} onUnhover={() => setHoveredTarget(null)} onClick={onToggleLight} debug={debugHitboxes} />
+            <Hitbox name="Phone" position={[-0.56, 0.81, -0.45]} scale={[0.34, 0.08, 0.28]} onHover={view === 'default' ? setHoveredTarget : undefined} onUnhover={() => setHoveredTarget(null)} onClick={view === 'default' ? onPhoneClick : undefined} debug={debugHitboxes} />
+            <Hitbox name="Notepad" position={[-0.25, 0.1, 0.45]} scale={[0.4, 0.1, 0.4]} onHover={view === 'default' ? setHoveredTarget : undefined} onUnhover={() => setHoveredTarget(null)} onClick={view === 'default' ? onNotepadClick : undefined} debug={debugHitboxes} />
+            <Hitbox name="Paper Stack" position={[-0.76, 0.78, -0.57]} scale={[0.327, 0.215, 0.279]} onHover={view === 'default' ? setHoveredTarget : undefined} onUnhover={() => setHoveredTarget(null)} onClick={view === 'default' ? handlePaperClick : undefined} debug={debugHitboxes} />
+            <Hitbox name="Lamp" position={[-0.428, 0.997, -0.698]} scale={[0.232, 0.536, 0.168]} onHover={view === 'default' ? setHoveredTarget : undefined} onUnhover={() => setHoveredTarget(null)} onClick={view === 'default' ? onToggleLight : undefined} debug={debugHitboxes} />
 
 
             <SceneLayout
