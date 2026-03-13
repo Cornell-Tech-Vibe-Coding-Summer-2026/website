@@ -124,23 +124,20 @@ export function InteractiveScene({
     useEffect(() => {
         const meshes = []
 
-        // --- Direct lookup for named containers (from GLTF inspection) ---
-        // Keyboard: all keys are children of Object3D named 'Keyboard'
-        // Paper stack: all sheets are children of Group named 'Paper'
-        const namedContainers = [
-            { key: 'Paper Stack', names: ['Paper', 'paper', 'stack'] },
-            { key: 'keyboard', names: ['Keyboard'] },
-            { key: 'mouse', names: ['Mouse', 'mouse'] },
+        // Pre-seed with exact named containers discovered from GLTF inspection.
+        // These are seeded FIRST so the traversal's dedup check skips all child meshes.
+        // 'Keyboard' is an Object3D containing all key meshes.
+        // 'Paper' is a Group containing all paper sheet meshes.
+        const namedRoots = [
+            { name: 'Keyboard', key: 'keyboard' },
+            { name: 'Paper',    key: 'Paper Stack' },
         ]
-        for (const { key, names } of namedContainers) {
-            for (const name of names) {
-                const found = scene.getObjectByName(name)
-                if (found) {
-                    meshes.push({ node: found, key })
-                    if (initialY.current[found.uuid] === undefined) {
-                        initialY.current[found.uuid] = found.position.y
-                    }
-                    break
+        for (const { name, key } of namedRoots) {
+            const found = scene.getObjectByName(name)
+            if (found) {
+                meshes.push({ node: found, key })
+                if (initialY.current[found.uuid] === undefined) {
+                    initialY.current[found.uuid] = found.position.y
                 }
             }
         }
@@ -159,14 +156,22 @@ export function InteractiveScene({
                 }
             }
 
-            // Performance: Filter meshes for lift animation (book, notepad only - keyboard/paper handled above)
+            // Performance: Filter meshes for lift animation
             if (obj.isMesh || obj.type === 'Group') {
                 let targetKey = null
-                // Only handle 'book' here - keyboard and paper stack use named container lookup above
-                if ((name.includes('book') || name.includes('values')) && !name.includes('notebook') && !name.includes('phone') && !name.includes('node003')) {
-                    targetKey = 'book'
+                for (const [key, config] of Object.entries(clickableObjects)) {
+                    if (config.lift && config.contains.some(str => name.includes(str))) {
+                        if (config.excludes && config.excludes.some(str => name.includes(str))) continue
+                        targetKey = key
+                        break
+                    }
+                }
+                if (!targetKey) {
+                    if (name.includes('stack') || name.includes('paper')) targetKey = 'Paper Stack'
+                    else if ((name.includes('book') || name.includes('values')) && !name.includes('notebook')) targetKey = 'book'
                 }
 
+                // Only add if no entry exists for this key yet (named roots claim keys first)
                 if (targetKey && !meshes.some(m => m.key === targetKey)) {
                     meshes.push({ node: obj, key: targetKey })
                     if (initialY.current[obj.uuid] === undefined) {
