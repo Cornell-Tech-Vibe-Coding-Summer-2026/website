@@ -8,6 +8,17 @@ import * as THREE from 'three'
 import { InteractiveScene } from './components/InteractiveScene'
 import { CameraController } from './components/CameraController'
 import { SuggestedReadingsView, ReadingView } from './components/ReadingViews'
+import { MobileView } from './components/MobileView'
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
+  return isMobile
+}
 
 function Loader() {
   const { progress } = useProgress()
@@ -17,6 +28,7 @@ function Loader() {
 import { AnimatePresence } from 'framer-motion'
 
 export default function App() {
+  const isMobile = useIsMobile()
   const [view, setView] = useState('default')
   const [overlayOrigin, setOverlayOrigin] = useState({ x: 0, y: 0 })
   const [deskLightOn, setDeskLightOn] = useState(false)
@@ -102,8 +114,12 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
+  if (isMobile) {
+    return <MobileView />
+  }
+
   return (
-    <div className="relative w-full h-full bg-[#050505] overflow-hidden">
+    <div className="relative h-full bg-[#050505] overflow-hidden" style={{ width: 'max(100vw, 1100px)' }}>
       <Canvas shadows camera={{ position: config.defaultPos, fov: 50 }} gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.0 }}>
 
         {/* Lights */}

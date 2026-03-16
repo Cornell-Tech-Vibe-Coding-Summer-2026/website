@@ -215,7 +215,7 @@ export function InteractiveScene({
         // Lift Animation — per-key lift amounts and consistent snappy damp
         liftableMeshes.current.forEach(({ node, key }) => {
             const isHovered = hoveredTarget === key || (key === 'book' && hoveredTarget === 'Book')
-            const liftAmount = key === 'Paper Stack' ? 0.2 : 0.06
+            const liftAmount = key === 'Paper Stack' ? 0.07 : 0.06
             // For paper stack use live Leva Y as base so it stays in sync without jitter
             const baseY = (key === 'Paper Stack' && paperStackPos) ? paperStackPos[1] : initialY.current[node.uuid]
             const targetY = isHovered ? baseY + liftAmount : baseY
