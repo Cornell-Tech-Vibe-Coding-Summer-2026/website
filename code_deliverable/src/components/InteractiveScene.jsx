@@ -211,11 +211,12 @@ export function InteractiveScene({
             stackRef.current.position.set(...paperStackPos)
         }
 
-        // Lift Animation
+        // Lift Animation — per-key lift amounts and consistent snappy damp
         liftableMeshes.current.forEach(({ node, key }) => {
             const isHovered = hoveredTarget === key || (key === 'book' && hoveredTarget === 'Book')
-            const targetY = isHovered ? initialY.current[node.uuid] + 0.05 : initialY.current[node.uuid]
-            easing.damp(node.position, 'y', targetY, 0.1, delta)
+            const liftAmount = key === 'Paper Stack' ? 0.08 : 0.06
+            const targetY = isHovered ? initialY.current[node.uuid] + liftAmount : initialY.current[node.uuid]
+            easing.damp(node.position, 'y', targetY, 0.07, delta)
         })
     })
 
@@ -256,6 +257,26 @@ export function InteractiveScene({
                 }
             }
         })
+
+        // Darken phone screen mesh: find the phone group, then darken its non-body mesh children
+        const phoneGroup = scene.getObjectByName('Phone') || scene.getObjectByName('Smartphone')
+        if (phoneGroup) {
+            phoneGroup.traverse((child) => {
+                if (!child.isMesh || !child.material) return
+                const n = child.name.toLowerCase()
+                // Screen meshes tend to have 'screen', 'glass', 'display', or generic node names
+                // Skip anything that's clearly the body (has 'body', 'case', 'frame', 'phone')
+                const isBody = ['body', 'case', 'frame'].some(s => n.includes(s))
+                if (!isBody && !child.userData.screenDarkened) {
+                    child.userData.screenDarkened = true
+                    child.userData.originalColor = child.material.color?.clone()
+                    child.material = child.material.clone() // clone to avoid sharing
+                    child.material.color?.set('#020205')
+                    child.material.emissive?.set('#000000')
+                    child.material.needsUpdate = true
+                }
+            })
+        }
     }, [scene, shadowConfig, setShowLeva])
 
     return (

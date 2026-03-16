@@ -54,9 +54,9 @@ export function PhoneAnimation({ scene, view, config, contentRef, hovered }) {
                 targetPos.y += 0.05
             }
 
-            // 1. Animate Phone Mesh (Local Transform)
-            easing.damp3(phoneRef.current.position, targetPos, 0.4, delta)
-            easing.dampE(phoneRef.current.rotation, targetRot, 0.4, delta)
+            // 1. Animate Phone Mesh (Local Transform) — snappy damp matches scene hover speed
+            easing.damp3(phoneRef.current.position, targetPos, 0.12, delta)
+            easing.dampE(phoneRef.current.rotation, targetRot, 0.12, delta)
 
             // 2. Sync Content to WORLD Position (Crucial fix for nested GLTF)
             if (contentRef && contentRef.current) {

@@ -60,7 +60,7 @@ function NotepadText() {
                 fontSize={0.15}
                 lineHeight={1.5}
                 letterSpacing={0.05}
-                maxWidth={2}
+                maxWidth={1.5}
                 anchorX="left"
                 anchorY="top"
                 color="black"
@@ -151,7 +151,7 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                                 pointer-events: none;
                             }
                         `}</style>
-                        <div className="phone-screen-on-overlay" key={Date.now()} />
+                        <div className="phone-screen-on-overlay" />
                         <div
                             className="w-full h-full"
                             style={{ pointerEvents: 'auto' }}
