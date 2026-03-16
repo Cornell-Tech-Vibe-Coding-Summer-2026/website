@@ -347,7 +347,7 @@ export function InteractiveScene({
             {/* Hitboxes - Paper Stack and Lamp only. */}
             <Hitbox name="Notepad" position={[-0.25, 0.1, 0.45]} scale={[0.4, 0.1, 0.4]} onHover={view === 'default' ? setHoveredTarget : undefined} onUnhover={() => setHoveredTarget(null)} onClick={view === 'default' ? onNotepadClick : undefined} debug={debugHitboxes} />
             {/* Paper Stack hitbox - shifted far right of lamp */}
-            <Hitbox name="Paper Stack" position={[-0.68, 0.78, -0.55]} scale={[0.16, 0.22, 0.20]} onHover={view === 'default' ? setHoveredTarget : undefined} onUnhover={() => setHoveredTarget(null)} onClick={view === 'default' ? handlePaperClick : undefined} debug={debugHitboxes} />
+            <Hitbox name="Paper Stack" position={[-0.78, 0.744, -0.613]} scale={[0.299, 0.226, 0.183]} onHover={view === 'default' ? setHoveredTarget : undefined} onUnhover={() => setHoveredTarget(null)} onClick={view === 'default' ? handlePaperClick : undefined} debug={debugHitboxes} />
             {/* Lamp hitbox - positioned on head/shade only, not overlapping phone or paper stack */}
             <Hitbox name="Lamp" position={[-0.428, 0.997, -0.698]} scale={[0.232, 0.536, 0.168]} onHover={view === 'default' ? setHoveredTarget : undefined} onUnhover={() => setHoveredTarget(null)} onClick={view === 'default' ? onToggleLight : undefined} debug={debugHitboxes} />
 

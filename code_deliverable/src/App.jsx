@@ -190,13 +190,10 @@ export default function App() {
         />
       </Canvas>
 
-      {/* UI Overlay */}
-      <div className="absolute top-8 left-8 z-[100] pointer-events-none">
+      <div className="absolute top-8 left-8 z-[100] pointer-events-none select-none">
         <h1 className="text-white text-5xl font-black tracking-tighter uppercase mb-2 drop-shadow-lg">Vibe Coding Ethics</h1>
         <p className="text-white/60 text-sm font-mono tracking-widest uppercase drop-shadow-md">Designing with Conscience • Cornell Tech 2026</p>
-      </div>
-
-      {/* Reading View Overlay */}
+      </div>      {/* Reading View Overlay */}
       <AnimatePresence>
         {view === 'reading' && (
           <ReadingView onClose={() => setView('default')} origin={overlayOrigin} />
