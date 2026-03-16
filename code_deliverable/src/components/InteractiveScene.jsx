@@ -203,19 +203,22 @@ export function InteractiveScene({
 
     // 3. Animation Loop
     useFrame((state, delta) => {
-        // Sync Paper Stack Position from Leva
+        // Sync Paper Stack X/Z Position from Leva — never touch Y, damp owns it
         if (!stackRef.current) {
             stackRef.current = scene.getObjectByName('Paper') || scene.getObjectByName('Paper_1') || scene.getObjectByName('Stack')
         }
         if (paperStackPos && stackRef.current) {
-            stackRef.current.position.set(...paperStackPos)
+            stackRef.current.position.x = paperStackPos[0]
+            stackRef.current.position.z = paperStackPos[2]
         }
 
         // Lift Animation — per-key lift amounts and consistent snappy damp
         liftableMeshes.current.forEach(({ node, key }) => {
             const isHovered = hoveredTarget === key || (key === 'book' && hoveredTarget === 'Book')
             const liftAmount = key === 'Paper Stack' ? 0.2 : 0.06
-            const targetY = isHovered ? initialY.current[node.uuid] + liftAmount : initialY.current[node.uuid]
+            // For paper stack use live Leva Y as base so it stays in sync without jitter
+            const baseY = (key === 'Paper Stack' && paperStackPos) ? paperStackPos[1] : initialY.current[node.uuid]
+            const targetY = isHovered ? baseY + liftAmount : baseY
             easing.damp(node.position, 'y', targetY, 0.07, delta)
         })
     })
