@@ -8,6 +8,17 @@ import * as THREE from 'three'
 import { InteractiveScene } from './components/InteractiveScene'
 import { CameraController } from './components/CameraController'
 import { SuggestedReadingsView, ReadingView } from './components/ReadingViews'
+import { MobileView } from './components/MobileView'
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
+  return isMobile
+}
 
 function Loader() {
   const { progress } = useProgress()
@@ -17,10 +28,12 @@ function Loader() {
 import { AnimatePresence } from 'framer-motion'
 
 export default function App() {
+  const isMobile = useIsMobile()
   const [view, setView] = useState('default')
   const [overlayOrigin, setOverlayOrigin] = useState({ x: 0, y: 0 })
   const [deskLightOn, setDeskLightOn] = useState(false)
   const [phoneMesh, setPhoneMesh] = useState(null)
+  const [showLeva, setShowLeva] = useState(false) // Default hidden
   const controlsRef = useRef()
 
   // Leva controls 
@@ -101,8 +114,12 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
+  if (isMobile) {
+    return <MobileView />
+  }
+
   return (
-    <div className="relative w-full h-full bg-[#050505] overflow-hidden">
+    <div className="relative h-full bg-[#050505] overflow-hidden" style={{ width: 'max(100vw, 1100px)' }}>
       <Canvas shadows camera={{ position: config.defaultPos, fov: 50 }} gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.0 }}>
 
         {/* Lights */}
@@ -145,6 +162,7 @@ export default function App() {
             setPhoneMesh={setPhoneMesh}
             phoneMesh={phoneMesh}
             paperStackPos={config.paperStackPos}
+            setShowLeva={setShowLeva}
           />
           <ContactShadows
             opacity={config.contactOpacity}
@@ -175,7 +193,7 @@ export default function App() {
       {/* UI Overlay */}
       <div className="absolute top-8 left-8 z-[100] pointer-events-none">
         <h1 className="text-white text-5xl font-black tracking-tighter uppercase mb-2 drop-shadow-lg">Vibe Coding Ethics</h1>
-        <p className="text-white/60 text-sm font-mono tracking-widest uppercase drop-shadow-md">Designing with Character • Cornell Tech 2026</p>
+        <p className="text-white/60 text-sm font-mono tracking-widest uppercase drop-shadow-md">Designing with Conscience • Cornell Tech 2026</p>
       </div>
 
       {/* Reading View Overlay */}
@@ -208,7 +226,7 @@ export default function App() {
 
       {/* Explicit Leva Panel with high z-index */}
       <div className="absolute top-0 right-0 z-[10000]">
-        <Leva flat fill={false} titleBar={false} theme={{
+        <Leva hidden={!showLeva} flat fill={false} titleBar={false} theme={{
           colors: {
             accent: '#ffffff',
             bg: '#1a1a1a',

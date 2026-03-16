@@ -57,19 +57,20 @@ function NotepadText() {
     return (
         <group>
             <Text
-                fontSize={0.15}
+                fontSize={0.09}
                 lineHeight={1.5}
-                letterSpacing={0.05}
-                maxWidth={2}
+                letterSpacing={0.02}
+                maxWidth={3.0}
                 anchorX="left"
                 anchorY="top"
                 color="black"
             >
-                PROJECT NOTES{'\n'}
-                - User Research{'\n'}
-                - Moral Ledger{'\n'}
-                - Vibe Check{'\n'}
-                - Final Polish
+                {'ToDo:\n'}
+                {'- 3D setup ✔️\n'}
+                {'- 2D interactions ✔️\n'}
+                {'- Edit content\n'}
+                {'- Fix 3D interaction bugs\n'}
+                {'- Host online'}
             </Text>
         </group>
     )
@@ -80,7 +81,7 @@ function useLayoutPlane(name, defaults) {
     return { config, setConfig }
 }
 
-function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode, onClick, view }) {
+function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode, onClick, onHover, onUnhover, view }) {
     const offsetGroupRef = useRef()
 
     const handleTransformChange = () => {
@@ -120,7 +121,56 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                 <group scale={config.scale}>
                     {children}
                 </group>
+            ) : name === 'Phone' ? (
+                // Phone: only render Html when actively zoomed in.
+                // At distance, render a cheap black plane so the screen looks dark without any HTML cost.
+                view === 'phone' ? (
+                    <Html
+                        transform
+                        distanceFactor={config.scale}
+                        style={{
+                            width: config.width || '320px',
+                            height: config.height || '640px',
+                            background: config.bg || 'transparent',
+                            borderRadius: config.radius || '0px',
+                            overflow: 'hidden',
+                            pointerEvents: 'none'
+                        }}
+                        zIndexRange={[50, 0]}
+                        occlude="blending"
+                    >
+                        {/* Screen turn-on: inject keyframe style + overlay div that fades from black */}
+                        <style>{`
+                            @keyframes screenOn {
+                                0%   { opacity: 1; }
+                                30%  { opacity: 0.85; background: #000; }
+                                100% { opacity: 0; }
+                            }
+                            .phone-screen-on-overlay {
+                                position: absolute; inset: 0; z-index: 9999;
+                                background: #000;
+                                animation: screenOn 0.7s ease-out forwards;
+                                pointer-events: none;
+                            }
+                        `}</style>
+                        <div className="phone-screen-on-overlay" />
+                        <div
+                            className="w-full h-full"
+                            style={{ pointerEvents: 'auto' }}
+                            onPointerDown={e => e.stopPropagation()}
+                        >
+                            {children}
+                        </div>
+                    </Html>
+                ) : (
+                    // Cheap black plane — no HTML, no raycasting, pure geometry
+                    <mesh raycast={() => null}>
+                        <planeGeometry args={[0.115, 0.22]} />
+                        <meshBasicMaterial color="#000000" />
+                    </mesh>
+                )
             ) : (
+                // Generic HTML plane for Monitor and any other planes
                 <Html
                     transform
                     distanceFactor={config.scale}
@@ -132,19 +182,19 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                         overflow: 'hidden',
                         pointerEvents: 'none'
                     }}
-                    zIndexRange={[name === 'Phone' ? 50 : 10, 0]}
-                    // Occlusion enabled via "blending" for correct depth sorting (fixes visible-through-meshes)
+                    zIndexRange={[10, 0]}
                     occlude="blending"
                 >
                     <div
                         className="w-full h-full"
                         style={{
-                            // Fix: Allow pointer events if onClick is present (e.g. for Zoom), unless in layout mode
-                            pointerEvents: (layoutMode || (name === 'Phone' && view !== 'phone' && !onClick) || (name === 'Monitor' && view !== 'monitor' && !onClick)) ? 'none' : 'auto',
+                            pointerEvents: (layoutMode || view !== name.toLowerCase()) ? 'none' : 'auto',
                             cursor: onClick ? 'pointer' : 'auto'
                         }}
                         onPointerDown={e => !layoutMode && e.stopPropagation()}
                         onClick={!layoutMode ? onClick : undefined}
+                        onMouseEnter={onHover}
+                        onMouseLeave={onUnhover}
                     >
                         {children}
                     </div>
@@ -171,7 +221,7 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
     return content
 }
 
-export function SceneLayout({ view, onBack, onPhoneClick, onMonitorClick, scene, config: overlayConfig, trackObject, phoneContentRef }) {
+export function SceneLayout({ view, onBack, onPhoneClick, onMonitorClick, onPhoneHover, onPhoneUnhover, onMonitorHover, onMonitorUnhover, scene, config: overlayConfig, trackObject, phoneContentRef, hoveredTarget }) {
     const { layoutMode, gizmoMode } = useControls({
         'Layout Mode': folder({
             layoutMode: { value: false, label: 'Enable Gizmos' },
@@ -194,6 +244,8 @@ export function SceneLayout({ view, onBack, onPhoneClick, onMonitorClick, scene,
                 gizmoMode={gizmoMode}
                 view={view}
                 onClick={onMonitorClick}
+                onHover={onMonitorHover}
+                onUnhover={onMonitorUnhover}
             >
                 <MonitorContent onBack={onBack} />
             </ContentPlane>
@@ -207,6 +259,8 @@ export function SceneLayout({ view, onBack, onPhoneClick, onMonitorClick, scene,
                     layoutMode={layoutMode}
                     gizmoMode={gizmoMode}
                     onClick={onPhoneClick}
+                    onHover={onPhoneHover}
+                    onUnhover={onPhoneUnhover}
                     view={view}
                 >
                     <PhoneContent />

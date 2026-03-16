@@ -8,7 +8,7 @@ import { useFrame } from '@react-three/fiber'
 
 function PhoneGroup({ config, view }) {
     const group = React.useRef()
-    const { nodes, materials } = useGLTF('/Desk.glb')
+    const { nodes, materials } = useGLTF(import.meta.env.BASE_URL + 'Desk.glb')
 
     useFrame((state, delta) => {
         if (!group.current) return
@@ -48,17 +48,18 @@ function PhoneGroup({ config, view }) {
 }
 
 export function Desk({ onFocus, config, handlePivotEnd, view }) {
-    const { nodes, materials } = useGLTF('/Desk.glb')
+    const base = import.meta.env.BASE_URL
+    const { nodes, materials } = useGLTF(base + 'Desk.glb')
 
     // Load new assets
-    const gavel = useGLTF('/Gavel.glb')
-    const msgBoard = useGLTF('/Message board.glb')
-    const notebook = useGLTF('/Notebook.glb')
-    const thinBook = useGLTF('/Thin Book.glb')
+    const gavel = useGLTF(base + 'Gavel.glb')
+    const msgBoard = useGLTF(base + 'Message board.glb')
+    const notebook = useGLTF(base + 'Notebook.glb')
+    const thinBook = useGLTF(base + 'Thin Book.glb')
 
     // Load textures
-    const vapCover = useTexture('/VAP-cover.jpg')
-    const ctSky = useTexture('/cornell-tech-sky.jpg')
+    const vapCover = useTexture(base + 'VAP-cover.jpg')
+    const ctSky = useTexture(base + 'cornell-tech-sky.jpg')
 
     // Reverse texture Y-axis for standard mapping
     vapCover.flipY = false
@@ -307,8 +308,8 @@ export function Desk({ onFocus, config, handlePivotEnd, view }) {
     )
 }
 
-useGLTF.preload('/Desk.glb')
-useGLTF.preload('/Gavel.glb')
-useGLTF.preload('/Message board.glb')
-useGLTF.preload('/Notebook.glb')
-useGLTF.preload('/Thin Book.glb')
+useGLTF.preload(import.meta.env.BASE_URL + 'Desk.glb')
+useGLTF.preload(import.meta.env.BASE_URL + 'Gavel.glb')
+useGLTF.preload(import.meta.env.BASE_URL + 'Message board.glb')
+useGLTF.preload(import.meta.env.BASE_URL + 'Notebook.glb')
+useGLTF.preload(import.meta.env.BASE_URL + 'Thin Book.glb')

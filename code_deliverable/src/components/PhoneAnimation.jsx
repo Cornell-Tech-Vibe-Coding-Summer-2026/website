@@ -51,18 +51,17 @@ export function PhoneAnimation({ scene, view, config, contentRef, hovered }) {
                 targetPos.z += config.phoneSlideZ || 0.067
                 targetRot.x += config.phoneTilt || 0.004
             } else if (isHovered && view === 'default') {
-                // Hover lift (smaller, just vertical)
                 targetPos.y += 0.05
             }
 
-            // 1. Animate Phone Mesh (Local Transform)
-            easing.damp3(phoneRef.current.position, targetPos, 0.4, delta)
-            easing.dampE(phoneRef.current.rotation, targetRot, 0.4, delta)
+            // 1. Animate Phone Mesh (Local Transform) — snappy damp matches scene hover speed
+            easing.damp3(phoneRef.current.position, targetPos, 0.12, delta)
+            easing.dampE(phoneRef.current.rotation, targetRot, 0.12, delta)
 
             // 2. Sync Content to WORLD Position (Crucial fix for nested GLTF)
             if (contentRef && contentRef.current) {
-                // Force update local transform to world matrix so we get fresh data
-                phoneRef.current.updateMatrixWorld()
+                // Force update local transform to world matrix so we get fresh data AFTER damp
+                phoneRef.current.updateMatrixWorld(true)
 
                 // Get exact world position/rotation
                 phoneRef.current.getWorldPosition(vec.current)
