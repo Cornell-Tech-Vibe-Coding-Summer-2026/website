@@ -57,18 +57,20 @@ function NotepadText() {
     return (
         <group>
             <Text
-                fontSize={0.15}
+                fontSize={0.09}
                 lineHeight={1.5}
-                letterSpacing={0.05}
-                maxWidth={1.5}
+                letterSpacing={0.02}
+                maxWidth={3.0}
                 anchorX="left"
                 anchorY="top"
                 color="black"
             >
-                ToDo: {'\n'}
-                - 3D setup ✔️{'\n'}
-                - 2D interactions ✔️{'\n'}
-                - Edit content
+                {'ToDo:\n'}
+                {'- 3D setup ✔️\n'}
+                {'- 2D interactions ✔️\n'}
+                {'- Edit content\n'}
+                {'- Fix 3D interaction bugs\n'}
+                {'- Host online'}
             </Text>
         </group>
     )
@@ -121,7 +123,7 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                 </group>
             ) : name === 'Phone' ? (
                 // Phone: only render Html when actively zoomed in.
-                // At distance, we render nothing so the native 3D phone mesh cleanly catches all raycasts.
+                // At distance, render a cheap black plane so the screen looks dark without any HTML cost.
                 view === 'phone' ? (
                     <Html
                         transform
@@ -160,7 +162,13 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                             {children}
                         </div>
                     </Html>
-                ) : null
+                ) : (
+                    // Cheap black plane — no HTML, no raycasting, pure geometry
+                    <mesh raycast={() => null}>
+                        <planeGeometry args={[0.115, 0.22]} />
+                        <meshBasicMaterial color="#000000" />
+                    </mesh>
+                )
             ) : (
                 // Generic HTML plane for Monitor and any other planes
                 <Html

@@ -214,7 +214,7 @@ export function InteractiveScene({
         // Lift Animation — per-key lift amounts and consistent snappy damp
         liftableMeshes.current.forEach(({ node, key }) => {
             const isHovered = hoveredTarget === key || (key === 'book' && hoveredTarget === 'Book')
-            const liftAmount = key === 'Paper Stack' ? 0.08 : 0.06
+            const liftAmount = key === 'Paper Stack' ? 0.2 : 0.06
             const targetY = isHovered ? initialY.current[node.uuid] + liftAmount : initialY.current[node.uuid]
             easing.damp(node.position, 'y', targetY, 0.07, delta)
         })
