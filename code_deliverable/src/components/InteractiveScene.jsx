@@ -75,7 +75,7 @@ export function InteractiveScene({
     paperStackPos,
     setShowLeva
 }) {
-    const { scene } = useGLTF('/scene-unmerged.glb')
+    const { scene } = useGLTF(import.meta.env.BASE_URL + 'scene-unmerged.glb')
 
     // Debugging and Specialized controls
     const { debugHitboxes } = useControls('Debugging', {
