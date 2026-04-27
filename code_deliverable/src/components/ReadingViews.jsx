@@ -1,8 +1,103 @@
 import { motion } from 'framer-motion'
 
+const READINGS = [
+    {
+        title: 'Why Johnny Can\'t Prompt',
+        authors: 'Zamfirescu-Pereira, Wong, Hartmann, Yang — CHI 2023',
+        venue: 'ACM CHI',
+        kind: 'paper',
+        url: 'https://dl.acm.org/doi/10.1145/3544548.3581388',
+        abstract: 'Non-AI-experts struggle to design effective prompts for LLMs. The authors find that users approach prompting opportunistically rather than systematically, and rarely revise prompts based on observed model behavior. A foundational read on the limits of vibe coding.',
+    },
+    {
+        title: 'Bias in Computer Systems',
+        authors: 'Friedman & Nissenbaum — 1996',
+        venue: 'ACM Transactions on Information Systems',
+        kind: 'paper',
+        url: 'https://nissenbaum.tech.cornell.edu/papers/biasincomputers.pdf',
+        abstract: 'Identifies three categories of bias in computer systems: preexisting (rooted in social institutions), technical (from constraints), and emergent (in context of use). The vocabulary the field still uses today.',
+    },
+    {
+        title: 'Values at Play in Digital Games',
+        authors: 'Flanagan & Nissenbaum — 2014',
+        venue: 'MIT Press',
+        kind: 'book',
+        url: 'https://drive.google.com/file/d/14fTIg05HNcARYP5JrEJ87KC29D2QAgqM/view?usp=drive_link',
+        abstract: 'The framework that anchors the second week of the class. Values are embedded in technology — the question is whether designers do it intentionally. Provides discovery, translation, and verification heuristics for value-sensitive design.',
+    },
+    {
+        title: 'Obfuscation: A User\'s Guide for Privacy and Protest',
+        authors: 'Brunton & Nissenbaum — 2015',
+        venue: 'MIT Press',
+        kind: 'book',
+        url: 'https://direct.mit.edu/books/book/3112/ObfuscationA-User-s-Guide-for-Privacy-and-Protest',
+        abstract: 'When you can\'t hide, drown the signal in noise. A toolkit of obfuscation strategies — from TrackMeNot to ad-nauseating bots — and a moral defense of using AI against AI.',
+    },
+    {
+        title: 'Workers Weaponizing AI Against Each Other',
+        authors: 'OfficeChai — 2024',
+        venue: 'Article',
+        kind: 'article',
+        url: 'https://officechai.com/ai/chinas-workers-are-weaponizing-ai-against-each-other-through-colleague-skill-files-and-fighting-back/',
+        abstract: 'Field report from China: workers use AI to track each other, then use AI again to push back. A glimpse at what "AI for protection from work automation" looks like in practice — material for week 2 (AI vs. AI).',
+    },
+    {
+        title: 'Public Interest Technology Ethics Workshop',
+        authors: 'Cornell PiTech',
+        venue: 'Workshop site',
+        kind: 'site',
+        url: 'https://pitechethics.github.io/',
+        abstract: 'The VAP Ethics Thinking Canvas used in week 2 was developed here. Browse the canvas, the case studies, and the workshop materials before applying VAP to your own project.',
+    },
+]
+
+const KIND_TAG = {
+    paper: { label: 'Paper', color: 'bg-blue-50 text-blue-800 border-blue-200' },
+    book: { label: 'Book', color: 'bg-amber-50 text-amber-800 border-amber-200' },
+    article: { label: 'Article', color: 'bg-emerald-50 text-emerald-800 border-emerald-200' },
+    site: { label: 'Site', color: 'bg-purple-50 text-purple-800 border-purple-200' },
+}
+
+function ReadingCard({ reading }) {
+    const tag = KIND_TAG[reading.kind] ?? KIND_TAG.paper
+    return (
+        <a
+            href={reading.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-shrink-0 w-[360px] h-[520px] bg-white shadow-md hover:shadow-2xl hover:border-gray-400 transition-all duration-200 border border-gray-200 p-7 flex flex-col snap-center group rounded"
+        >
+            <div className="flex items-center justify-between mb-4">
+                <span className={`text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded border ${tag.color}`}>
+                    {tag.label}
+                </span>
+                <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">
+                    {reading.venue}
+                </span>
+            </div>
+            <h3 className="text-xl font-bold mb-2 font-serif text-[#1a1a1a] leading-tight">
+                {reading.title}
+            </h3>
+            <p className="text-sm text-gray-500 italic mb-5">{reading.authors}</p>
+            <p className="flex-1 text-[13px] text-gray-700 leading-relaxed font-serif overflow-y-auto pr-1">
+                {reading.abstract}
+            </p>
+            <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
+                <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest truncate max-w-[200px]">
+                    {(() => { try { return new URL(reading.url).hostname.replace(/^www\./, '') } catch { return '' } })()}
+                </span>
+                <span className="text-blue-700 text-sm font-bold opacity-60 group-hover:opacity-100 transition-opacity">
+                    Open ↗
+                </span>
+            </div>
+        </a>
+    )
+}
+
 export function SuggestedReadingsView({ onClose, origin }) {
-    // Default origin if not provided (center screen fallback)
-    const initial = origin ? { x: origin.x - window.innerWidth / 2, y: origin.y - window.innerHeight / 2, scale: 0, opacity: 0 } : { scale: 0.8, opacity: 0 }
+    const initial = origin
+        ? { x: origin.x - window.innerWidth / 2, y: origin.y - window.innerHeight / 2, scale: 0, opacity: 0 }
+        : { scale: 0.8, opacity: 0 }
 
     return (
         <motion.div
@@ -16,54 +111,29 @@ export function SuggestedReadingsView({ onClose, origin }) {
                 initial={initial}
                 animate={{ x: 0, y: 0, scale: 1, opacity: 1 }}
                 exit={initial}
-                transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                className="bg-[#eaeaea] text-gray-900 w-full max-w-5xl h-[90vh] p-8 rounded shadow-2xl overflow-hidden relative flex flex-col origin-center"
-                onClick={e => e.stopPropagation()}
+                transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+                className="bg-[#f0efeb] text-gray-900 w-full max-w-6xl h-[90vh] p-8 rounded-lg shadow-2xl overflow-hidden relative flex flex-col origin-center"
+                onClick={(e) => e.stopPropagation()}
             >
-                <button onClick={onClose} className="absolute top-6 right-6 text-2xl opacity-50 hover:opacity-100 z-10">✕</button>
+                <button onClick={onClose} className="absolute top-6 right-6 text-2xl opacity-50 hover:opacity-100 z-10">
+                    ✕
+                </button>
 
-                <h2 className="text-3xl font-bold mb-6 text-center text-[#333]">Suggested Readings</h2>
-
-                <div className="flex-1 overflow-x-auto overflow-y-hidden flex items-center space-x-8 px-4 pb-4 snap-x">
-                    {/* Paper 1 */}
-                    <div className="flex-shrink-0 w-[400px] h-[600px] bg-white shadow-lg transform transition-transform hover:scale-105 cursor-pointer border border-gray-200 p-8 flex flex-col relative snap-center group">
-                        <div className="absolute top-0 right-0 p-4 opacity-50 font-mono text-xs text-right">PDF</div>
-                        <h3 className="text-xl font-bold mb-2 font-serif">Bias in Computer Systems</h3>
-                        <p className="text-sm text-gray-500 italic mb-6">Batya Friedman and Helen Nissenbaum (1996)</p>
-                        <div className="flex-1 bg-gray-50 text-[10px] text-gray-400 p-4 font-serif leading-relaxed overflow-hidden text-justify select-none">
-                            <p>ABSTRACT: From an analysis of bias in computer systems, we identify three categories: preexisting, technical, and emergent. Preexisting bias has its roots in social institutions, practices, and attitudes. Technical bias arises from technical constraints or considerations. Emergent bias arises in a context of use...</p>
-                            <div className="mt-4 h-full w-full bg-linear-to-b from-transparent to-white/90 absolute bottom-0 left-0"></div>
-                        </div>
-                        <div className="mt-4 pt-4 border-t border-gray-100 text-center">
-                            <span className="text-blue-600 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity">Read Full Paper →</span>
-                        </div>
-                    </div>
-
-                    {/* Paper 2 */}
-                    <div className="flex-shrink-0 w-[400px] h-[600px] bg-white shadow-lg transform transition-transform hover:scale-105 cursor-pointer border border-gray-200 p-8 flex flex-col relative snap-center group">
-                        <div className="absolute top-0 right-0 p-4 opacity-50 font-mono text-xs text-right">PDF</div>
-                        <h3 className="text-xl font-bold mb-2 font-serif">Value Sensitive Design</h3>
-                        <p className="text-sm text-gray-500 italic mb-6">Batya Friedman et al.</p>
-                        <div className="flex-1 bg-gray-50 text-[10px] text-gray-400 p-4 font-serif leading-relaxed overflow-hidden text-justify select-none">
-                            <p>Value Sensitive Design (VSD) is a theoretically grounded approach to the design of technology that accounts for human values in a principled and comprehensive manner. Throughout the design process, VSD emphasizes the ethical import of design decisions...</p>
-                            <div className="mt-4 h-full w-full bg-linear-to-b from-transparent to-white/90 absolute bottom-0 left-0"></div>
-                        </div>
-                        <div className="mt-4 pt-4 border-t border-gray-100 text-center">
-                            <span className="text-blue-600 text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity">Read Full Paper →</span>
-                        </div>
-                    </div>
-
-                    {/* Paper 3 - Placeholder */}
-                    <div className="flex-shrink-0 w-[400px] h-[600px] bg-gray-50 shadow-inner flex items-center justify-center border-2 border-dashed border-gray-300">
-                        <div className="text-center text-gray-400">
-                            <p className="font-bold text-lg">More Resources</p>
-                            <p className="text-sm">Public Interest Tech</p>
-                        </div>
-                    </div>
+                <div className="mb-6 pr-12">
+                    <h2 className="text-3xl font-bold text-[#222] font-serif">Suggested Readings</h2>
+                    <p className="text-sm text-gray-500 mt-1">
+                        Selected sources that anchor the class. Click any card to open the source in a new tab.
+                    </p>
                 </div>
 
-                <div className="text-center mt-4 text-gray-400 text-xs">
-                    Scroll horizontally to view papers
+                <div className="flex-1 overflow-x-auto overflow-y-hidden flex items-stretch gap-6 px-1 py-4 snap-x snap-mandatory">
+                    {READINGS.map((r) => (
+                        <ReadingCard key={r.url} reading={r} />
+                    ))}
+                </div>
+
+                <div className="text-center mt-3 text-gray-400 text-xs font-mono uppercase tracking-widest">
+                    ← scroll horizontally →
                 </div>
             </motion.div>
         </motion.div>
@@ -111,15 +181,6 @@ export function ReadingView({ onClose, origin }) {
                         </ul>
                     </div>
                     <div className="space-y-8">
-                        <div className="p-6 bg-white/50 rounded border border-gray-300">
-                            <h4 className="font-bold uppercase tracking-widest text-sm mb-2">Suggested Reading</h4>
-                            <ul className="space-y-3 text-base">
-                                <li><a href="#" className="text-blue-800 underline hover:text-blue-600">Introduction to Values at Play</a></li>
-                                <li><a href="#" className="text-blue-800 underline hover:text-blue-600">Bias in Computer Systems (Friedman)</a></li>
-                                <li><a href="#" className="text-blue-800 underline hover:text-blue-600">Download Full Syllabus (PDF)</a></li>
-                            </ul>
-                        </div>
-
                         <div className="p-6 bg-[#2a2a2a] text-white rounded">
                             <h4 className="font-bold uppercase tracking-widest text-sm mb-2 text-yellow-500">Public Interest Tech</h4>
                             <p className="text-sm opacity-80 mb-4">

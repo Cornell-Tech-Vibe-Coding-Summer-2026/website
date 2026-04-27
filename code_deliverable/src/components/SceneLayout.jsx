@@ -65,12 +65,14 @@ function NotepadText() {
                 anchorY="top"
                 color="black"
             >
-                {'ToDo:\n'}
-                {'- 3D setup ✔️\n'}
-                {'- 2D interactions ✔️\n'}
-                {'- Edit content\n'}
-                {'- Fix 3D interaction bugs\n'}
-                {'- Host online'}
+                {'Class Prep:\n'}
+                {'- Syllabus  ✔️\n'}
+                {'- Website  ✔️\n'}
+                {'- Slide decks\n'}
+                {'- Reading list\n'}
+                {'- Guest speakers\n'}
+                {'- GitHub Classroom\n'}
+                {'- Tool credits'}
             </Text>
         </group>
     )

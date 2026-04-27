@@ -92,7 +92,7 @@ export function InteractiveScene({
     // Small additive offset applied to the Values-at-Play book group so it
     // doesn't overlap the monitor screen. Tunable via Leva.
     const bookOffset = useControls('Book Tuning', {
-        offset: { value: [0, 0, 0.04], step: 0.001, label: 'Offset (x,y,z)' },
+        offset: { value: [0, 0, 0.03], step: 0.001, label: 'Offset (x,y,z)' },
     })
 
     // Interaction State

@@ -88,6 +88,6 @@ function instagramEntry(url) {
 }
 
 export const VIBE_FEED = [
-    ...rawInstagramUrls.map(instagramEntry),
     ...rawTikTokUrls.map(tiktokEntry),
+    ...rawInstagramUrls.map(instagramEntry),
 ].filter(Boolean)

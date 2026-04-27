@@ -24,10 +24,12 @@ export function VibeReel({ entry, scrollRoot }) {
         if (!el) return
         const root = scrollRoot?.current ?? null
 
-        // Mount/unmount: use a wider rootMargin so neighboring reels are ready.
+        // Mount/unmount: only the visible reel and its immediate neighbour.
+        // Wider preload (e.g. 200%) caused multiple iframes to load on entry
+        // and starved the camera animation.
         const mountObs = new IntersectionObserver(
             (entries) => entries.forEach((e) => setMounted(e.isIntersecting)),
-            { root, rootMargin: '200% 0px', threshold: 0.01 }
+            { root, rootMargin: '50% 0px', threshold: 0.01 }
         )
         // Active = the visible reel; play it, pause others.
         const activeObs = new IntersectionObserver(

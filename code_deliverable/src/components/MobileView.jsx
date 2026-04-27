@@ -170,15 +170,17 @@ function DesktopModal({ onClose }) {
 
 function NotepadModal() {
     const items = [
-        { text: '3D setup', done: true },
-        { text: '2D interactions', done: true },
-        { text: 'Edit content', done: false },
-        { text: 'Fix 3D interaction bugs', done: false },
-        { text: 'Host online', done: false },
+        { text: 'Syllabus', done: true },
+        { text: 'Website', done: true },
+        { text: 'Slide decks', done: false },
+        { text: 'Reading list', done: false },
+        { text: 'Guest speakers', done: false },
+        { text: 'GitHub Classroom', done: false },
+        { text: 'Tool credits', done: false },
     ]
     return (
         <div className="p-6 font-mono bg-[#fffef5] min-h-full">
-            <h2 className="text-lg font-bold mb-4 text-gray-800">ToDo:</h2>
+            <h2 className="text-lg font-bold mb-4 text-gray-800">Class Prep:</h2>
             <ul className="space-y-3">
                 {items.map((item, i) => (
                     <li key={i} className={`flex items-center gap-3 text-sm ${item.done ? 'line-through text-gray-400' : 'text-gray-800'}`}>
