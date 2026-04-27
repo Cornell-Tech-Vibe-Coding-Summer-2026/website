@@ -9,6 +9,7 @@ import { InteractiveScene } from './components/InteractiveScene'
 import { CameraController } from './components/CameraController'
 import { SuggestedReadingsView, ReadingView } from './components/ReadingViews'
 import { MobileView } from './components/MobileView'
+import { PartnersOverlay } from './components/PartnersOverlay'
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
@@ -62,6 +63,10 @@ export default function App() {
   const isMobile = useIsMobile()
   const [lowRes, toggleLowRes] = useLowResMode()
   const [view, setView] = useState('default')
+  const [partnersOpen, setPartnersOpen] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return new URLSearchParams(window.location.search).has('partners')
+  })
   const [overlayOrigin, setOverlayOrigin] = useState({ x: 0, y: 0 })
   const [deskLightOn, setDeskLightOn] = useState(false)
   const [phoneMesh, setPhoneMesh] = useState(null)
@@ -150,6 +155,13 @@ export default function App() {
     return (
       <>
         <MobileView />
+        <button
+          onClick={() => setPartnersOpen(true)}
+          className="fixed bottom-4 left-4 z-[200] px-3 py-2 bg-[#00ff41]/15 hover:bg-[#00ff41]/25 backdrop-blur-md text-[#00ff41] text-[10px] font-mono uppercase tracking-widest rounded-full border border-[#00ff41]/30 transition-colors"
+          title="For partners, sponsors, and press"
+        >
+          Partners & Press →
+        </button>
         {!isMobile && (
           <button
             onClick={toggleLowRes}
@@ -159,6 +171,9 @@ export default function App() {
             ⤴ 3D Scene
           </button>
         )}
+        <AnimatePresence>
+          {partnersOpen && <PartnersOverlay onClose={() => setPartnersOpen(false)} />}
+        </AnimatePresence>
       </>
     )
   }
@@ -271,6 +286,15 @@ export default function App() {
         </div>
       )}
 
+      {/* Partners CTA */}
+      <button
+        onClick={() => setPartnersOpen(true)}
+        className="absolute bottom-4 left-4 z-[200] px-3 py-2 bg-[#00ff41]/15 hover:bg-[#00ff41]/25 backdrop-blur-md text-[#00ff41] hover:text-white text-[10px] font-mono uppercase tracking-widest rounded-full border border-[#00ff41]/30 transition-colors"
+        title="For partners, sponsors, and press — what we're asking for"
+      >
+        Partners & Press →
+      </button>
+
       {/* Low-resource toggle */}
       <button
         onClick={toggleLowRes}
@@ -279,6 +303,10 @@ export default function App() {
       >
         ⤵ Lite Mode
       </button>
+
+      <AnimatePresence>
+        {partnersOpen && <PartnersOverlay onClose={() => setPartnersOpen(false)} />}
+      </AnimatePresence>
 
       {/* Explicit Leva Panel with high z-index */}
       <div className="absolute top-0 right-0 z-[10000]">
