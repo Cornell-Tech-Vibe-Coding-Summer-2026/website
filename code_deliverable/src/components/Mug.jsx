@@ -16,32 +16,20 @@ export function Mug({ onClick }) {
     const gltf = useGLTF(base + 'Mug With Office Tool.glb')
     const logo = useTexture(base + 'CornellTechT.png')
 
-    // Clone scene per-mount and recenter; recolor the body so the red logo
-    // shows up against it.
+    // Clone scene per-mount and recenter so the mug bottom sits at y=0 of the
+    // wrapper group. Original GLB materials are kept.
     const cloned = useMemo(() => {
         const c = gltf.scene.clone(true)
         const box = new THREE.Box3().setFromObject(c)
         const center = new THREE.Vector3()
         box.getCenter(center)
         c.position.set(-center.x, -box.min.y, -center.z)
-
-        let bodyMesh = null
-        let maxVerts = 0
         c.traverse((o) => {
-            if (o.isMesh && o.geometry) {
-                const v = o.geometry.attributes?.position?.count ?? 0
-                if (v > maxVerts) { maxVerts = v; bodyMesh = o }
+            if (o.isMesh) {
                 o.castShadow = true
                 o.receiveShadow = true
             }
         })
-        if (bodyMesh) {
-            bodyMesh.material = new THREE.MeshStandardMaterial({
-                color: '#f1efe8',
-                roughness: 0.55,
-                metalness: 0.05,
-            })
-        }
         return c
     }, [gltf.scene])
 

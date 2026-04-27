@@ -262,20 +262,17 @@ export default function App() {
       />
       <div
         className={`absolute top-8 left-8 z-[100] pointer-events-none select-none transition-opacity duration-500 ${view === 'default' ? 'opacity-100' : 'opacity-0'}`}
-        style={{
-          textShadow: '0 1px 2px rgba(0,0,0,0.85), 0 2px 16px rgba(0,0,0,0.6)',
-        }}
       >
-        <h1 className="text-white text-5xl font-black tracking-tighter uppercase leading-[0.95] mb-1.5">
+        <h1 className="text-white text-5xl font-black tracking-tighter uppercase leading-[0.95] mb-1 drop-shadow-lg">
           Ethical Vibe Coding
         </h1>
-        <p className="text-white/90 text-base font-mono tracking-widest uppercase mb-3">
+        <p className="text-white/85 text-base font-mono tracking-widest uppercase drop-shadow-md">
           Designing with Conscience
         </p>
-        <p className="text-white/70 text-[11px] font-mono tracking-widest uppercase">
+        <p className="text-white/60 text-[11px] font-mono tracking-widest uppercase mt-1 drop-shadow-md">
           TECHIE 1121 · Cornell Tech · Summer 2026
         </p>
-        <p className="text-white/55 text-[10px] font-mono tracking-wider mt-0.5">
+        <p className="text-white/45 text-[10px] font-mono tracking-wider mt-0.5 drop-shadow-md">
           Hauke Sandhaus · Jonathan Segal · Wendy Ju
         </p>
       </div>      {/* Reading View Overlay */}
