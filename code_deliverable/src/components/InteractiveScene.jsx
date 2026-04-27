@@ -6,6 +6,7 @@ import { easing } from 'maath'
 import * as THREE from 'three'
 import { SceneLayout } from './SceneLayout'
 import { PhoneAnimation } from './PhoneAnimation'
+import { FunkoPops } from './FunkoPops'
 
 // --- Hitbox Component ---
 function Hitbox({ name, onHover, onUnhover, onClick, debug, position, scale }) {
@@ -366,6 +367,9 @@ export function InteractiveScene({
                 phoneContentRef={contentRef}
                 hoveredTarget={hoveredTarget}
             />
+
+            {/* Instructor Funko Pops on the desk */}
+            <FunkoPops />
         </group>
     )
 }

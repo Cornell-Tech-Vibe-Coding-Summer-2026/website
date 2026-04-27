@@ -52,26 +52,68 @@ function PhoneModal({ onClose }) {
 }
 
 function TerminalModal() {
-    const lines = [
-        '  INITIALIZING VIBE-CODING-ETHICS...',
-        '',
-        '  [SYSTEM]: LOAD MODULE 0x7F21',
-        '  [SYSTEM]: CHARACTER ANALYZER ONLINE',
-        '  [SYSTEM]: CONNECTING TO CORNELL TECH...',
-        '',
-        '  > WELCOME TO SUMMER 2026',
-        '  > DESIGNING WITH CHARACTER',
-        '',
-        '  _',
-    ]
     return (
-        <div className="p-6 font-mono text-[#00ff41] text-sm leading-relaxed space-y-0.5">
-            {lines.map((line, i) => (
-                <div key={i}>{line || '\u00A0'}</div>
-            ))}
+        <div className="p-5 font-mono text-xs leading-relaxed bg-[#0a0e0a] min-h-full">
+            <div className="text-[#00ff41] text-[11px] mb-4 leading-tight">
+                <div className="font-bold tracking-wider">GOOD CODE / GOOD VIBES</div>
+                <div className="text-[#00ff41]/70">Building Ethical Apps with AI</div>
+                <div className="text-[#00ff41]/50 text-[10px] mt-1">Cornell Tech · Summer 2026</div>
+            </div>
+
+            <div className="text-[#00ff41]/70 text-[10px] mb-5 space-y-0.5">
+                <div>&gt; initializing course...</div>
+                <div>&gt; instructors online: hauke · jonathan · wendy</div>
+                <div>&gt; ready.</div>
+            </div>
+
+            <div className="space-y-4 mb-5">
+                <div>
+                    <div className="text-[#ffd166] text-[10px] font-bold mb-1 tracking-wider">? WHAT IS VIBE CODING</div>
+                    <div className="text-white/75 text-[11px]">
+                        Building software with AI as your co-author. Push a button, generate an app. But — just because you can, should you?
+                    </div>
+                </div>
+                <div>
+                    <div className="text-[#ffd166] text-[10px] font-bold mb-1 tracking-wider">? VIBE CODING <span className="italic">ETHICALLY</span>?</div>
+                    <div className="text-white/75 text-[11px]">
+                        Stop. Look up from the prompt. Who is this for? Who could it harm? Whose values does it embed?
+                    </div>
+                </div>
+                <div>
+                    <div className="text-[#ffd166] text-[10px] font-bold mb-1 tracking-wider">? WHAT ARE VALUES</div>
+                    <div className="text-white/75 text-[11px]">
+                        Privacy. Dignity. Equity. Truth. Care. The things we don't compromise — even when the tool says we can.
+                    </div>
+                </div>
+                <div>
+                    <div className="text-[#ffd166] text-[10px] font-bold mb-1 tracking-wider">? WHAT DO WE STRIVE FOR</div>
+                    <div className="text-white/75 text-[11px]">
+                        Software that's fast to build and slow to harm. Engineers who ship, and who know when not to. A summer of making, breaking, and questioning.
+                    </div>
+                </div>
+            </div>
+
+            <div className="border-t border-[#00ff41]/20 pt-3 text-[10px] space-y-2.5">
+                <div>
+                    <div className="text-[#00ff41]/70 mb-1 tracking-widest">CORNELL TECH · SUMMER 2026</div>
+                    <div className="text-white/55">Hauke Sandhaus · Jonathan Segal · Wendy Ju</div>
+                </div>
+                <div>
+                    <div className="text-[#00ff41]/70 mb-1 tracking-widest">FOR PARTNERS &amp; SPONSORS</div>
+                    <div className="text-white/55">
+                        Tool credits · guest speakers · real-world projects welcome.<br />
+                        <a href="mailto:hgs52@cornell.edu" className="text-[#00ff41] hover:underline">hgs52@cornell.edu</a>
+                    </div>
+                </div>
+            </div>
+
+            <div className="mt-4 text-[#00ff41] text-[11px]">
+                &gt; <span className="inline-block w-1.5 h-3 bg-[#00ff41] align-middle animate-pulse" />
+            </div>
         </div>
     )
 }
+
 
 function SyllabusModal() {
     return (
@@ -243,8 +285,11 @@ export function MobileView() {
                 <h1 className="text-white text-3xl font-black tracking-tighter uppercase leading-none mb-1">
                     Vibe Coding Ethics
                 </h1>
-                <p className="text-white/40 text-[11px] font-mono tracking-widest uppercase">
+                <p className="text-white/40 text-[11px] font-mono tracking-widest uppercase mb-1">
                     Designing with Conscience · Cornell Tech 2026
+                </p>
+                <p className="text-white/35 text-[10px] font-mono tracking-wider">
+                    a course by Hauke Sandhaus · Jonathan Segal · Wendy Ju
                 </p>
             </div>
 

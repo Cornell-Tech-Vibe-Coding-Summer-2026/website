@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { FileText, Terminal, X, Globe } from 'lucide-react'
+import { motion, useDragControls } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import syllabusMarkdown from '../content/syllabus.md?raw'
@@ -13,28 +14,131 @@ const WINDOWS = {
 // TODO: change to '/examples' once deployment restructure ships
 const EXAMPLES_URL = 'https://vibe-coding-ethics.tech.cornell.edu/'
 
-function Window({ title, icon: Icon, children, onClose, isOpen, x, y, width, height }) {
+function Window({ title, icon: Icon, children, onClose, isOpen, x, y, width, height, zIndex, onFocus }) {
+    const dragControls = useDragControls()
     if (!isOpen) return null
 
     return (
-        <div
+        <motion.div
+            drag
+            dragControls={dragControls}
+            dragListener={false}
+            dragMomentum={false}
+            dragElastic={0}
+            onPointerDown={onFocus}
             className="absolute bg-[#1a1c2c] border border-white/10 rounded-lg shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
-            style={{ left: x, top: y, width, height, boxShadow: '0 20px 50px -12px rgba(0,0,0,0.5)' }}
+            style={{ left: x, top: y, width, height, boxShadow: '0 20px 50px -12px rgba(0,0,0,0.5)', zIndex }}
         >
-            {/* Title Bar */}
-            <div className="bg-[#0e101a] px-3 py-2 flex justify-between items-center border-b border-white/5 handle cursor-move select-none">
+            {/* Title Bar (drag handle) */}
+            <div
+                onPointerDown={(e) => dragControls.start(e)}
+                className="bg-[#0e101a] px-3 py-2 flex justify-between items-center border-b border-white/5 select-none cursor-grab active:cursor-grabbing"
+            >
                 <div className="flex items-center gap-2 text-white/60">
                     <Icon size={14} />
                     <span className="text-[11px] font-bold uppercase tracking-wider">{title}</span>
                 </div>
                 <div className="flex gap-2">
-                    <button onClick={onClose} className="hover:text-red-400 text-white/20 transition-colors"><X size={14} /></button>
+                    <button
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onClick={(e) => { e.stopPropagation(); onClose() }}
+                        className="hover:text-red-400 hover:bg-red-500/10 text-white/40 transition-colors p-1 rounded"
+                        aria-label="Close window"
+                    >
+                        <X size={14} />
+                    </button>
                 </div>
             </div>
 
             {/* Content */}
             <div className="flex-1 overflow-auto bg-[#131520] text-sm relative">
                 {children}
+            </div>
+        </motion.div>
+    )
+}
+
+const ASCII_BANNER = `   ╭────────────────────────────────────────────────────╮
+   │                                                    │
+   │     GOOD CODE / GOOD VIBES                         │
+   │     Building Ethical Apps with AI                  │
+   │                                                    │
+   │     Cornell Tech · Summer 2026                     │
+   │                                                    │
+   ╰────────────────────────────────────────────────────╯`
+
+function WelcomeTerminal() {
+    return (
+        <div className="p-6 pt-5 font-mono text-xs leading-relaxed bg-[#0a0e0a] min-h-full">
+            <pre className="text-[#00ff41] text-[10px] mb-3 leading-tight whitespace-pre">{ASCII_BANNER}</pre>
+
+            <div className="text-[#00ff41]/70 text-[11px] mb-6 space-y-0.5">
+                <div>&gt; initializing course...</div>
+                <div>&gt; module: vibe-coding-ethics loaded</div>
+                <div>&gt; instructors online: hauke · jonathan · wendy</div>
+                <div>&gt; ready.</div>
+            </div>
+
+            <div className="space-y-5 mb-6 max-w-[640px]">
+                <div>
+                    <div className="text-[#ffd166] text-[11px] font-bold mb-1 tracking-wider">? WHAT IS VIBE CODING</div>
+                    <div className="text-white/75 pl-3">
+                        Building software with AI as your co-author.<br />
+                        Push a button, generate an app.<br />
+                        But — just because you can, should you?
+                    </div>
+                </div>
+                <div>
+                    <div className="text-[#ffd166] text-[11px] font-bold mb-1 tracking-wider">
+                        ? WHAT DOES IT MEAN TO VIBE CODE <span className="italic">ETHICALLY</span>
+                    </div>
+                    <div className="text-white/75 pl-3">
+                        Stop. Look up from the prompt.<br />
+                        Who is this for? Who could it harm?<br />
+                        Whose values does it embed?
+                    </div>
+                </div>
+                <div>
+                    <div className="text-[#ffd166] text-[11px] font-bold mb-1 tracking-wider">? WHAT ARE VALUES</div>
+                    <div className="text-white/75 pl-3">
+                        Privacy. Dignity. Equity. Truth. Care.<br />
+                        The things we don't compromise — even when the tool says we can.
+                    </div>
+                </div>
+                <div>
+                    <div className="text-[#ffd166] text-[11px] font-bold mb-1 tracking-wider">? WHAT DO WE STRIVE FOR</div>
+                    <div className="text-white/75 pl-3">
+                        Software that's fast to build and slow to harm.<br />
+                        Engineers who ship, and who know when not to.<br />
+                        A summer of making, breaking, and questioning.
+                    </div>
+                </div>
+            </div>
+
+            <div className="border-t border-[#00ff41]/20 pt-4 text-[10px] max-w-[640px] space-y-3">
+                <div>
+                    <div className="text-[#00ff41]/70 mb-1 tracking-widest">CORNELL TECH · SUMMER 2026</div>
+                    <div className="text-white/55">
+                        Hauke Sandhaus · Jonathan Segal · Wendy Ju
+                    </div>
+                </div>
+                <div>
+                    <div className="text-[#00ff41]/70 mb-1 tracking-widest">FOR PARTNERS &amp; SPONSORS</div>
+                    <div className="text-white/55">
+                        Tool credits · guest speakers · real-world project briefs welcome.<br />
+                        <a
+                            href="mailto:hgs52@cornell.edu"
+                            className="text-[#00ff41] hover:underline"
+                            onPointerDown={(e) => e.stopPropagation()}
+                        >
+                            hgs52@cornell.edu
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div className="mt-5 text-[#00ff41] text-[11px]">
+                &gt; <span className="inline-block w-1.5 h-3 bg-[#00ff41] align-middle animate-pulse" />
             </div>
         </div>
     )
@@ -46,33 +150,17 @@ export function MonitorContent({ onBack }) {
         [WINDOWS.SYLLABUS]: false,
         [WINDOWS.EXAMPLES]: false
     })
+    const [focused, setFocused] = useState(WINDOWS.TERMINAL)
 
     const toggleWindow = (id) => {
-        setOpenWindows(prev => ({ ...prev, [id]: !prev[id] }))
+        setOpenWindows(prev => {
+            const next = { ...prev, [id]: !prev[id] }
+            if (next[id]) setFocused(id)
+            return next
+        })
     }
 
-    const [terminalText, setTerminalText] = useState('')
-    const fullText = `
-  INITIALIZING VIBE-CODING-ETHICS...
-
-  [SYSTEM]: LOAD MODULE 0x7F21
-  [SYSTEM]: CHARACTER ANALYZER ONLINE
-  [SYSTEM]: CONNECTING TO CORNELL TECH REPO...
-
-  > WELCOME TO SUMMER 2026
-  > DESIGNING WITH CHARACTER
-
-  _`
-
-    useEffect(() => {
-        let i = 0
-        const interval = setInterval(() => {
-            setTerminalText(fullText.substring(0, i))
-            i++
-            if (i > fullText.length) clearInterval(interval)
-        }, 30)
-        return () => clearInterval(interval)
-    }, [])
+    const zFor = (id) => (focused === id ? 30 : 10)
 
     return (
         <div className="w-[1024px] h-[640px] bg-[#050505] overflow-hidden relative font-mono select-none border-4 border-[#1a1a1a] rounded-sm cursor-auto pointer-events-auto">
@@ -83,17 +171,16 @@ export function MonitorContent({ onBack }) {
                     backgroundSize: '40px 40px'
                 }}
             />
-
             <div className="absolute inset-0 bg-gradient-to-tr from-blue-900/10 via-transparent to-pink-900/10 pointer-events-none" />
 
             {/* Desktop Icons */}
-            <div className="absolute top-8 left-8 flex flex-col gap-6">
+            <div className="absolute top-6 left-6 flex flex-col gap-5 z-[5]">
                 <div
                     className="flex flex-col items-center gap-2 group cursor-pointer active:scale-95 transition-transform"
                     onClick={() => toggleWindow(WINDOWS.SYLLABUS)}
                 >
-                    <div className="w-14 h-14 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 group-hover:bg-white/10 group-hover:border-white/20 transition-all shadow-lg backdrop-blur-sm">
-                        <FileText className="text-blue-400 group-hover:text-blue-300 transition-colors" size={28} />
+                    <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 group-hover:bg-white/10 group-hover:border-white/20 transition-all shadow-lg backdrop-blur-sm">
+                        <FileText className="text-blue-400 group-hover:text-blue-300 transition-colors" size={24} />
                     </div>
                     <span className="text-white/80 text-[10px] font-bold tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-md">syllabus.md</span>
                 </div>
@@ -102,8 +189,8 @@ export function MonitorContent({ onBack }) {
                     className="flex flex-col items-center gap-2 group cursor-pointer active:scale-95 transition-transform"
                     onClick={() => toggleWindow(WINDOWS.EXAMPLES)}
                 >
-                    <div className="w-14 h-14 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 group-hover:bg-white/10 group-hover:border-white/20 transition-all shadow-lg backdrop-blur-sm">
-                        <Globe className="text-purple-400 group-hover:text-purple-300 transition-colors" size={28} />
+                    <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 group-hover:bg-white/10 group-hover:border-white/20 transition-all shadow-lg backdrop-blur-sm">
+                        <Globe className="text-purple-400 group-hover:text-purple-300 transition-colors" size={24} />
                     </div>
                     <span className="text-white/80 text-[10px] font-bold tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-md">examples.url</span>
                 </div>
@@ -112,24 +199,24 @@ export function MonitorContent({ onBack }) {
                     className="flex flex-col items-center gap-2 group cursor-pointer active:scale-95 transition-transform"
                     onClick={() => toggleWindow(WINDOWS.TERMINAL)}
                 >
-                    <div className="w-14 h-14 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 group-hover:bg-white/10 group-hover:border-white/20 transition-all shadow-lg backdrop-blur-sm">
-                        <Terminal className="text-green-400 group-hover:text-green-300 transition-colors" size={28} />
+                    <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 group-hover:bg-white/10 group-hover:border-white/20 transition-all shadow-lg backdrop-blur-sm">
+                        <Terminal className="text-green-400 group-hover:text-green-300 transition-colors" size={24} />
                     </div>
-                    <span className="text-white/80 text-[10px] font-bold tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-md">terminal.exe</span>
+                    <span className="text-white/80 text-[10px] font-bold tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-md">welcome.sh</span>
                 </div>
             </div>
 
-            {/* Terminal Window */}
+            {/* Welcome Terminal — opens centered, near full size */}
             <Window
-                title="TERMINAL"
+                title="WELCOME — vibe-coding-ethics"
                 icon={Terminal}
                 isOpen={openWindows[WINDOWS.TERMINAL]}
                 onClose={() => toggleWindow(WINDOWS.TERMINAL)}
-                x={620} y={380} width={380} height={220}
+                onFocus={() => setFocused(WINDOWS.TERMINAL)}
+                zIndex={zFor(WINDOWS.TERMINAL)}
+                x={130} y={20} width={870} height={560}
             >
-                <div className="p-4 text-[#00ff41] text-xs leading-relaxed font-mono">
-                    {terminalText}
-                </div>
+                <WelcomeTerminal />
             </Window>
 
             {/* Syllabus Window */}
@@ -138,7 +225,9 @@ export function MonitorContent({ onBack }) {
                 icon={FileText}
                 isOpen={openWindows[WINDOWS.SYLLABUS]}
                 onClose={() => toggleWindow(WINDOWS.SYLLABUS)}
-                x={120} y={50} width={620} height={520}
+                onFocus={() => setFocused(WINDOWS.SYLLABUS)}
+                zIndex={zFor(WINDOWS.SYLLABUS)}
+                x={150} y={40} width={620} height={520}
             >
                 <div className="bg-[#f5f5f5] text-[#1a1a1a] min-h-full p-8 font-serif">
                     <div className="prose prose-sm max-w-none syllabus-md">
@@ -161,11 +250,13 @@ export function MonitorContent({ onBack }) {
 
             {/* Examples Window (iframe) */}
             <Window
-                title="EXAMPLES — cornell-tech-vibe-coding-summer-2026.github.io"
+                title="EXAMPLES — vibe-coding-ethics.tech.cornell.edu"
                 icon={Globe}
                 isOpen={openWindows[WINDOWS.EXAMPLES]}
                 onClose={() => toggleWindow(WINDOWS.EXAMPLES)}
-                x={200} y={70} width={760} height={520}
+                onFocus={() => setFocused(WINDOWS.EXAMPLES)}
+                zIndex={zFor(WINDOWS.EXAMPLES)}
+                x={200} y={60} width={760} height={520}
             >
                 <iframe
                     src={EXAMPLES_URL}

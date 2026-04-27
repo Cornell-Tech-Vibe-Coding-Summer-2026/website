@@ -7,7 +7,27 @@
       "Bash(ls:*)",
       "Bash(npx gltfjsx:*)",
       "Bash(npm run dev:*)",
-      "Bash(npx gltf-transform inspect:*)"
+      "Bash(npx gltf-transform inspect:*)",
+      "mcp__claude_ai_Google_Drive__read_file_content",
+      "Bash(curl -sI https://raw.githubusercontent.com/Cornell-Tech-Vibe-Coding-Summer-2026/class/main/planning/syllabus.md)",
+      "Bash(npm install *)",
+      "Bash(gh auth *)",
+      "Bash(gh repo *)",
+      "Bash(gh api *)",
+      "Bash(curl -sI https://cornell-tech-vibe-coding-summer-2026.github.io/)",
+      "Bash(curl -sI https://cornell-tech-vibe-coding-summer-2026.github.io/examples)",
+      "Bash(curl -sI https://cornell-tech-vibe-coding-summer-2026.github.io/class)",
+      "Bash(curl -sI https://cornell-tech-vibe-coding-summer-2026.github.io/website/)",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); [print\\(x['type'], x['name']\\) for x in d]\")",
+      "Read(//Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/class/.github/workflows/**)",
+      "Read(//Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/class/**)",
+      "Bash(curl -sI https://vibe-coding-ethics.tech.cornell.edu/)",
+      "Bash(curl -sI https://vibe-coding-ethics.tech.cornell.edu/examples/)",
+      "Bash(curl -s https://vibe-coding-ethics.tech.cornell.edu/)",
+      "Bash(npm run *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }
