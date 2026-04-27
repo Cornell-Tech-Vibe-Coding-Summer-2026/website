@@ -73,8 +73,15 @@ export default function App() {
   const [showLeva, setShowLeva] = useState(false) // Default hidden
   const controlsRef = useRef()
 
-  // Leva controls 
+  // Leva controls
   const config = useControls({
+    "✨ hey, you found the debug panel": folder({
+      _note: {
+        value: 'AI can do a lot. But it still needs human designers steering it.',
+        disabled: true,
+        label: '↪',
+      },
+    }, { collapsed: false, order: -100 }),
     'Camera Positions': folder({
       defaultPos: { value: [-1.643, 1.589, 0.361], label: 'Default Position', step: 0.01 },
       defaultTarget: { value: [1.51, 0.09, 0], label: 'Default Target', step: 0.01 },
@@ -256,17 +263,41 @@ export default function App() {
         className={`absolute top-8 right-8 h-8 z-[100] drop-shadow-md pointer-events-none select-none transition-opacity duration-500 ${view === 'default' ? 'opacity-90' : 'opacity-0'}`}
       />
       <div
-        className={`absolute top-8 left-8 z-[100] pointer-events-none select-none transition-opacity duration-500 ${view === 'default' ? 'opacity-100' : 'opacity-0'}`}
+        className={`absolute top-7 left-7 z-[100] pointer-events-none select-none transition-opacity duration-500 ${view === 'default' ? 'opacity-100' : 'opacity-0'}`}
       >
-        <h1 className="text-white text-5xl font-black tracking-tighter uppercase mb-2 drop-shadow-lg">
-          Ethical Vibe Coding
-        </h1>
-        <p className="text-white/60 text-[11px] font-mono tracking-widest uppercase drop-shadow-md">
-          TECHIE 1121 · Cornell Tech · Summer 2026
-        </p>
-        <p className="text-white/40 text-[10px] font-mono tracking-wider mt-1 drop-shadow-md">
-          Hauke Sandhaus · Jonathan Segal · Wendy Ju
-        </p>
+        <div
+          className="rounded-2xl px-6 py-5"
+          style={{
+            background: 'radial-gradient(ellipse at top left, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0) 100%)',
+            backdropFilter: 'blur(6px)',
+            WebkitBackdropFilter: 'blur(6px)',
+          }}
+        >
+          <h1
+            className="text-white text-5xl font-black tracking-tighter uppercase leading-[0.95] mb-1"
+            style={{ textShadow: '0 2px 18px rgba(0,0,0,0.55)' }}
+          >
+            Ethical Vibe Coding
+          </h1>
+          <p
+            className="text-white/85 text-base font-mono tracking-widest uppercase mb-3"
+            style={{ textShadow: '0 1px 8px rgba(0,0,0,0.65)' }}
+          >
+            Designing with Conscience
+          </p>
+          <p
+            className="text-white/65 text-[11px] font-mono tracking-widest uppercase"
+            style={{ textShadow: '0 1px 6px rgba(0,0,0,0.7)' }}
+          >
+            TECHIE 1121 · Cornell Tech · Summer 2026
+          </p>
+          <p
+            className="text-white/50 text-[10px] font-mono tracking-wider mt-0.5"
+            style={{ textShadow: '0 1px 6px rgba(0,0,0,0.7)' }}
+          >
+            Hauke Sandhaus · Jonathan Segal · Wendy Ju
+          </p>
+        </div>
       </div>      {/* Reading View Overlay */}
       <AnimatePresence>
         {view === 'reading' && (
