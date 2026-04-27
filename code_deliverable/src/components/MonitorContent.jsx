@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import { FileText, Terminal, X, Minus, Square, Box, ExternalLink } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { FileText, Terminal, X, Globe } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import syllabusMarkdown from '../content/syllabus.md?raw'
 
 const WINDOWS = {
     TERMINAL: 'terminal',
     SYLLABUS: 'syllabus',
-    NOTES: 'notes'
+    EXAMPLES: 'examples'
 }
+
+// TODO: change to '/examples' once deployment restructure ships
+const EXAMPLES_URL = 'https://vibe-coding-ethics.tech.cornell.edu/'
 
 function Window({ title, icon: Icon, children, onClose, isOpen, x, y, width, height }) {
     if (!isOpen) return null
@@ -38,7 +44,7 @@ export function MonitorContent({ onBack }) {
     const [openWindows, setOpenWindows] = useState({
         [WINDOWS.TERMINAL]: true,
         [WINDOWS.SYLLABUS]: false,
-        [WINDOWS.NOTES]: false
+        [WINDOWS.EXAMPLES]: false
     })
 
     const toggleWindow = (id) => {
@@ -48,14 +54,14 @@ export function MonitorContent({ onBack }) {
     const [terminalText, setTerminalText] = useState('')
     const fullText = `
   INITIALIZING VIBE-CODING-ETHICS...
-  
+
   [SYSTEM]: LOAD MODULE 0x7F21
   [SYSTEM]: CHARACTER ANALYZER ONLINE
   [SYSTEM]: CONNECTING TO CORNELL TECH REPO...
-  
+
   > WELCOME TO SUMMER 2026
   > DESIGNING WITH CHARACTER
-  
+
   _`
 
     useEffect(() => {
@@ -89,7 +95,17 @@ export function MonitorContent({ onBack }) {
                     <div className="w-14 h-14 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 group-hover:bg-white/10 group-hover:border-white/20 transition-all shadow-lg backdrop-blur-sm">
                         <FileText className="text-blue-400 group-hover:text-blue-300 transition-colors" size={28} />
                     </div>
-                    <span className="text-white/80 text-[10px] font-bold tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-md">syllabus.rtf</span>
+                    <span className="text-white/80 text-[10px] font-bold tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-md">syllabus.md</span>
+                </div>
+
+                <div
+                    className="flex flex-col items-center gap-2 group cursor-pointer active:scale-95 transition-transform"
+                    onClick={() => toggleWindow(WINDOWS.EXAMPLES)}
+                >
+                    <div className="w-14 h-14 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 group-hover:bg-white/10 group-hover:border-white/20 transition-all shadow-lg backdrop-blur-sm">
+                        <Globe className="text-purple-400 group-hover:text-purple-300 transition-colors" size={28} />
+                    </div>
+                    <span className="text-white/80 text-[10px] font-bold tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-md">examples.url</span>
                 </div>
 
                 <div
@@ -109,7 +125,7 @@ export function MonitorContent({ onBack }) {
                 icon={Terminal}
                 isOpen={openWindows[WINDOWS.TERMINAL]}
                 onClose={() => toggleWindow(WINDOWS.TERMINAL)}
-                x={300} y={100} width={500} height={320}
+                x={620} y={380} width={380} height={220}
             >
                 <div className="p-4 text-[#00ff41] text-xs leading-relaxed font-mono">
                     {terminalText}
@@ -122,32 +138,41 @@ export function MonitorContent({ onBack }) {
                 icon={FileText}
                 isOpen={openWindows[WINDOWS.SYLLABUS]}
                 onClose={() => toggleWindow(WINDOWS.SYLLABUS)}
-                x={140} y={60} width={700} height={500}
+                x={120} y={50} width={620} height={520}
             >
                 <div className="bg-[#f5f5f5] text-[#1a1a1a] min-h-full p-8 font-serif">
-                    <h1 className="text-3xl font-bold mb-6 border-b-2 border-black/10 pb-4 italic">Vibe Coding Ethics</h1>
-                    <div className="space-y-4">
-                        <div>
-                            <p className="font-bold text-xs uppercase tracking-widest text-[#666]">Instructor</p>
-                            <p>Hauke Sandhaus</p>
-                        </div>
-                        <div>
-                            <p className="font-bold text-xs uppercase tracking-widest text-[#666]">Semester</p>
-                            <p>Summer 2026</p>
-                        </div>
-                    </div>
-
-                    <h2 className="text-xl font-bold mt-8 mb-4 uppercase tracking-tighter">Week 01: The Character of the Machine</h2>
-                    <ul className="list-disc pl-5 space-y-2 mb-8 text-sm">
-                        <li>Historical context of the "Designer-Developer" split.</li>
-                        <li>Prompt-based creation and the "Loss of Craft" myth.</li>
-                        <li>Ethics of AI-human synergy in prototyping.</li>
-                    </ul>
-
-                    <div className="bg-[#e8f0fe] p-4 rounded border-l-4 border-blue-500 text-sm italic text-blue-900">
-                        "We don't just write code anymore. We curate intentions."
+                    <div className="prose prose-sm max-w-none syllabus-md">
+                        <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            components={{
+                                img: ({ src, alt, ...rest }) => {
+                                    const rewritten = typeof src === 'string' && src.startsWith('assets/')
+                                        ? `${import.meta.env.BASE_URL}syllabus-${src}`
+                                        : src
+                                    return <img src={rewritten} alt={alt} {...rest} />
+                                },
+                            }}
+                        >
+                            {syllabusMarkdown}
+                        </ReactMarkdown>
                     </div>
                 </div>
+            </Window>
+
+            {/* Examples Window (iframe) */}
+            <Window
+                title="EXAMPLES — cornell-tech-vibe-coding-summer-2026.github.io"
+                icon={Globe}
+                isOpen={openWindows[WINDOWS.EXAMPLES]}
+                onClose={() => toggleWindow(WINDOWS.EXAMPLES)}
+                x={200} y={70} width={760} height={520}
+            >
+                <iframe
+                    src={EXAMPLES_URL}
+                    title="Examples"
+                    className="w-full h-full bg-white border-0"
+                    sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                />
             </Window>
 
             {/* Taskbar */}
@@ -174,6 +199,12 @@ export function MonitorContent({ onBack }) {
                         className={`w-8 h-8 flex items-center justify-center rounded transition-all ${openWindows[WINDOWS.SYLLABUS] ? 'bg-white/10 border-b-2 border-blue-500' : 'hover:bg-white/5 opacity-50'}`}
                     >
                         <FileText size={16} className="text-blue-400" />
+                    </button>
+                    <button
+                        onClick={() => toggleWindow(WINDOWS.EXAMPLES)}
+                        className={`w-8 h-8 flex items-center justify-center rounded transition-all ${openWindows[WINDOWS.EXAMPLES] ? 'bg-white/10 border-b-2 border-purple-500' : 'hover:bg-white/5 opacity-50'}`}
+                    >
+                        <Globe size={16} className="text-purple-400" />
                     </button>
                 </div>
 

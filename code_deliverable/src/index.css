@@ -34,3 +34,18 @@ html {
 canvas {
   touch-action: none;
 }
+
+/* Syllabus markdown styling (rendered inside SYLLABUS window) */
+.syllabus-md h1 { font-size: 1.6rem; font-weight: 700; margin: 0.4em 0 0.6em; line-height: 1.2; }
+.syllabus-md h2 { font-size: 1.2rem; font-weight: 700; margin: 1.2em 0 0.4em; }
+.syllabus-md h3, .syllabus-md h4 { font-size: 1rem; font-weight: 700; margin: 1em 0 0.3em; }
+.syllabus-md p { margin: 0.5em 0; line-height: 1.55; }
+.syllabus-md ul, .syllabus-md ol { margin: 0.5em 0 0.8em 1.4em; }
+.syllabus-md li { margin: 0.2em 0; }
+.syllabus-md a { color: #1d4ed8; text-decoration: underline; }
+.syllabus-md strong { font-weight: 700; }
+.syllabus-md table { border-collapse: collapse; margin: 0.8em 0; font-size: 0.85em; width: 100%; }
+.syllabus-md th, .syllabus-md td { border: 1px solid #d4d4d4; padding: 0.35em 0.55em; text-align: left; vertical-align: top; }
+.syllabus-md th { background: #ececec; font-weight: 700; }
+.syllabus-md hr { border: 0; border-top: 1px solid #d4d4d4; margin: 1em 0; }
+.syllabus-md img { max-width: 100%; height: auto; }

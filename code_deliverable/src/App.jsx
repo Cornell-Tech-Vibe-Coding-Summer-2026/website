@@ -191,6 +191,11 @@ export default function App() {
       </Canvas>
 
       <div className="absolute top-8 left-8 z-[100] pointer-events-none select-none">
+        <img
+          src={`${import.meta.env.BASE_URL}cornell-tech-logo-optimized.png`}
+          alt="Cornell Tech"
+          className="h-8 mb-4 opacity-90 drop-shadow-md"
+        />
         <h1 className="text-white text-5xl font-black tracking-tighter uppercase mb-2 drop-shadow-lg">Vibe Coding Ethics</h1>
         <p className="text-white/60 text-sm font-mono tracking-widest uppercase drop-shadow-md">Designing with Conscience • Cornell Tech 2026</p>
       </div>      {/* Reading View Overlay */}

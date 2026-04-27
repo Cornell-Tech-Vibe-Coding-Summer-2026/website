@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 import { SuggestedReadingsView, ReadingView } from './ReadingViews'
+import syllabusMarkdown from '../content/syllabus.md?raw'
+
+// TODO: change to '/examples' once deployment restructure ships
+const EXAMPLES_URL = 'https://vibe-coding-ethics.tech.cornell.edu/'
 
 // Content shown inside the phone card modal (scaled to fit mobile)
 function PhoneModal({ onClose }) {
@@ -70,26 +76,38 @@ function TerminalModal() {
 function SyllabusModal() {
     return (
         <div className="bg-[#f5f5f5] text-[#1a1a1a] min-h-full p-6 font-serif">
-            <h1 className="text-2xl font-bold mb-4 border-b-2 border-black/10 pb-3 italic">Vibe Coding Ethics</h1>
-            <div className="space-y-3 text-sm mb-6">
-                <div><p className="font-bold text-xs uppercase tracking-widest text-[#666]">Instructor</p><p>Hauke Sandhaus</p></div>
-                <div><p className="font-bold text-xs uppercase tracking-widest text-[#666]">Semester</p><p>Summer 2026</p></div>
-            </div>
-            <h2 className="text-lg font-bold mb-3 uppercase tracking-tight">Week 01: The Character of the Machine</h2>
-            <ul className="list-disc pl-5 space-y-2 mb-6 text-sm">
-                <li>Historical context of the "Designer-Developer" split.</li>
-                <li>Prompt-based creation and the "Loss of Craft" myth.</li>
-                <li>Ethics of AI-human synergy in prototyping.</li>
-            </ul>
-            <div className="bg-[#e8f0fe] p-4 rounded border-l-4 border-blue-500 text-sm italic text-blue-900">
-                "We don't just write code anymore. We curate intentions."
+            <div className="syllabus-md max-w-none">
+                <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                        img: ({ src, alt, ...rest }) => {
+                            const rewritten = typeof src === 'string' && src.startsWith('assets/')
+                                ? `${import.meta.env.BASE_URL}syllabus-${src}`
+                                : src
+                            return <img src={rewritten} alt={alt} {...rest} />
+                        },
+                    }}
+                >
+                    {syllabusMarkdown}
+                </ReactMarkdown>
             </div>
         </div>
     )
 }
 
+function ExamplesModal() {
+    return (
+        <iframe
+            src={EXAMPLES_URL}
+            title="Examples"
+            className="w-full h-full bg-white border-0"
+            sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+        />
+    )
+}
+
 function DesktopModal({ onClose }) {
-    const [tab, setTab] = useState('terminal')
+    const [tab, setTab] = useState('syllabus')
     return (
         <div className="flex flex-col h-full bg-[#050505] font-mono">
             {/* Fake desktop wallpaper */}
@@ -103,7 +121,7 @@ function DesktopModal({ onClose }) {
 
             {/* Tab bar */}
             <div className="relative z-10 flex gap-1 p-2 bg-[#0e101a] border-b border-white/5">
-                {[['terminal', '> Terminal'], ['syllabus', '📄 Syllabus']].map(([id, label]) => (
+                {[['syllabus', '📄 Syllabus'], ['examples', '🌐 Examples'], ['terminal', '> Terminal']].map(([id, label]) => (
                     <button
                         key={id}
                         onClick={() => setTab(id)}
@@ -115,7 +133,9 @@ function DesktopModal({ onClose }) {
             </div>
 
             <div className="relative z-10 flex-1 overflow-y-auto bg-[#131520]">
-                {tab === 'terminal' ? <TerminalModal /> : <SyllabusModal />}
+                {tab === 'terminal' && <TerminalModal />}
+                {tab === 'syllabus' && <SyllabusModal />}
+                {tab === 'examples' && <ExamplesModal />}
             </div>
         </div>
     )
@@ -146,7 +166,7 @@ function NotepadModal() {
 
 // Desk item card definitions
 const DESK_ITEMS = [
-    { id: 'desktop', label: 'Desktop', sublabel: 'Course Terminal', icon: '🖥️', wide: true },
+    { id: 'desktop', label: 'Desktop', sublabel: 'Syllabus & Examples', icon: '🖥️', wide: true },
     { id: 'phone',   label: 'Phone',   sublabel: 'Social Feed',     icon: '📱', wide: false },
     { id: 'notepad', label: 'Notepad', sublabel: 'To-Do List',      icon: '📝', wide: false },
     { id: 'book',    label: 'Values at Play', sublabel: 'Reading',  icon: '📖', wide: false },
@@ -214,7 +234,12 @@ export function MobileView() {
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/[0.02] pointer-events-none" />
 
             {/* Header */}
-            <div className="relative z-10 px-6 pt-12 pb-6">
+            <div className="relative z-10 px-6 pt-10 pb-6">
+                <img
+                    src={`${import.meta.env.BASE_URL}cornell-tech-logo-optimized.png`}
+                    alt="Cornell Tech"
+                    className="h-6 mb-3 opacity-90"
+                />
                 <h1 className="text-white text-3xl font-black tracking-tighter uppercase leading-none mb-1">
                     Vibe Coding Ethics
                 </h1>
