@@ -1,6 +1,8 @@
 # **![Cornell Tech](assets/horizontal-black.svg)**
 
-# **COURSE PREFIX & COURSE NUMBER: Good Code, Good Vibes: Building Ethical Apps with AI**
+# **TECHIE 1121 Ethical Vibe Coding (2026SU)**
+
+#### *Good Code, Good Vibes — Building Ethical Apps with AI*
 
 #### \[Summer 2026\]
 

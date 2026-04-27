@@ -7,6 +7,7 @@ import * as THREE from 'three'
 import { SceneLayout } from './SceneLayout'
 import { PhoneAnimation } from './PhoneAnimation'
 import { FunkoPops } from './FunkoPops'
+import { Mug } from './Mug'
 
 // --- Hitbox Component ---
 function Hitbox({ name, onHover, onUnhover, onClick, debug, position, scale }) {
@@ -250,6 +251,13 @@ export function InteractiveScene({
             if (child.isMesh) {
                 const name = child.name.toLowerCase()
 
+                // Hide the original cup — the new branded Mug component
+                // replaces it.
+                if (name.includes('cup')) {
+                    child.visible = false
+                    child.raycast = () => null
+                }
+
                 // Disable raycasting for meshes covered by Hitboxes
                 const isHitboxItem = ['stack', 'paper'].some(str => name.includes(str))
                 if (isHitboxItem && !name.includes('notepad')) {
@@ -390,6 +398,9 @@ export function InteractiveScene({
 
             {/* Instructor Funko Pops on the desk */}
             <FunkoPops />
+
+            {/* Cornell-Tech-branded mug (replaces the default cup) */}
+            <Mug onClick={() => setShowLeva((v) => !v)} />
         </group>
     )
 }

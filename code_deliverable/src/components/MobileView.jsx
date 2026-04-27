@@ -40,9 +40,9 @@ function TerminalModal() {
     return (
         <div className="p-5 font-mono text-xs leading-relaxed bg-[#0a0e0a] min-h-full">
             <div className="text-[#00ff41] text-[11px] mb-4 leading-tight">
-                <div className="font-bold tracking-wider">GOOD CODE / GOOD VIBES</div>
-                <div className="text-[#00ff41]/70">Building Ethical Apps with AI</div>
-                <div className="text-[#00ff41]/50 text-[10px] mt-1">Cornell Tech · Summer 2026</div>
+                <div className="font-bold tracking-wider">TECHIE 1121 · ETHICAL VIBE CODING</div>
+                <div className="text-[#00ff41]/70">Good Code, Good Vibes — Building Ethical Apps with AI</div>
+                <div className="text-[#00ff41]/50 text-[10px] mt-1">Cornell Tech · Summer 2026 (2026SU)</div>
             </div>
 
             <div className="text-[#00ff41]/70 text-[10px] mb-5 space-y-0.5">
@@ -270,13 +270,13 @@ export function MobileView() {
                     className="h-6 mb-3 opacity-90"
                 />
                 <h1 className="text-white text-3xl font-black tracking-tighter uppercase leading-none mb-1">
-                    Vibe Coding Ethics
+                    Ethical Vibe Coding
                 </h1>
-                <p className="text-white/40 text-[11px] font-mono tracking-widest uppercase mb-1">
-                    Designing with Conscience · Cornell Tech 2026
+                <p className="text-white/40 text-[10px] font-mono tracking-widest uppercase mb-1">
+                    TECHIE 1121 · Cornell Tech · Summer 2026
                 </p>
                 <p className="text-white/35 text-[10px] font-mono tracking-wider">
-                    a course by Hauke Sandhaus · Jonathan Segal · Wendy Ju
+                    Hauke Sandhaus · Jonathan Segal · Wendy Ju
                 </p>
             </div>
 

@@ -253,11 +253,20 @@ export default function App() {
       <img
         src={`${import.meta.env.BASE_URL}cornell-tech-logo-optimized.png`}
         alt="Cornell Tech"
-        className="absolute top-8 right-8 h-8 z-[100] opacity-90 drop-shadow-md pointer-events-none select-none"
+        className={`absolute top-8 right-8 h-8 z-[100] drop-shadow-md pointer-events-none select-none transition-opacity duration-500 ${view === 'default' ? 'opacity-90' : 'opacity-0'}`}
       />
-      <div className="absolute top-8 left-8 z-[100] pointer-events-none select-none">
-        <h1 className="text-white text-5xl font-black tracking-tighter uppercase mb-2 drop-shadow-lg">Vibe Coding Ethics</h1>
-        <p className="text-white/60 text-sm font-mono tracking-widest uppercase drop-shadow-md">Designing with Conscience • Cornell Tech 2026</p>
+      <div
+        className={`absolute top-8 left-8 z-[100] pointer-events-none select-none transition-opacity duration-500 ${view === 'default' ? 'opacity-100' : 'opacity-0'}`}
+      >
+        <h1 className="text-white text-5xl font-black tracking-tighter uppercase mb-2 drop-shadow-lg">
+          Ethical Vibe Coding
+        </h1>
+        <p className="text-white/60 text-[11px] font-mono tracking-widest uppercase drop-shadow-md">
+          TECHIE 1121 · Cornell Tech · Summer 2026
+        </p>
+        <p className="text-white/40 text-[10px] font-mono tracking-wider mt-1 drop-shadow-md">
+          Hauke Sandhaus · Jonathan Segal · Wendy Ju
+        </p>
       </div>      {/* Reading View Overlay */}
       <AnimatePresence>
         {view === 'reading' && (

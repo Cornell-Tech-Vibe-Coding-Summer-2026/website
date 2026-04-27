@@ -60,10 +60,11 @@ function Window({ title, icon: Icon, children, onClose, isOpen, x, y, width, hei
 
 const ASCII_BANNER = `   ╭────────────────────────────────────────────────────╮
    │                                                    │
-   │     GOOD CODE / GOOD VIBES                         │
+   │     TECHIE 1121  ·  ETHICAL VIBE CODING            │
+   │     Good Code, Good Vibes                          │
    │     Building Ethical Apps with AI                  │
    │                                                    │
-   │     Cornell Tech · Summer 2026                     │
+   │     Cornell Tech  ·  Summer 2026 (2026SU)          │
    │                                                    │
    ╰────────────────────────────────────────────────────╯`
 

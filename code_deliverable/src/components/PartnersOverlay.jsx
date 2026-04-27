@@ -14,16 +14,17 @@ const TEAM = [
     },
     {
         name: 'Wendy Ju, Ph.D.',
-        role: 'Associate Professor, Cornell Tech — Information Science',
+        role: 'Professor, Cornell Tech — Information Science',
         url: 'https://wendyju.com/',
     },
 ]
 
 const FACTS = [
-    ['Format', 'Three-week intensive · Mon–Thu · In-person'],
-    ['Dates', 'July 13 – July 30, 2026'],
+    ['Format', 'Three-week in-person intensive · July 13 – July 30, 2026'],
     ['Location', 'Cornell Tech, Roosevelt Island, NYC'],
     ['Audience', 'Pre-college / high-school cohort'],
+    ['Daily rhythm', 'Morning class · individual activities · evening homework & office hours'],
+    ['Group work', 'End-of-week project days, collaborative builds and live demos'],
     ['Supervision', '3 instructors · daily code review · structured ethical reflection'],
     ['Frame', 'Ethics-first curriculum anchored in the Values at Play framework'],
     ['Tools', 'AI tool use is supervised on instructor-administered accounts'],
@@ -86,12 +87,14 @@ export function PartnersOverlay({ onClose }) {
                     {/* Header */}
                     <div className="mb-10 max-w-3xl">
                         <div className="text-[#00ff41]/70 text-[11px] tracking-[0.3em] uppercase mb-3">
-                            Cornell Tech · Summer 2026
+                            TECHIE 1121 · Cornell Tech · Summer 2026
                         </div>
-                        <h1 className="text-white text-4xl md:text-5xl font-black tracking-tighter leading-[1.05] mb-4">
-                            Good Code,<br />
-                            Good Vibes.
+                        <h1 className="text-white text-4xl md:text-5xl font-black tracking-tighter leading-[1.05] mb-2">
+                            Ethical Vibe Coding
                         </h1>
+                        <div className="text-white/45 text-sm font-mono tracking-widest uppercase mb-5">
+                            Good Code, Good Vibes — Building Ethical Apps with AI
+                        </div>
                         <p className="text-white/70 text-base md:text-lg font-sans leading-relaxed">
                             A three-week intensive teaching pre-college students to build real apps with
                             AI — and to ask, every step of the way, whether they should. We're looking
