@@ -35,22 +35,24 @@ export function Mug({ onClick }) {
 
     const config = useControls('Mug', {
         Placement: folder({
-            position: { value: [-0.618, 0.76, 0.472], step: 0.001 },
-            rotationY: { value: -1.93, min: -3.14, max: 3.14, step: 0.01, label: 'Yaw' },
+            position: { value: [-0.618, 0.76, 0.601], step: 0.001 },
+            rotationY: { value: -1.99, min: -3.14, max: 3.14, step: 0.01, label: 'Yaw' },
             scale: { value: 1.33, min: 0.05, max: 5, step: 0.01 },
         }),
         Logo: folder({
             // The logo sits on a thin cylindrical-segment shell that wraps
             // around the mug's central Y axis, slightly larger radius than
             // the body so it floats in front. All values in mug-local space.
-            logoY: { value: 0.045, min: 0, max: 0.15, step: 0.001, label: 'Y (height on mug)' },
-            logoYaw: { value: 0, min: -3.14, max: 3.14, step: 0.01, label: 'Yaw (which side)' },
-            logoRadius: { value: 0.034, min: 0.005, max: 0.1, step: 0.0005, label: 'Radius' },
-            logoHeight: { value: 0.045, min: 0.005, max: 0.2, step: 0.001, label: 'Height' },
-            logoArc: { value: 0.55, min: 0.1, max: 2.5, step: 0.01, label: 'Arc width (rad)' },
+            logoY: { value: 0.056, min: 0, max: 0.15, step: 0.001, label: 'Y (height on mug)' },
+            logoYaw: { value: -0.1, min: -3.14, max: 3.14, step: 0.01, label: 'Yaw (which side)' },
+            logoRadius: { value: 0.0505, min: 0.005, max: 0.1, step: 0.0005, label: 'Radius' },
+            logoHeight: { value: 0.049, min: 0.005, max: 0.2, step: 0.001, label: 'Height' },
+            logoArc: { value: 1.02, min: 0.1, max: 2.5, step: 0.01, label: 'Arc width (rad)' },
             logoVisible: { value: true, label: 'Logo on' },
         }),
     })
+
+    const CORNELL_TECH_URL = 'https://tech.cornell.edu/programs/summer-innovation-intensives/'
 
     return (
         <group
@@ -69,6 +71,18 @@ export function Mug({ onClick }) {
                     position={[0, config.logoY, 0]}
                     rotation={[0, config.logoYaw, 0]}
                     renderOrder={5}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        window.open(CORNELL_TECH_URL, '_blank', 'noopener,noreferrer')
+                    }}
+                    onPointerOver={(e) => {
+                        e.stopPropagation()
+                        document.body.style.cursor = 'pointer'
+                    }}
+                    onPointerOut={(e) => {
+                        e.stopPropagation()
+                        document.body.style.cursor = 'auto'
+                    }}
                 >
                     <cylinderGeometry
                         args={[
