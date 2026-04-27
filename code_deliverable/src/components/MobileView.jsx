@@ -1,52 +1,37 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { SuggestedReadingsView, ReadingView } from './ReadingViews'
 import syllabusMarkdown from '../content/syllabus.md?raw'
+import { VIBE_FEED } from '../content/vibe-feed'
+import { VibeReel } from './VibeReel'
 
 // TODO: change to '/examples' once deployment restructure ships
 const EXAMPLES_URL = 'https://vibe-coding-ethics.tech.cornell.edu/'
 
-// Content shown inside the phone card modal (scaled to fit mobile)
-function PhoneModal({ onClose }) {
-    const reels = [
-        { id: 1, title: 'How to vibe code in 30s', author: '@hauke.haus', color: 'bg-indigo-900', emoji: '🚀' },
-        { id: 2, title: 'Why code needs values', author: '@ethic.vision', color: 'bg-rose-900', emoji: '⚖️' },
-        { id: 3, title: 'Summer 2026: Join the class!', author: '@cornell.tech', color: 'bg-emerald-900', emoji: '🎓' },
-    ]
+// Content shown inside the phone card modal: real TikTok / Instagram embeds
+function PhoneModal() {
+    const scrollRef = useRef(null)
     return (
-        <div className="flex flex-col w-full h-full bg-black text-white overflow-y-auto snap-y snap-mandatory">
-            {reels.map((reel) => (
-                <div key={reel.id} className="flex-shrink-0 w-full snap-start relative flex items-center justify-center" style={{ height: '100%' }}>
-                    <div className={`absolute inset-0 ${reel.color} opacity-40`} />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/20 z-10" />
-                    <div className="text-8xl z-0">{reel.emoji}</div>
-                    <div className="absolute bottom-12 left-6 right-16 z-20">
-                        <div className="flex items-center gap-3 mb-3">
-                            <div className="w-8 h-8 rounded-full bg-white/20 border border-white/40 flex items-center justify-center text-[10px] font-bold">
-                                {reel.author.substring(1, 4).toUpperCase()}
-                            </div>
-                            <p className="font-black text-sm">{reel.author}</p>
-                        </div>
-                        <p className="text-lg font-medium leading-tight mb-4">{reel.title}</p>
-                        <div className="flex gap-4 opacity-60 text-[10px] font-mono uppercase tracking-widest">
-                            <span>#vibecoding</span>
-                            <span>#ethics</span>
-                        </div>
-                    </div>
-                    <div className="absolute right-4 bottom-24 flex flex-col gap-6 z-30">
-                        <div className="flex flex-col items-center gap-1">
-                            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">❤️</div>
-                            <span className="text-[10px] font-bold">2.4k</span>
-                        </div>
-                        <div className="flex flex-col items-center gap-1">
-                            <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">💬</div>
-                            <span className="text-[10px] font-bold">128</span>
-                        </div>
-                    </div>
+        <div
+            ref={scrollRef}
+            className="flex flex-col w-full h-full bg-black text-white overflow-y-auto snap-y snap-mandatory"
+        >
+            {VIBE_FEED.map((entry) => (
+                <div
+                    key={`${entry.platform}-${entry.id}`}
+                    className="w-full"
+                    style={{ height: '100%', flex: '0 0 100%' }}
+                >
+                    <VibeReel entry={entry} scrollRoot={scrollRef} />
                 </div>
             ))}
+            {VIBE_FEED.length === 0 && (
+                <div className="flex-shrink-0 w-full h-full flex items-center justify-center text-white/40 text-xs font-mono p-6 text-center" style={{ height: '100%' }}>
+                    No vibe-feed entries configured yet.
+                </div>
+            )}
         </div>
     )
 }

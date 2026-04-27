@@ -89,6 +89,12 @@ export function InteractiveScene({
         scale: { value: 1.0, step: 0.01 }
     })
 
+    // Small additive offset applied to the Values-at-Play book group so it
+    // doesn't overlap the monitor screen. Tunable via Leva.
+    const bookOffset = useControls('Book Tuning', {
+        offset: { value: [0, 0, 0.04], step: 0.001, label: 'Offset (x,y,z)' },
+    })
+
     // Interaction State
     const [hoveredTarget, setHoveredTarget] = useState(null)
     const liftableMeshes = useRef([])
@@ -146,10 +152,13 @@ export function InteractiveScene({
         scene.traverse((obj) => {
             const name = obj.name.toLowerCase()
 
-            // Fix: Lift Book Group
-            if (name.includes('book') || name.includes('values')) {
+            // Fix: Lift Book Group — cache base position; offset applied below
+            if ((name.includes('book') || name.includes('values')) && !name.includes('notebook')) {
                 if (obj.isMesh || obj.type === 'Group') {
                     if (!obj.userData.correctedHeight) {
+                        obj.userData.bookBaseX = obj.position.x
+                        obj.userData.bookBaseY = obj.position.y + 0.015
+                        obj.userData.bookBaseZ = obj.position.z
                         obj.position.y += 0.015
                         obj.updateMatrixWorld()
                         obj.userData.correctedHeight = true
@@ -183,6 +192,17 @@ export function InteractiveScene({
         })
         liftableMeshes.current = meshes
     }, [scene])
+
+    // 1b. Book Offset Effect — runs on every Leva change
+    useEffect(() => {
+        scene.traverse((obj) => {
+            if (!obj.userData.correctedHeight) return
+            obj.position.x = obj.userData.bookBaseX + bookOffset.offset[0]
+            obj.position.y = obj.userData.bookBaseY + bookOffset.offset[1]
+            obj.position.z = obj.userData.bookBaseZ + bookOffset.offset[2]
+            obj.updateMatrixWorld()
+        })
+    }, [scene, bookOffset])
 
     // 2. Notebook Tuning Effect
     useEffect(() => {

@@ -27,7 +27,10 @@
       "Bash(npm run *)",
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
-      "Bash(git push *)"
+      "Bash(git push *)",
+      "Bash(curl -sIL \"https://vm.tiktok.com/ZG9NunGyX4p7K-qCrrS/\")",
+      "Bash(curl -s -A \"Mozilla/5.0\" \"https://www.tiktok.com/@haukesa/collection/Vibe-coding-7606043261760850720\" -o /tmp/tt-collection.html)",
+      "Read(//tmp/**)"
     ]
   }
 }

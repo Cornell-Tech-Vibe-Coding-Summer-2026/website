@@ -10,15 +10,7 @@ const FUNKOS = [
         label: 'Hauke',
         file: 'Hauke_Funko_Pop.glb',
         url: 'https://hauke.haus/',
-        defaultPos: [-0.527, 0.841, -0.353],
-    },
-    {
-        id: 'jonathan',
-        label: 'Jonathan',
-        // Asset filename has a double .glb extension as added by the user
-        file: 'Jonathan_Funko_Pop.glb.glb',
-        url: 'https://jonathansegal.io/',
-        defaultPos: [-0.518, 0.845, -0.256],
+        defaultPos: [-0.530, 0.839, -0.269],
     },
     {
         id: 'wendy',
@@ -26,6 +18,14 @@ const FUNKOS = [
         file: 'Wendy_Funko_Pop.glb',
         url: 'https://wendyju.com',
         defaultPos: [-0.523, 0.839, -0.163],
+    },
+    {
+        id: 'jonathan',
+        label: 'Jonathan',
+        // Asset filename has a double .glb extension as added by the user
+        file: 'Jonathan_Funko_Pop.glb.glb',
+        url: 'https://jonathansegal.io/',
+        defaultPos: [-0.526, 0.845, -0.058],
     },
 ]
 

@@ -20,6 +20,37 @@ function useIsMobile() {
   return isMobile
 }
 
+const LOW_RES_KEY = 'vibe-low-resource-mode'
+
+// Auto-detect: small device memory, few cores, prefers-reduced-motion, or
+// already on a touch device that's not mobile width (iPad). The user can
+// always override via the toggle button.
+function detectLowRes() {
+  if (typeof window === 'undefined') return false
+  const mem = navigator.deviceMemory
+  const cores = navigator.hardwareConcurrency
+  const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  return (mem && mem < 4) || (cores && cores < 4) || !!reduced
+}
+
+function useLowResMode() {
+  const [lowRes, setLowRes] = useState(() => {
+    try {
+      const saved = localStorage.getItem(LOW_RES_KEY)
+      if (saved !== null) return saved === '1'
+    } catch { /* ignore */ }
+    return detectLowRes()
+  })
+  const toggle = () => {
+    setLowRes((prev) => {
+      const next = !prev
+      try { localStorage.setItem(LOW_RES_KEY, next ? '1' : '0') } catch { /* ignore */ }
+      return next
+    })
+  }
+  return [lowRes, toggle]
+}
+
 function Loader() {
   const { progress } = useProgress()
   return <Html center>{progress.toFixed(1)} % loaded</Html>
@@ -29,6 +60,7 @@ import { AnimatePresence } from 'framer-motion'
 
 export default function App() {
   const isMobile = useIsMobile()
+  const [lowRes, toggleLowRes] = useLowResMode()
   const [view, setView] = useState('default')
   const [overlayOrigin, setOverlayOrigin] = useState({ x: 0, y: 0 })
   const [deskLightOn, setDeskLightOn] = useState(false)
@@ -114,8 +146,21 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  if (isMobile) {
-    return <MobileView />
+  if (isMobile || lowRes) {
+    return (
+      <>
+        <MobileView />
+        {!isMobile && (
+          <button
+            onClick={toggleLowRes}
+            className="fixed bottom-4 right-4 z-[200] px-3 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white text-[10px] font-mono uppercase tracking-widest rounded-full border border-white/20 transition-colors"
+            title="Switch to the 3D scene (more GPU/CPU intensive)"
+          >
+            ⤴ 3D Scene
+          </button>
+        )}
+      </>
+    )
   }
 
   return (
@@ -190,12 +235,12 @@ export default function App() {
         />
       </Canvas>
 
+      <img
+        src={`${import.meta.env.BASE_URL}cornell-tech-logo-optimized.png`}
+        alt="Cornell Tech"
+        className="absolute top-8 right-8 h-8 z-[100] opacity-90 drop-shadow-md pointer-events-none select-none"
+      />
       <div className="absolute top-8 left-8 z-[100] pointer-events-none select-none">
-        <img
-          src={`${import.meta.env.BASE_URL}cornell-tech-logo-optimized.png`}
-          alt="Cornell Tech"
-          className="h-8 mb-4 opacity-90 drop-shadow-md"
-        />
         <h1 className="text-white text-5xl font-black tracking-tighter uppercase mb-2 drop-shadow-lg">Vibe Coding Ethics</h1>
         <p className="text-white/60 text-sm font-mono tracking-widest uppercase drop-shadow-md">Designing with Conscience • Cornell Tech 2026</p>
       </div>      {/* Reading View Overlay */}
@@ -225,6 +270,15 @@ export default function App() {
           Click on monitor, phone, or lamp to interact
         </div>
       )}
+
+      {/* Low-resource toggle */}
+      <button
+        onClick={toggleLowRes}
+        className="absolute bottom-4 right-4 z-[200] px-3 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white/70 hover:text-white text-[10px] font-mono uppercase tracking-widest rounded-full border border-white/20 transition-colors"
+        title="Switch to a lighter, no-3D version of the site"
+      >
+        ⤵ Lite Mode
+      </button>
 
       {/* Explicit Leva Panel with high z-index */}
       <div className="absolute top-0 right-0 z-[10000]">
