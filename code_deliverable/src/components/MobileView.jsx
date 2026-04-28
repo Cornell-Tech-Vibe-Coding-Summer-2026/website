@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -221,13 +222,14 @@ function DeskCard({ item, onClick }) {
 }
 
 function FullscreenModal({ title, onClose, children }) {
-    return (
+    if (typeof document === 'undefined') return null
+    return createPortal(
         <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
             transition={{ type: 'spring', damping: 28, stiffness: 320 }}
-            className="absolute inset-0 z-[300] flex flex-col bg-[#050505]"
+            className="fixed inset-0 z-[300] flex flex-col bg-[#050505]"
         >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-[#0e101a] shrink-0">
@@ -242,11 +244,12 @@ function FullscreenModal({ title, onClose, children }) {
             <div className="flex-1 overflow-hidden relative">
                 {children}
             </div>
-        </motion.div>
+        </motion.div>,
+        document.body
     )
 }
 
-export function MobileView({ onOpenPartners }) {
+export function MobileView() {
     const [open, setOpen] = useState(null) // id of open item
 
     const close = () => setOpen(null)
@@ -321,15 +324,6 @@ export function MobileView({ onOpenPartners }) {
                     </div>
                 </div>
 
-                {onOpenPartners && (
-                    <button
-                        onClick={onOpenPartners}
-                        className="w-full mt-2 px-4 py-3 bg-[#00ff41]/15 hover:bg-[#00ff41]/25 active:bg-[#00ff41]/30 text-[#00ff41] text-[11px] font-mono uppercase tracking-widest rounded-xl border border-[#00ff41]/30 transition-colors text-left flex items-center justify-between"
-                    >
-                        <span>For partners, sponsors &amp; press</span>
-                        <span>→</span>
-                    </button>
-                )}
             </div>
 
             {/* Desk label */}

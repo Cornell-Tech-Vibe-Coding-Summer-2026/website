@@ -159,7 +159,7 @@ export default function App() {
   if (isMobile || lowRes) {
     return (
       <>
-        <MobileView onOpenPartners={() => setPartnersOpen(true)} />
+        <MobileView />
         <button
           onClick={() => setPartnersOpen(true)}
           className="fixed bottom-4 left-4 z-[200] px-3 py-2 bg-[#00ff41]/15 hover:bg-[#00ff41]/25 backdrop-blur-md text-[#00ff41] text-[10px] font-mono uppercase tracking-widest rounded-full border border-[#00ff41]/30 transition-colors"

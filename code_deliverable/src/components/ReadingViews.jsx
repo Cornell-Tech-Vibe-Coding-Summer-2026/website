@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { createPortal } from 'react-dom'
 
 const READINGS = [
     {
@@ -99,12 +100,13 @@ export function SuggestedReadingsView({ onClose, origin }) {
         ? { x: origin.x - window.innerWidth / 2, y: origin.y - window.innerHeight / 2, scale: 0, opacity: 0 }
         : { scale: 0.8, opacity: 0 }
 
-    return (
+    if (typeof document === 'undefined') return null
+    return createPortal(
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm"
             onClick={onClose}
         >
             <motion.div
@@ -136,7 +138,8 @@ export function SuggestedReadingsView({ onClose, origin }) {
                     ← scroll horizontally →
                 </div>
             </motion.div>
-        </motion.div>
+        </motion.div>,
+        document.body
     )
 }
 
@@ -144,12 +147,13 @@ export function ReadingView({ onClose, origin }) {
     // Default origin if not provided
     const initial = origin ? { x: origin.x - window.innerWidth / 2, y: origin.y - window.innerHeight / 2, scale: 0, opacity: 0 } : { scale: 0.8, opacity: 0 }
 
-    return (
+    if (typeof document === 'undefined') return null
+    return createPortal(
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm"
             onClick={onClose}
         >
             <motion.div
@@ -193,6 +197,7 @@ export function ReadingView({ onClose, origin }) {
                     </div>
                 </div>
             </motion.div>
-        </motion.div>
+        </motion.div>,
+        document.body
     )
 }
