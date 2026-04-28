@@ -49,17 +49,30 @@ export function LoadingOverlay() {
                         }}
                     />
 
-                    {/* Neon T mark with a soft glow + breathing animation */}
-                    <motion.img
-                        src={`${import.meta.env.BASE_URL}T-Neon-Green.png`}
-                        alt=""
-                        className="w-28 h-28 mb-8 select-none"
-                        style={{
-                            filter: 'drop-shadow(0 0 18px rgba(57,255,20,0.55)) drop-shadow(0 0 4px rgba(57,255,20,0.9))',
-                        }}
-                        animate={{ opacity: [0.7, 1, 0.7], scale: [0.97, 1, 0.97] }}
+                    {/* Neon T mark — glow lives on a sibling element so it
+                        doesn't interact with the PNG's alpha channel. */}
+                    <motion.div
+                        className="relative w-28 h-28 mb-8"
+                        animate={{ scale: [0.97, 1, 0.97] }}
                         transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-                    />
+                    >
+                        <motion.div
+                            className="absolute inset-0 rounded-full"
+                            style={{
+                                background:
+                                    'radial-gradient(circle, rgba(57,255,20,0.35) 0%, rgba(57,255,20,0.12) 45%, rgba(57,255,20,0) 70%)',
+                                filter: 'blur(8px)',
+                            }}
+                            animate={{ opacity: [0.55, 1, 0.55] }}
+                            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+                        />
+                        <img
+                            src={`${import.meta.env.BASE_URL}T-Neon-Green.png`}
+                            alt=""
+                            className="relative w-full h-full select-none"
+                            draggable={false}
+                        />
+                    </motion.div>
 
                     {/* Title */}
                     <div className="text-white text-3xl font-black tracking-tighter uppercase mb-1">
