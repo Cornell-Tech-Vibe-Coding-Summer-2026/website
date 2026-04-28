@@ -10,6 +10,7 @@ import { CameraController } from './components/CameraController'
 import { SuggestedReadingsView, ReadingView } from './components/ReadingViews'
 import { MobileView } from './components/MobileView'
 import { PartnersOverlay } from './components/PartnersOverlay'
+import { LoadingOverlay } from './components/LoadingOverlay'
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
@@ -87,8 +88,8 @@ export default function App() {
       monitorTarget: { value: [5.61, 0.18, 0], label: 'Monitor Target', step: 0.01 },
       phonePos: { value: [-0.695, 1.22, -0.339], label: 'Phone Position', step: 0.01 },
       phoneTarget: { value: [-0.43, 0.07, -0.48], label: 'Phone Target', step: 0.01 },
-      notepadPos: { value: [-1.01, 0.995, 0.1], label: 'Notepad Position', step: 0.01 },
-      notepadTarget: { value: [-0.21, 0.43, 0.47], label: 'Notepad Target', step: 0.01 },
+      notepadPos: { value: [-0.87, 0.945, -0.01], label: 'Notepad Position', step: 0.01 },
+      notepadTarget: { value: [1.16, 0.17, -0.19], label: 'Notepad Target', step: 0.01 },
       paperStackPos: { value: [0.06, -0.01, 0.19], label: 'Paper Stack Pos', step: 0.01 },
     }),
     'Lighting': folder({
@@ -257,6 +258,8 @@ export default function App() {
           }}
         />
       </Canvas>
+
+      <LoadingOverlay />
 
       <img
         src={`${import.meta.env.BASE_URL}cornell-tech-logo-optimized.png`}

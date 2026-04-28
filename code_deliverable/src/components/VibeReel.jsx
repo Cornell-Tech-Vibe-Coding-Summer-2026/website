@@ -24,17 +24,18 @@ export function VibeReel({ entry, scrollRoot }) {
         if (!el) return
         const root = scrollRoot?.current ?? null
 
-        // Mount/unmount: only the visible reel and its immediate neighbour.
-        // Wider preload (e.g. 200%) caused multiple iframes to load on entry
-        // and starved the camera animation.
+        // Mount/unmount: only the visible reel — preloading the next one
+        // mid-scroll is what was choking Safari. The active reel will
+        // hot-load when it actually becomes visible.
         const mountObs = new IntersectionObserver(
             (entries) => entries.forEach((e) => setMounted(e.isIntersecting)),
-            { root, rootMargin: '50% 0px', threshold: 0.01 }
+            { root, rootMargin: '0px', threshold: 0.01 }
         )
-        // Active = the visible reel; play it, pause others.
+        // Active = the reel that's almost fully on-screen; only one at a
+        // time so we never have two TikTok players audibly running.
         const activeObs = new IntersectionObserver(
-            (entries) => entries.forEach((e) => setActive(e.isIntersecting && e.intersectionRatio > 0.6)),
-            { root, threshold: [0, 0.6, 1] }
+            (entries) => entries.forEach((e) => setActive(e.isIntersecting && e.intersectionRatio > 0.8)),
+            { root, threshold: [0, 0.8, 1] }
         )
 
         mountObs.observe(el)

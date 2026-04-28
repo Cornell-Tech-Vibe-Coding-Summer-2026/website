@@ -5,10 +5,14 @@ import { VibeReel } from './VibeReel'
 export function PhoneContent() {
     const scrollRef = useRef(null)
     // Defer iframe loads so the camera zoom-in animation isn't fighting with
-    // network / iframe parsing on the same frame. A short timeout is enough.
+    // network / iframe parsing on the same frame. Safari is much more
+    // sensitive here — too many simultaneous cross-origin iframes inside a
+    // drei <Html> can lock the main thread, so we wait a bit longer there.
     const [ready, setReady] = useState(false)
     useEffect(() => {
-        const t = setTimeout(() => setReady(true), 750)
+        const isSafari = typeof navigator !== 'undefined'
+            && /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+        const t = setTimeout(() => setReady(true), isSafari ? 1300 : 800)
         return () => clearTimeout(t)
     }, [])
 
