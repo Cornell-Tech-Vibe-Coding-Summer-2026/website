@@ -159,7 +159,7 @@ export default function App() {
   if (isMobile || lowRes) {
     return (
       <>
-        <MobileView />
+        <MobileView onOpenPartners={() => setPartnersOpen(true)} />
         <button
           onClick={() => setPartnersOpen(true)}
           className="fixed bottom-4 left-4 z-[200] px-3 py-2 bg-[#00ff41]/15 hover:bg-[#00ff41]/25 backdrop-blur-md text-[#00ff41] text-[10px] font-mono uppercase tracking-widest rounded-full border border-[#00ff41]/30 transition-colors"
@@ -179,6 +179,9 @@ export default function App() {
         <AnimatePresence>
           {partnersOpen && <PartnersOverlay onClose={() => setPartnersOpen(false)} />}
         </AnimatePresence>
+        {/* Render Leva hidden so it doesn't auto-inject its default panel
+            on mobile/lite when no <Leva /> is in the tree. */}
+        <Leva hidden />
       </>
     )
   }

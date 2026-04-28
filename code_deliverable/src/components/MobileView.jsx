@@ -246,33 +246,36 @@ function FullscreenModal({ title, onClose, children }) {
     )
 }
 
-export function MobileView() {
+export function MobileView({ onOpenPartners }) {
     const [open, setOpen] = useState(null) // id of open item
 
     const close = () => setOpen(null)
 
     return (
-        <div className="relative w-full h-full bg-[#050505] overflow-hidden">
+        <div className="relative w-full h-full bg-[#050505] overflow-y-auto">
             {/* Subtle desk surface texture */}
-            <div className="absolute inset-0 opacity-[0.04] pointer-events-none"
+            <div className="fixed inset-0 opacity-[0.04] pointer-events-none"
                 style={{
                     backgroundImage: 'linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)',
                     backgroundSize: '48px 48px',
                 }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-white/[0.02] pointer-events-none" />
+            <div className="fixed inset-0 bg-gradient-to-b from-transparent via-transparent to-white/[0.02] pointer-events-none" />
 
             {/* Header */}
-            <div className="relative z-10 px-6 pt-10 pb-6">
+            <div className="relative z-10 px-6 pt-10 pb-5">
                 <img
                     src={`${import.meta.env.BASE_URL}cornell-tech-logo-optimized.png`}
                     alt="Cornell Tech"
                     className="h-6 mb-3 opacity-90"
                 />
-                <h1 className="text-white text-3xl font-black tracking-tighter uppercase leading-none mb-1">
+                <h1 className="text-white text-3xl font-black tracking-tighter uppercase leading-none mb-1.5">
                     Ethical Vibe Coding
                 </h1>
-                <p className="text-white/40 text-[10px] font-mono tracking-widest uppercase mb-1">
+                <p className="text-white/85 text-[13px] font-mono tracking-widest uppercase mb-3">
+                    Designing with Conscience
+                </p>
+                <p className="text-white/45 text-[10px] font-mono tracking-widest uppercase mb-0.5">
                     TECHIE 1121 · Cornell Tech · Summer 2026
                 </p>
                 <p className="text-white/35 text-[10px] font-mono tracking-wider">
@@ -280,18 +283,81 @@ export function MobileView() {
                 </p>
             </div>
 
+            {/* Welcome / pitch content inline so the landing has substance */}
+            <div className="relative z-10 px-6 pb-6 space-y-5">
+                <div className="border-l-2 border-[#00ff41]/50 pl-4 py-1">
+                    <p className="text-white/80 text-[14px] leading-relaxed">
+                        Build software with AI as your co-author. Push a button, generate an app.
+                    </p>
+                    <p className="text-[#00ff41] text-[14px] font-medium mt-1">
+                        But — just because you can, should you?
+                    </p>
+                </div>
+
+                <div className="space-y-4">
+                    <div>
+                        <p className="text-[#ffd166] text-[10px] font-mono font-bold tracking-widest mb-1">? WHAT IS VIBE CODING</p>
+                        <p className="text-white/70 text-[13px] leading-relaxed">
+                            Building software with AI as your co-author. The line between &ldquo;designer&rdquo; and &ldquo;developer&rdquo; gets blurry — fast.
+                        </p>
+                    </div>
+                    <div>
+                        <p className="text-[#ffd166] text-[10px] font-mono font-bold tracking-widest mb-1">? VIBE CODING <span className="italic">ETHICALLY</span>?</p>
+                        <p className="text-white/70 text-[13px] leading-relaxed">
+                            Stop. Look up from the prompt. Who is this for? Who could it harm? Whose values does it embed?
+                        </p>
+                    </div>
+                    <div>
+                        <p className="text-[#ffd166] text-[10px] font-mono font-bold tracking-widest mb-1">? WHAT ARE VALUES</p>
+                        <p className="text-white/70 text-[13px] leading-relaxed">
+                            Privacy. Dignity. Equity. Truth. Care. The things we don&rsquo;t compromise — even when the tool says we can.
+                        </p>
+                    </div>
+                    <div>
+                        <p className="text-[#ffd166] text-[10px] font-mono font-bold tracking-widest mb-1">? WHAT DO WE STRIVE FOR</p>
+                        <p className="text-white/70 text-[13px] leading-relaxed">
+                            Software that&rsquo;s fast to build and slow to harm. Engineers who ship, and who know when not to.
+                        </p>
+                    </div>
+                </div>
+
+                {onOpenPartners && (
+                    <button
+                        onClick={onOpenPartners}
+                        className="w-full mt-2 px-4 py-3 bg-[#00ff41]/15 hover:bg-[#00ff41]/25 active:bg-[#00ff41]/30 text-[#00ff41] text-[11px] font-mono uppercase tracking-widest rounded-xl border border-[#00ff41]/30 transition-colors text-left flex items-center justify-between"
+                    >
+                        <span>For partners, sponsors &amp; press</span>
+                        <span>→</span>
+                    </button>
+                )}
+            </div>
+
             {/* Desk label */}
-            <div className="relative z-10 px-6 mb-3">
-                <span className="text-white/20 text-[10px] font-mono uppercase tracking-[0.2em]">— desk —</span>
+            <div className="relative z-10 px-6 mb-3 mt-2">
+                <span className="text-white/25 text-[10px] font-mono uppercase tracking-[0.2em]">— desk —</span>
+                <p className="text-white/30 text-[11px] mt-1.5">Tap any item to dive deeper.</p>
             </div>
 
             {/* Cards grid */}
-            <div className="relative z-10 px-4 overflow-y-auto" style={{ maxHeight: 'calc(100% - 160px)' }}>
-                <div className="grid grid-cols-2 gap-3 pb-8">
+            <div className="relative z-10 px-4 pb-10">
+                <div className="grid grid-cols-2 gap-3">
                     {DESK_ITEMS.map(item => (
                         <DeskCard key={item.id} item={item} onClick={() => setOpen(item.id)} />
                     ))}
                 </div>
+            </div>
+
+            {/* Footer */}
+            <div className="relative z-10 px-6 pb-12 text-center">
+                <p className="text-white/30 text-[10px] font-mono tracking-widest uppercase">
+                    Cornell Tech · Summer 2026
+                </p>
+                <a
+                    href="mailto:hgs52@cornell.edu"
+                    className="text-white/50 text-[11px] font-mono mt-1 inline-block hover:text-white/80 transition-colors"
+                >
+                    hgs52@cornell.edu
+                </a>
             </div>
 
             {/* Modals */}
