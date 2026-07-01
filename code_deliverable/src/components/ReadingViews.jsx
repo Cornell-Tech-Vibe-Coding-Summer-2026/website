@@ -295,7 +295,8 @@ export function SuggestedReadingsView({ onClose, origin }) {
                 <div className="mb-4 pr-12">
                     <h2 className="text-3xl font-bold text-[#222] font-serif">Suggested Readings</h2>
                     <p className="text-sm text-gray-500 mt-1">
-                        Grouped by week. <span className="text-green-800 font-semibold">★ Required</span> before class; the rest are recommended background. Click any card to open the source.
+                        Grouped by week. <span className="text-green-800 font-semibold">★ Required</span> before class; the rest are recommended background. Click any card to open the source, or see the{' '}
+                        <a href="https://vibe-coding-ethics.tech.cornell.edu/instructions.html?file=planning/readings.md&title=Course%20Readings" target="_blank" rel="noopener noreferrer" className="text-green-800 underline font-medium">full list by session ↗</a>.
                     </p>
                     <div className="flex flex-wrap gap-2 mt-3">
                         {GROUP_DEFS.map((g, i) => (
