@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
 import { createPortal } from 'react-dom'
 
+// Curated selection of the course readings. The full, always-current list lives
+// in the class repo (planning/readings.md, generated from activities-manifest.json).
 const READINGS = [
     {
         title: 'Why Johnny Can\'t Prompt',
@@ -8,23 +10,87 @@ const READINGS = [
         venue: 'ACM CHI',
         kind: 'paper',
         url: 'https://dl.acm.org/doi/10.1145/3544548.3581388',
-        abstract: 'Non-AI-experts struggle to design effective prompts for LLMs. The authors find that users approach prompting opportunistically rather than systematically, and rarely revise prompts based on observed model behavior. A foundational read on the limits of vibe coding.',
+        abstract: 'Non-AI-experts struggle to design effective prompts for LLMs. Users approach prompting opportunistically rather than systematically, and rarely revise prompts based on observed model behavior. A foundational read on the limits of vibe coding.',
+    },
+    {
+        title: 'Prompt Engineering Overview',
+        authors: 'Anthropic',
+        venue: 'Docs',
+        kind: 'site',
+        url: 'https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview',
+        abstract: 'The official guide behind week 1\'s prompt lab: XML-tagged structure, giving the model room to think, and few-shot examples. The "engineering" half of vibe coding — how to make a prompt behave like a spec.',
+    },
+    {
+        title: 'This Is How AI Bias Really Happens',
+        authors: 'Karen Hao — MIT Technology Review, 2019',
+        venue: 'Article',
+        kind: 'article',
+        url: 'https://www.technologyreview.com/2019/02/04/137602/this-is-how-ai-bias-really-happensand-why-its-so-hard-to-fix/',
+        abstract: 'A plain-language tour of where bias enters the machine-learning pipeline — framing the problem, collecting and labeling data, deploying the model. The accessible starting point for week 1\'s bias activity.',
+    },
+    {
+        title: 'Gender Shades',
+        authors: 'Buolamwini & Gebru — 2018',
+        venue: 'Project',
+        kind: 'site',
+        url: 'http://gendershades.org/',
+        abstract: 'Commercial face-classification systems were far less accurate for darker-skinned women than for lighter-skinned men. A vivid demonstration that "the default" in AI is rarely neutral.',
+    },
+    {
+        title: 'Machine Bias',
+        authors: 'Angwin, Larson, Mattu, Kirchner — ProPublica, 2016',
+        venue: 'Article',
+        kind: 'article',
+        url: 'https://www.propublica.org/article/machine-bias-risk-assessments-in-criminal-sentencing',
+        abstract: 'The COMPAS recidivism algorithm flagged Black defendants as higher-risk more often, even when it was wrong. A landmark piece of accountability journalism on algorithmic fairness.',
     },
     {
         title: 'Bias in Computer Systems',
         authors: 'Friedman & Nissenbaum — 1996',
-        venue: 'ACM Transactions on Information Systems',
+        venue: 'ACM TOIS',
         kind: 'paper',
         url: 'https://nissenbaum.tech.cornell.edu/papers/biasincomputers.pdf',
         abstract: 'Identifies three categories of bias in computer systems: preexisting (rooted in social institutions), technical (from constraints), and emergent (in context of use). The vocabulary the field still uses today.',
+    },
+    {
+        title: 'The Values Map',
+        authors: 'Common Cause Foundation — 2023',
+        venue: 'Resource',
+        kind: 'site',
+        url: 'https://commoncausefoundation.org/_resources/the-values-map/',
+        abstract: 'A practical map of human values and how they reinforce or oppose one another. Week 2\'s warm-up for naming the value a tool actually serves.',
     },
     {
         title: 'Values at Play in Digital Games',
         authors: 'Flanagan & Nissenbaum — 2014',
         venue: 'MIT Press',
         kind: 'book',
-        url: 'https://drive.google.com/file/d/14fTIg05HNcARYP5JrEJ87KC29D2QAgqM/view?usp=drive_link',
-        abstract: 'The framework that anchors the second week of the class. Values are embedded in technology — the question is whether designers do it intentionally. Provides discovery, translation, and verification heuristics for value-sensitive design.',
+        url: 'https://drive.google.com/drive/folders/1qZ8x8MXbJaex-7LnnrBUVR0_H87oBz24?usp=share_link',
+        abstract: 'The framework that anchors week 2. Values are embedded in technology — the question is whether designers do it on purpose. Discovery, implementation, and verification heuristics for value-sensitive design. (Cornell netID.)',
+    },
+    {
+        title: 'Promoting Bright Patterns',
+        authors: 'Sandhaus — CHI 2023 Workshop',
+        venue: 'arXiv',
+        kind: 'paper',
+        url: 'https://arxiv.org/abs/2304.01157',
+        abstract: 'The constructive inverse of dark patterns: interfaces that nudge toward the user\'s own interest. Week 2\'s counterpoint to designing manipulation on purpose.',
+    },
+    {
+        title: '"Create a Fear of Missing Out"',
+        authors: 'Krauß et al. — CHI 2025',
+        venue: 'ACM CHI',
+        kind: 'paper',
+        url: 'https://doi.org/10.1145/3706598.3713083',
+        abstract: 'ChatGPT inserts deceptive designs — fake urgency, confirmshaming — into generated websites without being asked and without warning. The core finding behind the red-teaming activity.',
+    },
+    {
+        title: 'DarkBench',
+        authors: 'Kran et al.',
+        venue: 'Benchmark',
+        kind: 'site',
+        url: 'https://darkbench.ai/',
+        abstract: 'A benchmark of manipulative behaviors in large language models — brand bias, sycophancy, user retention, sneaking. Names the dark patterns you\'ll try to reproduce.',
     },
     {
         title: 'Obfuscation: A User\'s Guide for Privacy and Protest',
@@ -35,12 +101,20 @@ const READINGS = [
         abstract: 'When you can\'t hide, drown the signal in noise. A toolkit of obfuscation strategies — from TrackMeNot to ad-nauseating bots — and a moral defense of using AI against AI.',
     },
     {
-        title: 'Workers Weaponizing AI Against Each Other',
-        authors: 'OfficeChai — 2024',
-        venue: 'Article',
-        kind: 'article',
-        url: 'https://officechai.com/ai/chinas-workers-are-weaponizing-ai-against-each-other-through-colleague-skill-files-and-fighting-back/',
-        abstract: 'Field report from China: workers use AI to track each other, then use AI again to push back. A glimpse at what "AI for protection from work automation" looks like in practice — material for week 2 (AI vs. AI).',
+        title: 'Privacy of Groups in Dense Street Imagery',
+        authors: 'Franchi, Sandhaus et al. — FAccT 2025',
+        venue: 'ACM FAccT',
+        kind: 'paper',
+        url: 'https://arxiv.org/abs/2505.07085',
+        abstract: 'Street-level imagery exposes not just individuals but groups. A contextual-integrity audit of large image datasets — the privacy stakes behind week 2\'s AI-against-AI work.',
+    },
+    {
+        title: '10 Usability Heuristics for UI Design',
+        authors: 'Jakob Nielsen — 1994',
+        venue: 'Nielsen Norman Group',
+        kind: 'site',
+        url: 'https://www.nngroup.com/articles/ten-usability-heuristics/',
+        abstract: 'Ten enduring rules of thumb — visibility of system status, match to the real world, error prevention. The checklist for week 3\'s user-evaluation activity.',
     },
     {
         title: 'Public Interest Technology Ethics Workshop',
@@ -48,7 +122,15 @@ const READINGS = [
         venue: 'Workshop site',
         kind: 'site',
         url: 'https://pitechethics.github.io/',
-        abstract: 'The VAP Ethics Thinking Canvas used in week 2 was developed here. Browse the canvas, the case studies, and the workshop materials before applying VAP to your own project.',
+        abstract: 'The VAP Ethics Thinking Canvas used in weeks 2–3 was developed here. Browse the canvas, the case studies, and the workshop materials before applying VAP to your own project.',
+    },
+    {
+        title: 'Workers Weaponizing AI Against Each Other',
+        authors: 'OfficeChai — 2024',
+        venue: 'Article',
+        kind: 'article',
+        url: 'https://officechai.com/ai/chinas-workers-are-weaponizing-ai-against-each-other-through-colleague-skill-files-and-fighting-back/',
+        abstract: 'Field report from China: workers use AI to track each other, then use AI again to push back. A glimpse at what "AI for protection from work automation" looks like in practice.',
     },
 ]
 
@@ -185,6 +267,16 @@ export function ReadingView({ onClose, origin }) {
                         </ul>
                     </div>
                     <div className="space-y-8">
+                        <div className="p-6 border-2 border-[#2a2a2a]/20 rounded bg-white/40">
+                            <h4 className="font-bold uppercase tracking-widest text-sm mb-3 text-[#2a2a2a]">Read the book <span className="normal-case font-normal text-[#5a5a5a]">(Cornell netID)</span></h4>
+                            <ul className="text-base space-y-1.5">
+                                <li><a href="https://drive.google.com/drive/folders/1qZ8x8MXbJaex-7LnnrBUVR0_H87oBz24?usp=share_link" target="_blank" rel="noreferrer" className="text-blue-800 hover:underline font-semibold">Full digital book ↗</a></li>
+                                <li><a href="https://drive.google.com/file/d/14fTIg05HNcARYP5JrEJ87KC29D2QAgqM/view" target="_blank" rel="noreferrer" className="text-blue-800 hover:underline">Ch. 1 — Groundwork ↗</a></li>
+                                <li><a href="https://drive.google.com/file/d/1FGbCVYgsKt9kW_sH0R2_B-LFcTmJum04/view" target="_blank" rel="noreferrer" className="text-blue-800 hover:underline">Ch. 5 — Discovery (canvas) ↗</a></li>
+                                <li><a href="https://drive.google.com/file/d/1fBpVUQwUBikdUN21U0yKo58Lvs-0u899/view" target="_blank" rel="noreferrer" className="text-blue-800 hover:underline">Ch. 6 — Implementation ↗</a></li>
+                                <li><a href="https://drive.google.com/file/d/1bHp2N78YO2r2mOB6XR2H8lbbvBXqnCWJ/view" target="_blank" rel="noreferrer" className="text-blue-800 hover:underline">Ch. 7 — Verification ↗</a></li>
+                            </ul>
+                        </div>
                         <div className="p-6 bg-[#2a2a2a] text-white rounded">
                             <h4 className="font-bold uppercase tracking-widest text-sm mb-2 text-yellow-500">Public Interest Tech</h4>
                             <p className="text-sm opacity-80 mb-4">
