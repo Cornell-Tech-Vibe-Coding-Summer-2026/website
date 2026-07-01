@@ -1,6 +1,10 @@
 import React from 'react'
 
 export function NotepadContent() {
+    const items = [
+        'Syllabus', 'Website', 'Activities & group projects', 'Reading list',
+        'Guest speakers', 'GitHub Classroom', 'Slide decks', 'Tool credits',
+    ]
     return (
         <div className="w-[400px] h-[500px] bg-transparent text-zinc-800 p-10 flex flex-col font-serif select-none">
             <div className="flex justify-between items-start mb-8 opacity-40">
@@ -8,27 +12,17 @@ export function NotepadContent() {
                 <span className="text-[10px] font-mono">02/06/2026</span>
             </div>
 
-            <div className="flex-1 space-y-6">
-                <h2 className="text-3xl italic font-serif leading-none tracking-tight">The Moral Twist</h2>
-                <p className="text-sm leading-relaxed border-b border-black/5 pb-6">
-                    "The designer's role is not to control every byte, but to set the character of the system. AI is the brush; ethics is the canvas."
-                </p>
-
-                <div className="space-y-4 pt-4">
+            <div className="flex-1 space-y-4">
+                <h2 className="text-3xl italic font-serif leading-none tracking-tight">Class Prep</h2>
+                <div className="space-y-2.5 pt-2">
+                    {items.map((t) => (
+                        <div key={t} className="flex items-start gap-3">
+                            <span className="text-[#00ff41] font-bold text-base leading-none">●</span>
+                            <p className="text-xs font-mono uppercase tracking-wide line-through opacity-50">{t}</p>
+                        </div>
+                    ))}
                     <div className="flex items-start gap-3">
-                        <span className="text-[#00ff41] font-bold text-lg leading-none">●</span>
-                        <p className="text-xs font-mono uppercase tracking-wide line-through opacity-50">Syllabus, readings &amp; website</p>
-                    </div>
-                    <div className="flex items-start gap-3">
-                        <span className="text-[#00ff41] font-bold text-lg leading-none">●</span>
-                        <p className="text-xs font-mono uppercase tracking-wide line-through opacity-50">Activities &amp; group projects</p>
-                    </div>
-                    <div className="flex items-start gap-3">
-                        <span className="text-[#00ff41] font-bold text-lg leading-none">●</span>
-                        <p className="text-xs font-mono uppercase tracking-wide line-through opacity-50">Interactive desk</p>
-                    </div>
-                    <div className="flex items-start gap-3">
-                        <span className="text-zinc-800 font-bold text-lg leading-none">○</span>
+                        <span className="text-zinc-800 font-bold text-base leading-none">○</span>
                         <p className="text-xs font-mono uppercase tracking-wide">Run class</p>
                     </div>
                 </div>

@@ -64,10 +64,10 @@ const READINGS = [
     {
         title: 'Values at Play in Digital Games',
         authors: 'Flanagan & Nissenbaum — 2014',
-        venue: 'MIT Press',
+        venue: 'MIT Press · Ch. 5',
         kind: 'book',
-        url: 'https://drive.google.com/drive/folders/1qZ8x8MXbJaex-7LnnrBUVR0_H87oBz24?usp=share_link',
-        abstract: 'The framework that anchors week 2. Values are embedded in technology — the question is whether designers do it on purpose. Discovery, implementation, and verification heuristics for value-sensitive design. (Cornell netID.)',
+        url: 'https://drive.google.com/file/d/1FGbCVYgsKt9kW_sH0R2_B-LFcTmJum04/view',
+        abstract: 'The framework for value-sensitive design. Required: Ch. 5 — Discovery (the values canvas). Chapters 1, 6, 7 and the full book are on the "Values at Play" desk item. Values are embedded in technology; the question is whether designers do it on purpose. (Cornell netID.)',
     },
     {
         title: 'Promoting Bright Patterns',
@@ -96,10 +96,10 @@ const READINGS = [
     {
         title: 'Obfuscation: A User\'s Guide for Privacy and Protest',
         authors: 'Brunton & Nissenbaum — 2015',
-        venue: 'MIT Press',
+        venue: 'MIT Press · Ch. 1',
         kind: 'book',
         url: 'https://direct.mit.edu/books/book/3112/ObfuscationA-User-s-Guide-for-Privacy-and-Protest',
-        abstract: 'When you can\'t hide, drown the signal in noise. A toolkit of obfuscation strategies — from TrackMeNot to ad-nauseating bots — and a moral defense of using AI against AI.',
+        abstract: 'Required: Ch. 1 (Core Cases). When you can\'t hide, drown the signal in noise — a toolkit of obfuscation strategies, from TrackMeNot to ad-nauseating bots, and a moral defense of using AI against AI.',
     },
     {
         title: 'Privacy of Groups in Dense Street Imagery',
