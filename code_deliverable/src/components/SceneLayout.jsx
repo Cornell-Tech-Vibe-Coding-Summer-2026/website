@@ -57,22 +57,24 @@ function NotepadText() {
     return (
         <group>
             <Text
-                fontSize={0.09}
-                lineHeight={1.5}
-                letterSpacing={0.02}
-                maxWidth={3.0}
+                fontSize={0.065}
+                lineHeight={1.45}
+                letterSpacing={0.01}
+                maxWidth={3.4}
                 anchorX="left"
                 anchorY="top"
                 color="black"
             >
-                {'Class Prep:\n'}
-                {'- Syllabus  ✔️\n'}
-                {'- Website  ✔️\n'}
-                {'- Slide decks\n'}
-                {'- Reading list\n'}
-                {'- Guest speakers\n'}
-                {'- GitHub Classroom\n'}
-                {'- Tool credits'}
+                {'AI-USE DISCLOSURE\n\n'}
+                {'This class + site were vibe-coded,\n'}
+                {'openly: Claude, GitHub Copilot,\n'}
+                {'Antigravity / Gemini, Warp.\n'}
+                {'3D figures: Meshy AI. Scene: Blender.\n\n'}
+                {'The same Vibe-Trace we ask of you —\n'}
+                {'transparency, human capability,\n'}
+                {'non-manipulation, a trustworthy web.\n\n'}
+                {'Accountable: Hauke · Jonathan · Wendy\n'}
+                {'hgs52@cornell.edu'}
             </Text>
         </group>
     )

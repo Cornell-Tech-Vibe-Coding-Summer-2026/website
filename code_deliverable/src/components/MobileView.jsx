@@ -197,42 +197,49 @@ function DesktopModal({ onClose, initialTab }) {
 }
 
 function NotepadModal() {
-    const items = [
-        { text: 'Syllabus', done: true },
-        { text: 'Website', done: true },
-        { text: 'Activities & group projects', done: true },
-        { text: 'Reading list', done: true },
-        { text: 'Guest speakers', done: true },
-        { text: 'GitHub Classroom', done: true },
-        { text: 'Slide decks', done: true },
-        { text: 'Tool credits', done: true },
-        { text: 'Run class', done: false },
-    ]
     return (
-        <div className="p-6 font-mono bg-[#fffef5] min-h-full">
-            <h2 className="text-lg font-bold mb-4 text-gray-800">Class Prep:</h2>
-            <ul className="space-y-3">
-                {items.map((item, i) => (
-                    <li key={i} className={`flex items-center gap-3 text-sm ${item.done ? 'line-through text-gray-400' : 'text-gray-800'}`}>
-                        <span className="text-base">{item.done ? '✔️' : '☐'}</span>
-                        {item.text}
-                    </li>
-                ))}
-            </ul>
+        <div className="p-6 md:p-8 font-mono bg-[#fffef5] min-h-full overflow-y-auto text-gray-800">
+            <div className="max-w-2xl">
+                <h2 className="text-lg font-bold mb-1">🤖 AI-Use Disclosure &amp; Colophon</h2>
+                <p className="text-xs text-gray-500 mb-5">The Vibe-Trace we ask of students, applied to the course itself.</p>
 
-            <div className="mt-8 pt-5 border-t border-gray-300">
-                <h3 className="text-sm font-bold text-gray-800 mb-1.5">🤖 How this class was built</h3>
-                <p className="text-xs text-gray-600 leading-relaxed">
-                    This course &amp; site were vibe-coded with Claude, GitHub Copilot, Antigravity/Gemini, and Warp; the 3D figures are Meshy AI and the scene is Blender. We keep the same Vibe-Trace we ask of you.
+                <p className="text-[13px] leading-relaxed mb-4">
+                    The course materials and this site were themselves <strong>vibe-coded</strong> over ~6 months (Jan–Jul 2026), mostly by Hauke Sandhaus with Jonathan Segal. Reconstructed from the git history of both repos:
                 </p>
-                <a
-                    href="https://vibe-coding-ethics.tech.cornell.edu/instructions.html?file=COLOPHON.md&title=Colophon%20%26%20AI-Use%20Disclosure"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-block mt-2 text-xs font-bold text-blue-700 hover:underline"
-                >
-                    Read the full AI-use disclosure &amp; colophon →
-                </a>
+                <ul className="text-[13px] leading-relaxed space-y-1.5 mb-4 list-disc pl-5">
+                    <li><strong>Claude</strong> (Claude Code) — Opus 4.7, Opus 4.8, Sonnet 4.6; most of the recent writing and site engineering (~50 co-authored commits).</li>
+                    <li><strong>GitHub Copilot</strong> — earlier code assistance.</li>
+                    <li><strong>Antigravity / Gemini Code Assist</strong> — the course's &ldquo;lab favorite,&rdquo; used during development.</li>
+                    <li><strong>Warp</strong> — an agentic terminal, occasional.</li>
+                </ul>
+                <p className="text-[13px] leading-relaxed mb-5">
+                    Commit trailers attribute Claude precisely; the earlier Copilot and Antigravity sessions were only partially recorded — an honest reconstruction, and a lesson in how fast provenance is lost when you don&rsquo;t log it. Which is exactly why we require a Vibe-Trace.
+                </p>
+
+                <h3 className="text-sm font-bold mb-1.5">3D scene &amp; media</h3>
+                <p className="text-[13px] leading-relaxed mb-5">
+                    <strong>Meshy AI</strong> — the Funko-Pop-style figures. <strong>Blender</strong> — scene assembly (with Claude Code + MCP). <strong>React Three Fiber + drei</strong> (pmndrs) — the in-browser 3D; environment HDRI from pmndrs/drei-assets. <strong>Google Fonts</strong> — Inter, JetBrains Mono, Outfit.
+                </p>
+
+                <h3 className="text-sm font-bold mb-1.5">Why we disclose — our values</h3>
+                <ul className="text-[13px] leading-relaxed space-y-1.5 mb-5 list-disc pl-5">
+                    <li><strong>Transparency</strong> — the same Vibe-Trace we ask of you; both repos&rsquo; history is public.</li>
+                    <li><strong>Honing human capability, not replacing it</strong> — AI collaborated; every choice was human-reviewed and approved.</li>
+                    <li><strong>Non-manipulation</strong> — no dark patterns, no fabricated data or citations.</li>
+                    <li><strong>A trustworthy web</strong> — accessible, honest content; real sources; no AI slop passed off as fact.</li>
+                </ul>
+
+                <p className="text-[13px] leading-relaxed">
+                    <strong>Accountability:</strong> Hauke Sandhaus, with Jonathan Segal and Wendy Ju, are responsible for everything here — errors included. Spot one? <a href="mailto:hgs52@cornell.edu" className="text-blue-700 hover:underline">hgs52@cornell.edu</a>.
+                </p>
+
+                {/* Class prep — deprioritized, kept as a small aside */}
+                <div className="mt-8 pt-4 border-t border-gray-300 opacity-60">
+                    <h3 className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1.5">Class prep — done ✔</h3>
+                    <p className="text-[11px] text-gray-500 leading-relaxed">
+                        Syllabus · Website · Activities &amp; group projects · Reading list · Guest speakers · GitHub Classroom · Slide decks · Tool credits · <span className="text-gray-700 font-bold">Run class ☐</span>
+                    </p>
+                </div>
             </div>
         </div>
     )
