@@ -26,8 +26,11 @@ export function ColophonContent() {
                 <h2 className={H}>How it was built</h2>
                 <p className={`${P} mb-3`}>
                     The course and this site were themselves <em>vibe-coded</em> over roughly six months
-                    (January–July 2026), mostly by Hauke Sandhaus with Jonathan Segal. Reconstructed from
-                    the git history of both repositories:
+                    (January–July 2026), mostly by Hauke Sandhaus with Jonathan Segal. Both repositories are
+                    public — read the full history yourself:{' '}
+                    <a href="https://github.com/Cornell-Tech-Vibe-Coding-Summer-2026/class/commits/main" target="_blank" rel="noreferrer" className="text-blue-700 hover:underline">class commits</a>{' · '}
+                    <a href="https://github.com/Cornell-Tech-Vibe-Coding-Summer-2026/website/commits/main" target="_blank" rel="noreferrer" className="text-blue-700 hover:underline">website commits</a>.
+                    Reconstructed from that history:
                 </p>
                 <dl className="font-serif text-[14.5px] leading-7 text-gray-700 space-y-1.5">
                     <div><dt className="inline font-bold">Claude</dt> (Claude Code) — Opus 4.7, Opus 4.8, Sonnet 4.6; most of the recent writing and site engineering (~50 co-authored commits).</div>

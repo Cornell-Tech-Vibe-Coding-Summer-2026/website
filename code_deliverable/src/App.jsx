@@ -316,7 +316,7 @@ export default function App() {
       {view === 'notepad' && !colophonOpen && (
         <button
           onClick={() => setColophonOpen(true)}
-          className="absolute bottom-28 left-1/2 -translate-x-1/2 z-[100] px-6 py-2.5 bg-[#00ff41]/15 hover:bg-[#00ff41]/25 backdrop-blur-md text-[#00ff41] hover:text-white text-xs font-mono uppercase tracking-widest rounded-full border border-[#00ff41]/40 transition-colors animate-pulse"
+          className="absolute bottom-28 left-1/2 -translate-x-1/2 z-[100] px-6 py-2.5 bg-[#0e101a] hover:bg-black text-[#00ff41] hover:text-white text-xs font-mono uppercase tracking-widest rounded-full border border-[#00ff41]/50 shadow-xl transition-colors"
         >
           📖 Read the full colophon
         </button>
