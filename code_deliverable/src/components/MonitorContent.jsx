@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { FileText, Terminal, X, Globe } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { FileText, Terminal, X, Globe, Folder } from 'lucide-react'
 import { motion, useDragControls } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -8,11 +8,16 @@ import syllabusMarkdown from '../content/syllabus.md?raw'
 const WINDOWS = {
     TERMINAL: 'terminal',
     SYLLABUS: 'syllabus',
-    EXAMPLES: 'examples'
+    ACTIVITIES: 'activities',
+    PROJECTS: 'projects'
 }
 
-// TODO: change to '/examples' once deployment restructure ships
-const EXAMPLES_URL = 'https://vibe-coding-ethics.tech.cornell.edu/'
+// Live pages on the class site (single source of truth — this repo hosts no copies).
+const ACTIVITIES_URL = 'https://vibe-coding-ethics.tech.cornell.edu/'
+const PROJECTS_URL = 'https://vibe-coding-ethics.tech.cornell.edu/projects/'
+// The syllabus is fetched from the class repo at runtime; the bundled
+// ../content/syllabus.md is only a fallback if that fetch fails.
+const SYLLABUS_URL = 'https://vibe-coding-ethics.tech.cornell.edu/planning/syllabus.md'
 
 function Window({ title, icon: Icon, children, onClose, isOpen, x, y, width, height, zIndex, onFocus }) {
     const dragControls = useDragControls()
@@ -149,9 +154,21 @@ export function MonitorContent({ onBack }) {
     const [openWindows, setOpenWindows] = useState({
         [WINDOWS.TERMINAL]: true,
         [WINDOWS.SYLLABUS]: false,
-        [WINDOWS.EXAMPLES]: false
+        [WINDOWS.ACTIVITIES]: false,
+        [WINDOWS.PROJECTS]: false
     })
     const [focused, setFocused] = useState(WINDOWS.TERMINAL)
+
+    // Fetch the canonical syllabus from the class site; fall back to the bundled copy.
+    const [syllabus, setSyllabus] = useState(syllabusMarkdown)
+    useEffect(() => {
+        let active = true
+        fetch(SYLLABUS_URL)
+            .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
+            .then((text) => { if (active && text && text.trim()) setSyllabus(text) })
+            .catch(() => { /* keep bundled fallback */ })
+        return () => { active = false }
+    }, [])
 
     const toggleWindow = (id) => {
         setOpenWindows(prev => {
@@ -188,12 +205,22 @@ export function MonitorContent({ onBack }) {
 
                 <div
                     className="flex flex-col items-center gap-2 group cursor-pointer active:scale-95 transition-transform"
-                    onClick={() => toggleWindow(WINDOWS.EXAMPLES)}
+                    onClick={() => toggleWindow(WINDOWS.ACTIVITIES)}
                 >
                     <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 group-hover:bg-white/10 group-hover:border-white/20 transition-all shadow-lg backdrop-blur-sm">
                         <Globe className="text-purple-400 group-hover:text-purple-300 transition-colors" size={24} />
                     </div>
-                    <span className="text-white/80 text-[10px] font-bold tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-md">examples.url</span>
+                    <span className="text-white/80 text-[10px] font-bold tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-md">activities.url</span>
+                </div>
+
+                <div
+                    className="flex flex-col items-center gap-2 group cursor-pointer active:scale-95 transition-transform"
+                    onClick={() => toggleWindow(WINDOWS.PROJECTS)}
+                >
+                    <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 group-hover:bg-white/10 group-hover:border-white/20 transition-all shadow-lg backdrop-blur-sm">
+                        <Folder className="text-green-400 group-hover:text-green-300 transition-colors" size={24} />
+                    </div>
+                    <span className="text-white/80 text-[10px] font-bold tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-md">projects.url</span>
                 </div>
 
                 <div
@@ -243,25 +270,43 @@ export function MonitorContent({ onBack }) {
                                 },
                             }}
                         >
-                            {syllabusMarkdown}
+                            {syllabus}
                         </ReactMarkdown>
                     </div>
                 </div>
             </Window>
 
-            {/* Examples Window (iframe) */}
+            {/* Activities Window (iframe) */}
             <Window
-                title="EXAMPLES — vibe-coding-ethics.tech.cornell.edu"
+                title="ACTIVITIES — vibe-coding-ethics.tech.cornell.edu"
                 icon={Globe}
-                isOpen={openWindows[WINDOWS.EXAMPLES]}
-                onClose={() => toggleWindow(WINDOWS.EXAMPLES)}
-                onFocus={() => setFocused(WINDOWS.EXAMPLES)}
-                zIndex={zFor(WINDOWS.EXAMPLES)}
+                isOpen={openWindows[WINDOWS.ACTIVITIES]}
+                onClose={() => toggleWindow(WINDOWS.ACTIVITIES)}
+                onFocus={() => setFocused(WINDOWS.ACTIVITIES)}
+                zIndex={zFor(WINDOWS.ACTIVITIES)}
                 x={200} y={60} width={760} height={520}
             >
                 <iframe
-                    src={EXAMPLES_URL}
-                    title="Examples"
+                    src={ACTIVITIES_URL}
+                    title="Individual Activities"
+                    className="w-full h-full bg-white border-0"
+                    sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                />
+            </Window>
+
+            {/* Group Projects Window (iframe) */}
+            <Window
+                title="GROUP PROJECTS — vibe-coding-ethics.tech.cornell.edu/projects"
+                icon={Folder}
+                isOpen={openWindows[WINDOWS.PROJECTS]}
+                onClose={() => toggleWindow(WINDOWS.PROJECTS)}
+                onFocus={() => setFocused(WINDOWS.PROJECTS)}
+                zIndex={zFor(WINDOWS.PROJECTS)}
+                x={240} y={80} width={760} height={520}
+            >
+                <iframe
+                    src={PROJECTS_URL}
+                    title="Group Projects"
                     className="w-full h-full bg-white border-0"
                     sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
                 />
@@ -293,10 +338,16 @@ export function MonitorContent({ onBack }) {
                         <FileText size={16} className="text-blue-400" />
                     </button>
                     <button
-                        onClick={() => toggleWindow(WINDOWS.EXAMPLES)}
-                        className={`w-8 h-8 flex items-center justify-center rounded transition-all ${openWindows[WINDOWS.EXAMPLES] ? 'bg-white/10 border-b-2 border-purple-500' : 'hover:bg-white/5 opacity-50'}`}
+                        onClick={() => toggleWindow(WINDOWS.ACTIVITIES)}
+                        className={`w-8 h-8 flex items-center justify-center rounded transition-all ${openWindows[WINDOWS.ACTIVITIES] ? 'bg-white/10 border-b-2 border-purple-500' : 'hover:bg-white/5 opacity-50'}`}
                     >
                         <Globe size={16} className="text-purple-400" />
+                    </button>
+                    <button
+                        onClick={() => toggleWindow(WINDOWS.PROJECTS)}
+                        className={`w-8 h-8 flex items-center justify-center rounded transition-all ${openWindows[WINDOWS.PROJECTS] ? 'bg-white/10 border-b-2 border-green-500' : 'hover:bg-white/5 opacity-50'}`}
+                    >
+                        <Folder size={16} className="text-green-400" />
                     </button>
                 </div>
 

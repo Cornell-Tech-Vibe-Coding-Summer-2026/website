@@ -1,3 +1,6 @@
+<!-- FALLBACK COPY ONLY. Canonical syllabus is the class repo: planning/syllabus.md,
+     fetched at runtime by MonitorContent.jsx. Do not edit here; edit the class repo. -->
+
 # **![Cornell Tech](assets/horizontal-black.svg)**
 
 # **TECHIE 1121 Ethical Vibe Coding (2026SU)**
@@ -34,15 +37,15 @@
 
 **Office Hours:** Afternoons
 
-**Expectations and Resources for Student Success:** [Vibe Showcase Website](https://cornell-tech-vibe-coding-summer-2026.github.io/website/), [Examples](https://cornell-tech-vibe-coding-summer-2026.github.io/), [GitHub Classroom Repository](https://classroom.github.com/classrooms/245015926-cornell-tech-vibe-coding-summer-2026/assignments/class-repo)
+**Expectations and Resources for Student Success:** [Vibe Showcase Website](https://cornell-tech-vibe-coding-summer-2026.github.io/website/), [Individual Activities](https://vibe-coding-ethics.tech.cornell.edu/), [Group Projects](https://vibe-coding-ethics.tech.cornell.edu/projects/), [GitHub Classroom Repository](https://classroom.github.com/classrooms/245015926-cornell-tech-vibe-coding-summer-2026/assignments/class-repo)
 
 **Assignments, Exams, and Projects:**
 
 | Activity | Overview | Grade Percentage |
 | :---- | :---- | :---- |
-| Project 1 | Project from Week 1, due Monday of Week 2 before class | 15% |
-| Project 2 | Project from Week 2, due Monday of Week 3 before class | 15% |
-| Final Project | Group project benefiting someone outside the class | 25% |
+| Project 1 (group) | Team project from Week 1, due Monday of Week 2 before class | 15% |
+| Project 2 (group) | Team project from Week 2, due Monday of Week 3 before class | 15% |
+| Final Project (group) | Team project benefiting someone outside the class | 25% |
 | Final Presentation | Presented on the last day of class | 15% |
 | In-Class Activities | Daily individual or small-group activities and write-ups | 20% |
 | Class Participation | In-person attendance and meaningful participation in dialog (in-class and online) | 10% |
@@ -118,19 +121,21 @@ Topics covered:
 * Ethics: Doing the right thing  
 * Outcomes: Designing systems that are useful and empowering
 
+> **Readings** are maintained in one place — [`planning/readings.md`](readings.md), generated from `activities-manifest.json`. Edit readings there and run `python3 scripts/sync_readings.py`; the website and each activity brief update automatically. Treat `readings.md` as canonical; the Reading column below may lag.
+
 | Theme | Weekday | Topic | Project/Activity | Speaker | Reading |
 | :---- | :---- | :---- | :---- | :---- | :---- |
 | Vibe Coding: Gaining Control | Week 1 Monday | What is vibe coding? | Activity: Build and submit a personal "about you" page (hosted on GitHub) on Canvas | TBD | TBD |
 |  | Week 1 Tuesday | Prompt Engineering | Activity: Test different prompts and compare outcomes | Heonjun Park — Cornell graduate lawyer who vibe coded [CityDogs](https://apps.apple.com/us/app/citydogs/id6761141597), a dog-meetup platform | [Why Johnny Can't Prompt (CHI 2023)](https://dl.acm.org/doi/10.1145/3544548.3581388) |
-|  | Week 1 Wednesday | Bias in vibe coding | Activity: Test different vibe coding tools and compare outcomes | TBD | TBD |
-|  | Week 1 Thursday | Project Day | **Project 1:** Vibe code something you want or need | — | — |
+|  | Week 1 Wednesday | Bias in vibe coding | Activity: Test different vibe coding tools and compare outcomes | Remy Stewart — data scientist at Figma AI | TBD |
+|  | Week 1 Thursday | Project Day | **[Project 1](https://vibe-coding-ethics.tech.cornell.edu/projects/) (group):** Vibe code something your team wants or needs | — | — |
 |  |  |  |  |  |  |
-| Ethics: Doing the right thing | Week 2 Monday | AI for good — Values in Technology (VAP) | Activity: Apply the VAP Ethics thinking canvas developed for the [Public Interest Summer Tech Workshop](https://pitechethics.github.io/) | Ria Gualano — Cornell Communication PhD student working on accessible technology | TBD |
+| Ethics: Doing the right thing | Week 2 Monday | Values in Vibe Coding (Light) — AI as Moral Assistant | Activity: Lightweight discussion of what moral, ethical, and political values get embedded in the tools we use, then build a personal Vibe Coding Footprint Calculator (CO₂, energy, water from your last week of AI use, compared to meal references such as tofu vs. beef) | Ria Gualano — Cornell Communication PhD student working on accessible technology | TBD |
 |  | Week 2 Tuesday | AI safety | Activity: Red-team and adversarially test the AI — push it to produce dark patterns or manipulate users. Where does safety/ethics blur? | TBD | TBD |
 |  | Week 2 Wednesday | AI against AI | Activity: Use AI against AI harms — e.g., [obfuscation for privacy protection](https://direct.mit.edu/books/book/3112/ObfuscationA-User-s-Guide-for-Privacy-and-Protest), or [protection from work automation](https://officechai.com/ai/chinas-workers-are-weaponizing-ai-against-each-other-through-colleague-skill-files-and-fighting-back/) | TBD | TBD |
-|  | Week 2 Thursday | Project Day | **Project 2:** Make something that purposefully supports a human value | — | — |
+|  | Week 2 Thursday | Project Day | **[Project 2](https://vibe-coding-ethics.tech.cornell.edu/projects/) (group):** Make something that purposefully supports a human value | — | — |
 |  |  |  |  |  |  |
 | Outcomes: Designing systems that are useful and empowering | Week 3 Monday | Understanding users (UCD — HCD) | Activity: Split the class in 2; first half does live user evaluation, development, and validation. *(User-centered vs. human/humanity-centered: what do people need from technology?)* | TBD | TBD |
-|  | Week 3 Tuesday | Validation and testing (VAP) | Activity: Same as Monday, groups switch. *(Either user testing or value-centered verification — did the technology achieve the value?)* | TBD | TBD |
+|  | Week 3 Tuesday | Values at Play — Full Canvas + Evaluation Switch | Activity: Apply the full Values at Play canvas (from the [PIT Tech Ethics workshop](https://pitechethics.github.io/)) to your final project — identify embedded values, conflicts, and stakeholders. Round 2 of user testing with roles reversed. | TBD | TBD |
 | Final Project | Week 3 Wednesday | Working Day | Final project working day | — | — |
-|  | Week 3 Thursday | Final Project Presentations | **Final Project:** Make something that benefits someone else, and that society continues to benefit from after class | — | — |
+|  | Week 3 Thursday | Final Project Presentations | **[Final Project](https://vibe-coding-ethics.tech.cornell.edu/projects/) (group):** Make something that benefits someone else, and that society continues to benefit from after class | — | — |
