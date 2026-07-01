@@ -1,3 +1,4 @@
+import { Fragment } from 'react'
 import { motion } from 'framer-motion'
 import { createPortal } from 'react-dom'
 
@@ -141,6 +142,55 @@ const KIND_TAG = {
     site: { label: 'Site', color: 'bg-purple-50 text-purple-800 border-purple-200' },
 }
 
+// Group the cards to follow the class structure (week themes).
+const GROUP_DEFS = [
+    {
+        label: 'Week 1 · Gaining Control',
+        sub: 'Vibe coding · prompting · bias',
+        titles: [
+            'Why Johnny Can\'t Prompt',
+            'Prompt Engineering Overview',
+            'This Is How AI Bias Really Happens',
+            'Gender Shades',
+            'Machine Bias',
+            'Bias in Computer Systems',
+        ],
+    },
+    {
+        label: 'Week 2 · Doing the Right Thing',
+        sub: 'Values · dark patterns · privacy',
+        titles: [
+            'The Values Map',
+            'Values at Play in Digital Games',
+            'Promoting Bright Patterns',
+            '"Create a Fear of Missing Out"',
+            'DarkBench',
+            'Obfuscation: A User\'s Guide for Privacy and Protest',
+            'Privacy of Groups in Dense Street Imagery',
+            'Workers Weaponizing AI Against Each Other',
+        ],
+    },
+    {
+        label: 'Week 3 · Useful & Empowering',
+        sub: 'User-centered design · VAP',
+        titles: [
+            '10 Usability Heuristics for UI Design',
+            'Public Interest Technology Ethics Workshop',
+        ],
+    },
+]
+
+function GroupDivider({ label, sub }) {
+    return (
+        <div className="flex-shrink-0 w-14 h-[520px] flex items-center justify-center snap-center">
+            <div className="[writing-mode:vertical-rl] rotate-180 text-center px-1">
+                <span className="font-serif font-bold text-lg text-[#2a2a2a] tracking-wide whitespace-nowrap">{label}</span>
+                <span className="block text-[10px] text-gray-500 mt-3 uppercase tracking-[0.2em] whitespace-nowrap">{sub}</span>
+            </div>
+        </div>
+    )
+}
+
 function ReadingCard({ reading }) {
     const tag = KIND_TAG[reading.kind] ?? KIND_TAG.paper
     return (
@@ -206,13 +256,21 @@ export function SuggestedReadingsView({ onClose, origin }) {
                 <div className="mb-6 pr-12">
                     <h2 className="text-3xl font-bold text-[#222] font-serif">Suggested Readings</h2>
                     <p className="text-sm text-gray-500 mt-1">
-                        Selected sources that anchor the class. Click any card to open the source in a new tab.
+                        Selected sources, grouped by week. Click any card to open the source in a new tab.
                     </p>
                 </div>
 
                 <div className="flex-1 overflow-x-auto overflow-y-hidden flex items-stretch gap-6 px-1 py-4 snap-x snap-mandatory">
-                    {READINGS.map((r) => (
-                        <ReadingCard key={r.url} reading={r} />
+                    {GROUP_DEFS.map((g) => (
+                        <Fragment key={g.label}>
+                            <GroupDivider label={g.label} sub={g.sub} />
+                            {g.titles
+                                .map((t) => READINGS.find((r) => r.title === t))
+                                .filter(Boolean)
+                                .map((r) => (
+                                    <ReadingCard key={r.url} reading={r} />
+                                ))}
+                        </Fragment>
                     ))}
                 </div>
 

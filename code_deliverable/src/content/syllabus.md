@@ -27,7 +27,7 @@
 
 **Course Frequency:** Offered Summer 2026
 
-**Textbook(s) and/or Other Required Materials:**  Personal Laptops, a digital version of [Values at Play by Flanagan and Nissenbaum](https://drive.google.com/file/d/14fTIg05HNcARYP5JrEJ87KC29D2QAgqM/view?usp=drive_link) will be provided.
+**Textbook(s) and/or Other Required Materials:**  Personal Laptops, a digital version of [Values at Play by Flanagan and Nissenbaum](https://drive.google.com/drive/folders/1qZ8x8MXbJaex-7LnnrBUVR0_H87oBz24?usp=share_link) will be provided (Cornell netID required).
 
 **Prerequisites:** Familiarity with git version control (github.com)
 
@@ -125,17 +125,17 @@ Topics covered:
 
 | Theme | Weekday | Topic | Project/Activity | Speaker | Reading |
 | :---- | :---- | :---- | :---- | :---- | :---- |
-| Vibe Coding: Gaining Control | Week 1 Monday | What is vibe coding? | Activity: Build and submit a personal "about you" page (hosted on GitHub) on Canvas | TBD | TBD |
+| Vibe Coding: Gaining Control | Week 1 Monday | What is vibe coding? | Activity: Build and submit a personal "about you" page (hosted on GitHub) on Canvas | TBD | Li et al. 2026, *Vibe Coding in Product Teams* (CHIWORK) |
 |  | Week 1 Tuesday | Prompt Engineering | Activity: Test different prompts and compare outcomes | Heonjun Park — Cornell graduate lawyer who vibe coded [CityDogs](https://apps.apple.com/us/app/citydogs/id6761141597), a dog-meetup platform | [Why Johnny Can't Prompt (CHI 2023)](https://dl.acm.org/doi/10.1145/3544548.3581388) |
-|  | Week 1 Wednesday | Bias in vibe coding | Activity: Test different vibe coding tools and compare outcomes | Remy Stewart — data scientist at Figma AI | TBD |
+|  | Week 1 Wednesday | Bias in vibe coding | Activity: Test different vibe coding tools and compare outcomes | Remy Stewart — data scientist at Figma AI | [How AI Bias Really Happens](https://www.technologyreview.com/2019/02/04/137602/this-is-how-ai-bias-really-happensand-why-its-so-hard-to-fix/) · [Gender Shades](http://gendershades.org/) |
 |  | Week 1 Thursday | Project Day | **[Project 1](https://vibe-coding-ethics.tech.cornell.edu/projects/) (group):** Vibe code something your team wants or needs | — | — |
 |  |  |  |  |  |  |
-| Ethics: Doing the right thing | Week 2 Monday | Values in Vibe Coding (Light) — AI as Moral Assistant | Activity: Lightweight discussion of what moral, ethical, and political values get embedded in the tools we use, then build a personal Vibe Coding Footprint Calculator (CO₂, energy, water from your last week of AI use, compared to meal references such as tofu vs. beef) | Ria Gualano — Cornell Communication PhD student working on accessible technology | TBD |
-|  | Week 2 Tuesday | AI safety | Activity: Red-team and adversarially test the AI — push it to produce dark patterns or manipulate users. Where does safety/ethics blur? | TBD | TBD |
-|  | Week 2 Wednesday | AI against AI | Activity: Use AI against AI harms — e.g., [obfuscation for privacy protection](https://direct.mit.edu/books/book/3112/ObfuscationA-User-s-Guide-for-Privacy-and-Protest), or [protection from work automation](https://officechai.com/ai/chinas-workers-are-weaponizing-ai-against-each-other-through-colleague-skill-files-and-fighting-back/) | TBD | TBD |
+| Ethics: Doing the right thing | Week 2 Monday | Values in Vibe Coding (Light) — AI as Moral Assistant | Activity: Lightweight discussion of what moral, ethical, and political values get embedded in the tools we use, then build a personal Vibe Coding Footprint Calculator (CO₂, energy, water from your last week of AI use, compared to meal references such as tofu vs. beef) | Ria Gualano — Cornell Communication PhD student working on accessible technology | [The Values Map](https://commoncausefoundation.org/_resources/the-values-map/) |
+|  | Week 2 Tuesday | AI safety | Activity: Red-team and adversarially test the AI — push it to produce dark patterns or manipulate users. Where does safety/ethics blur? | TBD | [Krauß et al. 2025 (CHI)](https://doi.org/10.1145/3706598.3713083) · [DarkBench](https://darkbench.ai/) |
+|  | Week 2 Wednesday | AI against AI | Activity: Use AI against AI harms — e.g., [obfuscation for privacy protection](https://direct.mit.edu/books/book/3112/ObfuscationA-User-s-Guide-for-Privacy-and-Protest), or [protection from work automation](https://officechai.com/ai/chinas-workers-are-weaponizing-ai-against-each-other-through-colleague-skill-files-and-fighting-back/) | TBD | [Obfuscation, Ch. 1](https://direct.mit.edu/books/book/3112/ObfuscationA-User-s-Guide-for-Privacy-and-Protest) · [Privacy of Groups](https://arxiv.org/abs/2505.07085) |
 |  | Week 2 Thursday | Project Day | **[Project 2](https://vibe-coding-ethics.tech.cornell.edu/projects/) (group):** Make something that purposefully supports a human value | — | — |
 |  |  |  |  |  |  |
-| Outcomes: Designing systems that are useful and empowering | Week 3 Monday | Understanding users (UCD — HCD) | Activity: Split the class in 2; first half does live user evaluation, development, and validation. *(User-centered vs. human/humanity-centered: what do people need from technology?)* | TBD | TBD |
-|  | Week 3 Tuesday | Values at Play — Full Canvas + Evaluation Switch | Activity: Apply the full Values at Play canvas (from the [PIT Tech Ethics workshop](https://pitechethics.github.io/)) to your final project — identify embedded values, conflicts, and stakeholders. Round 2 of user testing with roles reversed. | TBD | TBD |
+| Outcomes: Designing systems that are useful and empowering | Week 3 Monday | Understanding users (UCD — HCD) | Activity: Split the class in 2; first half does live user evaluation, development, and validation. *(User-centered vs. human/humanity-centered: what do people need from technology?)* | TBD | [Nielsen — 10 Usability Heuristics](https://www.nngroup.com/articles/ten-usability-heuristics/) |
+|  | Week 3 Tuesday | Values at Play — Full Canvas + Evaluation Switch | Activity: Apply the full Values at Play canvas (from the [PIT Tech Ethics workshop](https://pitechethics.github.io/)) to your final project — identify embedded values, conflicts, and stakeholders. Round 2 of user testing with roles reversed. | TBD | [Values at Play, Ch. 5 (Discovery)](https://drive.google.com/file/d/1FGbCVYgsKt9kW_sH0R2_B-LFcTmJum04/view) |
 | Final Project | Week 3 Wednesday | Working Day | Final project working day | — | — |
 |  | Week 3 Thursday | Final Project Presentations | **[Final Project](https://vibe-coding-ethics.tech.cornell.edu/projects/) (group):** Make something that benefits someone else, and that society continues to benefit from after class | — | — |
