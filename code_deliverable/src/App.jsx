@@ -11,6 +11,7 @@ import { SuggestedReadingsView, ReadingView } from './components/ReadingViews'
 import { MobileView } from './components/MobileView'
 import { PartnersOverlay } from './components/PartnersOverlay'
 import { LoadingOverlay } from './components/LoadingOverlay'
+import { ColophonModal } from './components/Colophon'
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
@@ -69,6 +70,7 @@ export default function App() {
     (window.location.hash && window.location.hash.length > 1)
   )
   const [overlayOrigin, setOverlayOrigin] = useState({ x: 0, y: 0 })
+  const [colophonOpen, setColophonOpen] = useState(false)
   const [deskLightOn, setDeskLightOn] = useState(false)
   const [phoneMesh, setPhoneMesh] = useState(null)
   const [showLeva, setShowLeva] = useState(false) // Default hidden
@@ -130,7 +132,10 @@ export default function App() {
   }
 
   const handleNotepadClick = () => {
+    // First click zooms to the notepad; clicking again (while zoomed)
+    // opens the full, scrollable colophon overlay.
     if (view === 'default') setView('notepad')
+    else if (view === 'notepad') setColophonOpen(true)
   }
 
   const handleReadingClick = (origin) => {
@@ -306,6 +311,21 @@ export default function App() {
           Back to Desktop
         </button>
       )}
+
+      {/* Notepad zoomed: invite the reader to open the full colophon */}
+      {view === 'notepad' && !colophonOpen && (
+        <button
+          onClick={() => setColophonOpen(true)}
+          className="absolute bottom-28 left-1/2 -translate-x-1/2 z-[100] px-6 py-2.5 bg-[#00ff41]/15 hover:bg-[#00ff41]/25 backdrop-blur-md text-[#00ff41] hover:text-white text-xs font-mono uppercase tracking-widest rounded-full border border-[#00ff41]/40 transition-colors animate-pulse"
+        >
+          📖 Read the full colophon
+        </button>
+      )}
+
+      {/* Full colophon overlay (from 3D notepad) */}
+      <AnimatePresence>
+        {colophonOpen && <ColophonModal onClose={() => setColophonOpen(false)} />}
+      </AnimatePresence>
 
       {/* Instructions */}
       {view === 'default' && (

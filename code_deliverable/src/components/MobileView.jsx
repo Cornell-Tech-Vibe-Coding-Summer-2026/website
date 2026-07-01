@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { SuggestedReadingsView, ReadingView } from './ReadingViews'
+import { ColophonContent } from './Colophon'
 import syllabusMarkdown from '../content/syllabus.md?raw'
 import { VIBE_FEED } from '../content/vibe-feed'
 import { VibeReel } from './VibeReel'
@@ -198,45 +199,13 @@ function DesktopModal({ onClose, initialTab }) {
 
 function NotepadModal() {
     return (
-        <div className="p-6 md:p-8 font-mono bg-[#fffef5] min-h-full overflow-y-auto text-gray-800">
-            <div className="max-w-2xl">
-                <h2 className="text-lg font-bold mb-1">🤖 AI-Use Disclosure &amp; Colophon</h2>
-                <p className="text-xs text-gray-500 mb-5">The Vibe-Trace we ask of students, applied to the course itself.</p>
-
-                <p className="text-[13px] leading-relaxed mb-4">
-                    The course materials and this site were themselves <strong>vibe-coded</strong> over ~6 months (Jan–Jul 2026), mostly by Hauke Sandhaus with Jonathan Segal. Reconstructed from the git history of both repos:
-                </p>
-                <ul className="text-[13px] leading-relaxed space-y-1.5 mb-4 list-disc pl-5">
-                    <li><strong>Claude</strong> (Claude Code) — Opus 4.7, Opus 4.8, Sonnet 4.6; most of the recent writing and site engineering (~50 co-authored commits).</li>
-                    <li><strong>GitHub Copilot</strong> — earlier code assistance.</li>
-                    <li><strong>Antigravity / Gemini Code Assist</strong> — the course's &ldquo;lab favorite,&rdquo; used during development.</li>
-                    <li><strong>Warp</strong> — an agentic terminal, occasional.</li>
-                </ul>
-                <p className="text-[13px] leading-relaxed mb-5">
-                    Commit trailers attribute Claude precisely; the earlier Copilot and Antigravity sessions were only partially recorded — an honest reconstruction, and a lesson in how fast provenance is lost when you don&rsquo;t log it. Which is exactly why we require a Vibe-Trace.
-                </p>
-
-                <h3 className="text-sm font-bold mb-1.5">3D scene &amp; media</h3>
-                <p className="text-[13px] leading-relaxed mb-5">
-                    <strong>Meshy AI</strong> — the Funko-Pop-style figures. <strong>Blender</strong> — scene assembly (with Claude Code + MCP). <strong>React Three Fiber + drei</strong> (pmndrs) — the in-browser 3D; environment HDRI from pmndrs/drei-assets. <strong>Google Fonts</strong> — Inter, JetBrains Mono, Outfit.
-                </p>
-
-                <h3 className="text-sm font-bold mb-1.5">Why we disclose — our values</h3>
-                <ul className="text-[13px] leading-relaxed space-y-1.5 mb-5 list-disc pl-5">
-                    <li><strong>Transparency</strong> — the same Vibe-Trace we ask of you; both repos&rsquo; history is public.</li>
-                    <li><strong>Honing human capability, not replacing it</strong> — AI collaborated; every choice was human-reviewed and approved.</li>
-                    <li><strong>Non-manipulation</strong> — no dark patterns, no fabricated data or citations.</li>
-                    <li><strong>A trustworthy web</strong> — accessible, honest content; real sources; no AI slop passed off as fact.</li>
-                </ul>
-
-                <p className="text-[13px] leading-relaxed">
-                    <strong>Accountability:</strong> Hauke Sandhaus, with Jonathan Segal and Wendy Ju, are responsible for everything here — errors included. Spot one? <a href="mailto:hgs52@cornell.edu" className="text-blue-700 hover:underline">hgs52@cornell.edu</a>.
-                </p>
-
-                {/* Class prep — deprioritized, kept as a small aside */}
-                <div className="mt-8 pt-4 border-t border-gray-300 opacity-60">
-                    <h3 className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-1.5">Class prep — done ✔</h3>
-                    <p className="text-[11px] text-gray-500 leading-relaxed">
+        <div className="h-full overflow-y-auto bg-[#fffef5] text-gray-800">
+            <ColophonContent />
+            {/* Class prep — deprioritized, kept as a small aside */}
+            <div className="max-w-xl mx-auto px-8 pb-12 -mt-4">
+                <div className="pt-4 border-t border-gray-200 opacity-60">
+                    <h3 className="text-[10px] font-mono font-bold uppercase tracking-widest text-gray-500 mb-1.5">Class prep — done ✔</h3>
+                    <p className="text-[11px] font-mono text-gray-500 leading-relaxed">
                         Syllabus · Website · Activities &amp; group projects · Reading list · Guest speakers · GitHub Classroom · Slide decks · Tool credits · <span className="text-gray-700 font-bold">Run class ☐</span>
                     </p>
                 </div>
@@ -249,7 +218,7 @@ function NotepadModal() {
 const DESK_ITEMS = [
     { id: 'desktop', label: 'Desktop', sublabel: 'Syllabus · Activities · Projects', links: [['syllabus', 'Syllabus'], ['activities', 'Activities'], ['projects', 'Group Projects']], icon: '🖥️', wide: true },
     { id: 'phone',   label: 'Phone',   sublabel: 'Social Feed',     icon: '📱', wide: false },
-    { id: 'notepad', label: 'Notepad', sublabel: 'To-Do List',      icon: '📝', wide: false },
+    { id: 'notepad', label: 'AI Disclosure', sublabel: 'Colophon',  icon: '📝', wide: false },
     { id: 'book',    label: 'Values at Play', sublabel: 'Core Framework', icon: '📖', wide: false },
     { id: 'papers',  label: 'Readings', sublabel: 'Suggested Papers', icon: '📄', wide: false },
 ]
@@ -444,7 +413,7 @@ export function MobileView() {
                     </FullscreenModal>
                 )}
                 {open === 'notepad' && (
-                    <FullscreenModal title="Notepad" onClose={close}>
+                    <FullscreenModal title="AI Disclosure" onClose={close}>
                         <NotepadModal />
                     </FullscreenModal>
                 )}

@@ -319,6 +319,22 @@ export function InteractiveScene({
                 object={scene}
                 onClick={(e) => {
                     e.stopPropagation()
+
+                    // When zoomed into the notepad, clicking the notepad itself
+                    // opens the full, scrollable colophon overlay.
+                    if (view === 'notepad') {
+                        let c = e.object
+                        while (c) {
+                            const cn = c.name.toLowerCase()
+                            if ((cn.includes('notebook') || cn.includes('notepad')) && !cn.includes('stack') && !cn.includes('paper')) {
+                                onNotepadClick()
+                                break
+                            }
+                            c = c.parent
+                        }
+                        return
+                    }
+
                     if (view !== 'default') return // Prevent clicks on generic scene objects when zoomed in
 
                     const clickedNode = e.object
