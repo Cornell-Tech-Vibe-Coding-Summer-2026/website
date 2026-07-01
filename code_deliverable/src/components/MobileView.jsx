@@ -160,8 +160,8 @@ function ProjectsModal() {
     )
 }
 
-function DesktopModal({ onClose }) {
-    const [tab, setTab] = useState('syllabus')
+function DesktopModal({ onClose, initialTab }) {
+    const [tab, setTab] = useState(initialTab || 'syllabus')
     return (
         <div className="flex flex-col h-full bg-[#050505] font-mono">
             {/* Fake desktop wallpaper */}
@@ -280,8 +280,25 @@ function FullscreenModal({ title, onClose, children }) {
 
 export function MobileView() {
     const [open, setOpen] = useState(null) // id of open item
+    const [desktopTab, setDesktopTab] = useState('syllabus')
 
     const close = () => setOpen(null)
+    const openSection = (id) => {
+        if (id === 'readings') { setOpen('papers'); return }
+        setDesktopTab(id)
+        setOpen('desktop')
+    }
+
+    // Deep links: /website/#syllabus | #activities | #projects | #readings | #notepad | #phone
+    useEffect(() => {
+        const h = (window.location.hash || '').replace('#', '').toLowerCase()
+        if (!h) return
+        if (h === 'syllabus' || h === 'activities' || h === 'projects') { setDesktopTab(h); setOpen('desktop') }
+        else if (h === 'readings' || h === 'papers') setOpen('papers')
+        else if (h === 'notepad') setOpen('notepad')
+        else if (h === 'phone') setOpen('phone')
+        else if (h === 'book' || h === 'values') setOpen('book')
+    }, [])
 
     return (
         <div className="relative w-full h-full bg-[#050505] overflow-y-auto">
@@ -313,6 +330,21 @@ export function MobileView() {
                 <p className="text-white/35 text-[10px] font-mono tracking-wider">
                     Hauke Sandhaus · Jonathan Segal · Wendy Ju
                 </p>
+            </div>
+
+            {/* Primary sections — top-level nav */}
+            <div className="relative z-20 px-6 pb-5">
+                <div className="flex flex-wrap gap-2">
+                    {[['activities', 'Activities'], ['projects', 'Group Projects'], ['syllabus', 'Syllabus'], ['readings', 'Readings']].map(([id, label]) => (
+                        <button
+                            key={id}
+                            onClick={() => openSection(id)}
+                            className="px-3.5 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-[#00ff41]/10 text-[#00ff41] border border-[#00ff41]/30 hover:bg-[#00ff41]/20 transition-colors"
+                        >
+                            {label}
+                        </button>
+                    ))}
+                </div>
             </div>
 
             {/* Welcome / pitch content inline so the landing has substance */}
@@ -387,7 +419,7 @@ export function MobileView() {
             <AnimatePresence>
                 {open === 'desktop' && (
                     <FullscreenModal title="Desktop" onClose={close}>
-                        <DesktopModal onClose={close} />
+                        <DesktopModal onClose={close} initialTab={desktopTab} />
                     </FullscreenModal>
                 )}
                 {open === 'phone' && (

@@ -63,6 +63,11 @@ export default function App() {
     if (typeof window === 'undefined') return false
     return new URLSearchParams(window.location.search).has('partners')
   })
+  // ?lite (or any #deeplink) opens the lightweight view instead of the 3D scene.
+  const forceLite = typeof window !== 'undefined' && (
+    new URLSearchParams(window.location.search).has('lite') ||
+    (window.location.hash && window.location.hash.length > 1)
+  )
   const [overlayOrigin, setOverlayOrigin] = useState({ x: 0, y: 0 })
   const [deskLightOn, setDeskLightOn] = useState(false)
   const [phoneMesh, setPhoneMesh] = useState(null)
@@ -152,7 +157,7 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
-  if (isMobile || lowRes) {
+  if (isMobile || lowRes || forceLite) {
     return (
       <>
         <MobileView />

@@ -121,7 +121,7 @@ Topics covered:
 * Ethics: Doing the right thing  
 * Outcomes: Designing systems that are useful and empowering
 
-> **Readings** are maintained in one place — [`planning/readings.md`](readings.md), generated from `activities-manifest.json`. Edit readings there and run `python3 scripts/sync_readings.py`; the website and each activity brief update automatically. The **Reading** column below is each session's **required** reading; the full list — including recommended and optional background — is in `readings.md`.
+> The **Reading** column below is each session's **required** reading; the full list — with recommended and optional background — is in the [course readings](https://vibe-coding-ethics.tech.cornell.edu/instructions.html?file=planning/readings.md&title=Course%20Readings).
 
 | Theme | Weekday | Topic | Project / Activity | Reading |
 | :---- | :---- | :---- | :---- | :---- |
