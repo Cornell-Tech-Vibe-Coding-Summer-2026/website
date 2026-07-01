@@ -219,20 +219,35 @@ function NotepadModal() {
                     </li>
                 ))}
             </ul>
+
+            <div className="mt-8 pt-5 border-t border-gray-300">
+                <h3 className="text-sm font-bold text-gray-800 mb-1.5">🤖 How this class was built</h3>
+                <p className="text-xs text-gray-600 leading-relaxed">
+                    This course &amp; site were vibe-coded with Claude, GitHub Copilot, Antigravity/Gemini, and Warp; the 3D figures are Meshy AI and the scene is Blender. We keep the same Vibe-Trace we ask of you.
+                </p>
+                <a
+                    href="https://vibe-coding-ethics.tech.cornell.edu/instructions.html?file=COLOPHON.md&title=Colophon%20%26%20AI-Use%20Disclosure"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-block mt-2 text-xs font-bold text-blue-700 hover:underline"
+                >
+                    Read the full AI-use disclosure &amp; colophon →
+                </a>
+            </div>
         </div>
     )
 }
 
 // Desk item card definitions
 const DESK_ITEMS = [
-    { id: 'desktop', label: 'Desktop', sublabel: 'Syllabus · Activities · Projects', icon: '🖥️', wide: true },
+    { id: 'desktop', label: 'Desktop', sublabel: 'Syllabus · Activities · Projects', links: [['syllabus', 'Syllabus'], ['activities', 'Activities'], ['projects', 'Group Projects']], icon: '🖥️', wide: true },
     { id: 'phone',   label: 'Phone',   sublabel: 'Social Feed',     icon: '📱', wide: false },
     { id: 'notepad', label: 'Notepad', sublabel: 'To-Do List',      icon: '📝', wide: false },
     { id: 'book',    label: 'Values at Play', sublabel: 'Core Framework', icon: '📖', wide: false },
     { id: 'papers',  label: 'Readings', sublabel: 'Suggested Papers', icon: '📄', wide: false },
 ]
 
-function DeskCard({ item, onClick }) {
+function DeskCard({ item, onClick, onLink }) {
     return (
         <motion.button
             whileTap={{ scale: 0.95 }}
@@ -243,7 +258,23 @@ function DeskCard({ item, onClick }) {
             <span className="text-3xl">{item.icon}</span>
             <div>
                 <p className="text-white text-sm font-bold tracking-tight">{item.label}</p>
-                <p className="text-white/40 text-xs font-mono uppercase tracking-wider mt-0.5">{item.sublabel}</p>
+                {item.links ? (
+                    <div className="flex flex-wrap gap-1.5 mt-2">
+                        {item.links.map(([tab, label]) => (
+                            <span
+                                key={tab}
+                                role="button"
+                                tabIndex={0}
+                                onClick={(e) => { e.stopPropagation(); onLink?.(tab) }}
+                                className="px-2.5 py-1 rounded-md text-[11px] font-mono uppercase tracking-wider bg-[#00ff41]/10 text-[#00ff41] border border-[#00ff41]/25 hover:bg-[#00ff41]/20 transition-colors cursor-pointer"
+                            >
+                                {label}
+                            </span>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-white/40 text-xs font-mono uppercase tracking-wider mt-0.5">{item.sublabel}</p>
+                )}
             </div>
             <div className="absolute top-3 right-3 text-white/20 text-xs font-mono">→</div>
         </motion.button>
@@ -335,7 +366,7 @@ export function MobileView() {
             <div className="relative z-10 px-4 pb-8">
                 <div className="grid grid-cols-2 gap-3">
                     {DESK_ITEMS.map(item => (
-                        <DeskCard key={item.id} item={item} onClick={() => setOpen(item.id)} />
+                        <DeskCard key={item.id} item={item} onClick={() => setOpen(item.id)} onLink={(tab) => { setDesktopTab(tab); setOpen('desktop') }} />
                     ))}
                 </div>
             </div>

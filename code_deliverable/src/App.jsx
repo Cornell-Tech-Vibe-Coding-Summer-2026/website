@@ -170,7 +170,12 @@ export default function App() {
         </button>
         {!isMobile && (
           <button
-            onClick={toggleLowRes}
+            onClick={() => {
+              // If we're in lite because of ?lite/#hash, the 3D scene isn't mounted —
+              // reload at the clean path so it loads. Otherwise just toggle low-res.
+              if (forceLite) window.location.href = window.location.pathname
+              else toggleLowRes()
+            }}
             className="fixed bottom-4 right-4 z-[200] px-3 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white text-[10px] font-mono uppercase tracking-widest rounded-full border border-white/20 transition-colors"
             title="Switch to the 3D scene (more GPU/CPU intensive)"
           >

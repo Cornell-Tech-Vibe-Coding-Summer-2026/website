@@ -29,8 +29,8 @@ export function NotepadContent() {
             </div>
 
             <footer className="mt-8 pt-6 border-t border-black/5">
-                <p className="text-[9px] font-mono uppercase tracking-wider text-black/30">
-                    * reminder: check the VAP framework document in the papers stack.
+                <p className="text-[9px] font-mono uppercase tracking-wider text-black/40">
+                    ↩ overleaf: AI-use disclosure &amp; colophon — how this class was built (Claude · Copilot · Antigravity · Meshy AI). Open the Notepad for the full note.
                 </p>
             </footer>
         </div>
