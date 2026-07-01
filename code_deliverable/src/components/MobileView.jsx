@@ -228,7 +228,7 @@ const DESK_ITEMS = [
     { id: 'desktop', label: 'Desktop', sublabel: 'Syllabus · Activities · Projects', icon: '🖥️', wide: true },
     { id: 'phone',   label: 'Phone',   sublabel: 'Social Feed',     icon: '📱', wide: false },
     { id: 'notepad', label: 'Notepad', sublabel: 'To-Do List',      icon: '📝', wide: false },
-    { id: 'book',    label: 'Values at Play', sublabel: 'Reading',  icon: '📖', wide: false },
+    { id: 'book',    label: 'Values at Play', sublabel: 'Core Framework', icon: '📖', wide: false },
     { id: 'papers',  label: 'Readings', sublabel: 'Suggested Papers', icon: '📄', wide: false },
 ]
 
@@ -283,11 +283,6 @@ export function MobileView() {
     const [desktopTab, setDesktopTab] = useState('syllabus')
 
     const close = () => setOpen(null)
-    const openSection = (id) => {
-        if (id === 'readings') { setOpen('papers'); return }
-        setDesktopTab(id)
-        setOpen('desktop')
-    }
 
     // Deep links: /website/#syllabus | #activities | #projects | #readings | #notepad | #phone
     useEffect(() => {
@@ -332,17 +327,15 @@ export function MobileView() {
                 </p>
             </div>
 
-            {/* Primary sections — top-level nav */}
-            <div className="relative z-20 px-6 pb-5">
-                <div className="flex flex-wrap gap-2">
-                    {[['activities', 'Activities'], ['projects', 'Group Projects'], ['syllabus', 'Syllabus'], ['readings', 'Readings']].map(([id, label]) => (
-                        <button
-                            key={id}
-                            onClick={() => openSection(id)}
-                            className="px-3.5 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-[#00ff41]/10 text-[#00ff41] border border-[#00ff41]/30 hover:bg-[#00ff41]/20 transition-colors"
-                        >
-                            {label}
-                        </button>
+            {/* Desk — the main sections (nav lives here, up top) */}
+            <div className="relative z-10 px-6 mb-3">
+                <span className="text-white/25 text-[10px] font-mono uppercase tracking-[0.2em]">— desk —</span>
+                <p className="text-white/30 text-[11px] mt-1.5">Tap any item to open it.</p>
+            </div>
+            <div className="relative z-10 px-4 pb-8">
+                <div className="grid grid-cols-2 gap-3">
+                    {DESK_ITEMS.map(item => (
+                        <DeskCard key={item.id} item={item} onClick={() => setOpen(item.id)} />
                     ))}
                 </div>
             </div>
@@ -385,21 +378,6 @@ export function MobileView() {
                     </div>
                 </div>
 
-            </div>
-
-            {/* Desk label */}
-            <div className="relative z-10 px-6 mb-3 mt-2">
-                <span className="text-white/25 text-[10px] font-mono uppercase tracking-[0.2em]">— desk —</span>
-                <p className="text-white/30 text-[11px] mt-1.5">Tap any item to dive deeper.</p>
-            </div>
-
-            {/* Cards grid */}
-            <div className="relative z-10 px-4 pb-10">
-                <div className="grid grid-cols-2 gap-3">
-                    {DESK_ITEMS.map(item => (
-                        <DeskCard key={item.id} item={item} onClick={() => setOpen(item.id)} />
-                    ))}
-                </div>
             </div>
 
             {/* Footer */}
