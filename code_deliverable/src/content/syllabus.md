@@ -125,7 +125,7 @@ Topics covered:
 
 | Theme | Weekday | Topic | Project / Activity | Reading |
 | :---- | :---- | :---- | :---- | :---- |
-| Vibe Coding: Gaining Control | Week 1 Monday | What is vibe coding? | Activity: Build and submit a personal "about you" page (hosted on GitHub) on Canvas | Li et al. 2026, *Vibe Coding in Product Teams* (CHIWORK) |
+| Vibe Coding: Gaining Control | Week 1 Monday | What is vibe coding? | Activity: Build and host a personal "about you" page from your GitHub repo | Li et al. 2026, *Vibe Coding in Product Teams* (CHIWORK) |
 |  | Week 1 Tuesday | Prompt Engineering | Activity: Test different prompts and compare outcomes. **Guest:** Heonjun Park, who vibe-coded [CityDogs](https://apps.apple.com/us/app/citydogs/id6761141597). | [Why Johnny Can't Prompt (CHI 2023)](https://dl.acm.org/doi/10.1145/3544548.3581388) |
 |  | Week 1 Wednesday | Bias in vibe coding | Activity: Test different vibe coding tools and compare outcomes. **Guest:** Remy Stewart (data scientist, Figma AI). | [How AI Bias Really Happens](https://www.technologyreview.com/2019/02/04/137602/this-is-how-ai-bias-really-happensand-why-its-so-hard-to-fix/) |
 |  | Week 1 Thursday | Project Day | **[Project 1](https://vibe-coding-ethics.tech.cornell.edu/projects/) (group):** Vibe code something your team wants or needs | — |
