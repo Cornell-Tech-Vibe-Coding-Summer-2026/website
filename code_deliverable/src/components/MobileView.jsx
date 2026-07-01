@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
@@ -8,8 +8,11 @@ import syllabusMarkdown from '../content/syllabus.md?raw'
 import { VIBE_FEED } from '../content/vibe-feed'
 import { VibeReel } from './VibeReel'
 
-// TODO: change to '/examples' once deployment restructure ships
-const EXAMPLES_URL = 'https://vibe-coding-ethics.tech.cornell.edu/'
+const ACTIVITIES_URL = 'https://vibe-coding-ethics.tech.cornell.edu/'
+const PROJECTS_URL = 'https://vibe-coding-ethics.tech.cornell.edu/projects/'
+// Syllabus is fetched from the class repo at runtime (single source of truth);
+// the bundled ../content/syllabus.md is only a fallback.
+const SYLLABUS_URL = 'https://vibe-coding-ethics.tech.cornell.edu/planning/syllabus.md'
 
 // Content shown inside the phone card modal: real TikTok / Instagram embeds
 function PhoneModal() {
@@ -102,6 +105,15 @@ function TerminalModal() {
 
 
 function SyllabusModal() {
+    const [md, setMd] = useState(syllabusMarkdown)
+    useEffect(() => {
+        let active = true
+        fetch(SYLLABUS_URL)
+            .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
+            .then((t) => { if (active && t && t.trim()) setMd(t) })
+            .catch(() => { /* keep bundled fallback */ })
+        return () => { active = false }
+    }, [])
     return (
         <div className="bg-[#f5f5f5] text-[#1a1a1a] min-h-full p-6 font-serif">
             <div className="syllabus-md max-w-none">
@@ -116,18 +128,29 @@ function SyllabusModal() {
                         },
                     }}
                 >
-                    {syllabusMarkdown}
+                    {md}
                 </ReactMarkdown>
             </div>
         </div>
     )
 }
 
-function ExamplesModal() {
+function ActivitiesModal() {
     return (
         <iframe
-            src={EXAMPLES_URL}
-            title="Examples"
+            src={ACTIVITIES_URL}
+            title="Individual Activities"
+            className="w-full h-full bg-white border-0"
+            sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+        />
+    )
+}
+
+function ProjectsModal() {
+    return (
+        <iframe
+            src={PROJECTS_URL}
+            title="Group Projects"
             className="w-full h-full bg-white border-0"
             sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
         />
@@ -149,7 +172,7 @@ function DesktopModal({ onClose }) {
 
             {/* Tab bar */}
             <div className="relative z-10 flex gap-1 p-2 bg-[#0e101a] border-b border-white/5">
-                {[['syllabus', '📄 Syllabus'], ['examples', '🌐 Examples'], ['terminal', '> Terminal']].map(([id, label]) => (
+                {[['syllabus', '📄 Syllabus'], ['activities', '🌐 Activities'], ['projects', '📁 Projects'], ['terminal', '> Terminal']].map(([id, label]) => (
                     <button
                         key={id}
                         onClick={() => setTab(id)}
@@ -163,7 +186,8 @@ function DesktopModal({ onClose }) {
             <div className="relative z-10 flex-1 overflow-y-auto bg-[#131520]">
                 {tab === 'terminal' && <TerminalModal />}
                 {tab === 'syllabus' && <SyllabusModal />}
-                {tab === 'examples' && <ExamplesModal />}
+                {tab === 'activities' && <ActivitiesModal />}
+                {tab === 'projects' && <ProjectsModal />}
             </div>
         </div>
     )
@@ -173,11 +197,13 @@ function NotepadModal() {
     const items = [
         { text: 'Syllabus', done: true },
         { text: 'Website', done: true },
-        { text: 'Slide decks', done: false },
-        { text: 'Reading list', done: false },
-        { text: 'Guest speakers', done: false },
-        { text: 'GitHub Classroom', done: false },
-        { text: 'Tool credits', done: false },
+        { text: 'Activities & group projects', done: true },
+        { text: 'Reading list', done: true },
+        { text: 'Guest speakers', done: true },
+        { text: 'GitHub Classroom', done: true },
+        { text: 'Slide decks', done: true },
+        { text: 'Tool credits', done: true },
+        { text: 'Run class', done: false },
     ]
     return (
         <div className="p-6 font-mono bg-[#fffef5] min-h-full">
@@ -196,7 +222,7 @@ function NotepadModal() {
 
 // Desk item card definitions
 const DESK_ITEMS = [
-    { id: 'desktop', label: 'Desktop', sublabel: 'Syllabus & Examples', icon: '🖥️', wide: true },
+    { id: 'desktop', label: 'Desktop', sublabel: 'Syllabus · Activities · Projects', icon: '🖥️', wide: true },
     { id: 'phone',   label: 'Phone',   sublabel: 'Social Feed',     icon: '📱', wide: false },
     { id: 'notepad', label: 'Notepad', sublabel: 'To-Do List',      icon: '📝', wide: false },
     { id: 'book',    label: 'Values at Play', sublabel: 'Reading',  icon: '📖', wide: false },

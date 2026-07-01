@@ -16,16 +16,20 @@ export function NotepadContent() {
 
                 <div className="space-y-4 pt-4">
                     <div className="flex items-start gap-3">
-                        <span className="text-[#00ff41] font-bold text-lg leading-none">○</span>
-                        <p className="text-xs font-mono uppercase tracking-wide">Validate Plagiarism vs Inspiration</p>
-                    </div>
-                    <div className="flex items-start gap-3">
-                        <span className="text-[#00ff41] font-bold text-lg leading-none">○</span>
-                        <p className="text-xs font-mono uppercase tracking-wide">Audit Vibe-Trace Accuracy</p>
+                        <span className="text-[#00ff41] font-bold text-lg leading-none">●</span>
+                        <p className="text-xs font-mono uppercase tracking-wide line-through opacity-50">Syllabus, readings &amp; website</p>
                     </div>
                     <div className="flex items-start gap-3">
                         <span className="text-[#00ff41] font-bold text-lg leading-none">●</span>
-                        <p className="text-xs font-mono uppercase tracking-wide">Implement Interactive Desk</p>
+                        <p className="text-xs font-mono uppercase tracking-wide line-through opacity-50">Activities &amp; group projects</p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                        <span className="text-[#00ff41] font-bold text-lg leading-none">●</span>
+                        <p className="text-xs font-mono uppercase tracking-wide line-through opacity-50">Interactive desk</p>
+                    </div>
+                    <div className="flex items-start gap-3">
+                        <span className="text-zinc-800 font-bold text-lg leading-none">○</span>
+                        <p className="text-xs font-mono uppercase tracking-wide">Run class</p>
                     </div>
                 </div>
             </div>
