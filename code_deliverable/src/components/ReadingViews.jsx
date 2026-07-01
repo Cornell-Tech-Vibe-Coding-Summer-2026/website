@@ -240,7 +240,7 @@ const GROUP_DEFS = [
 
 function GroupDivider({ id, label, sub }) {
     return (
-        <div id={id} className="flex-shrink-0 w-14 h-[340px] flex items-center justify-center snap-center">
+        <div id={id} className="flex-shrink-0 w-14 h-[520px] flex items-center justify-center snap-center">
             <div className="[writing-mode:vertical-rl] rotate-180 text-center px-1">
                 <span className="font-serif font-bold text-lg text-[#2a2a2a] tracking-wide whitespace-nowrap">{label}</span>
                 <span className="block text-[10px] text-gray-500 mt-3 uppercase tracking-[0.2em] whitespace-nowrap">{sub}</span>
@@ -257,7 +257,7 @@ function ReadingCard({ reading }) {
             href={reading.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-shrink-0 w-[360px] h-[340px] hover:h-[520px] bg-white shadow-md hover:shadow-2xl hover:border-gray-400 transition-all duration-200 border border-gray-200 p-7 flex flex-col snap-center group rounded overflow-hidden hover:overflow-y-auto"
+            className="flex-shrink-0 w-[360px] h-[520px] bg-white shadow-md hover:shadow-2xl hover:border-gray-400 transition-all duration-200 border border-gray-200 p-7 flex flex-col snap-center group rounded"
         >
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
@@ -278,11 +278,10 @@ function ReadingCard({ reading }) {
                 {reading.title}
             </h3>
             <p className="text-sm text-gray-500 italic mb-5">{reading.authors}</p>
-            <p className="text-[13px] text-gray-700 leading-relaxed font-serif overflow-hidden line-clamp-3 group-hover:line-clamp-none pr-1">
+            <p className="flex-1 text-[13px] text-gray-700 leading-relaxed font-serif overflow-y-auto pr-1">
                 {reading.abstract}
             </p>
-            <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest group-hover:hidden mt-2">Hover to read →</span>
-            <div className="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
+            <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
                 <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest truncate max-w-[200px]">
                     {(() => { try { return new URL(reading.url).hostname.replace(/^www\./, '') } catch { return '' } })()}
                 </span>
