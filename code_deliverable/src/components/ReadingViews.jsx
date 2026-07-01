@@ -240,7 +240,7 @@ const GROUP_DEFS = [
 
 function GroupDivider({ id, label, sub }) {
     return (
-        <div id={id} className="flex-shrink-0 w-14 h-[520px] flex items-center justify-center snap-center">
+        <div id={id} className="flex-shrink-0 w-14 h-[550px] flex items-center justify-center snap-center">
             <div className="[writing-mode:vertical-rl] rotate-180 text-center px-1">
                 <span className="font-serif font-bold text-lg text-[#2a2a2a] tracking-wide whitespace-nowrap">{label}</span>
                 <span className="block text-[10px] text-gray-500 mt-3 uppercase tracking-[0.2em] whitespace-nowrap">{sub}</span>
@@ -257,7 +257,7 @@ function ReadingCard({ reading }) {
             href={reading.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-shrink-0 w-[360px] h-[520px] bg-white shadow-md hover:shadow-2xl hover:border-gray-400 transition-all duration-200 border border-gray-200 p-7 flex flex-col snap-center group rounded"
+            className="flex-shrink-0 w-[425px] h-[550px] bg-white shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-200 p-8 flex flex-col snap-center group rounded-sm"
         >
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
