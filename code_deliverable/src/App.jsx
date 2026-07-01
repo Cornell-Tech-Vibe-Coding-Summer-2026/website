@@ -1,6 +1,6 @@
 import { useState, Suspense, useRef, useEffect } from 'react'
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Environment, ContactShadows, Html, useProgress } from '@react-three/drei'
+import { OrbitControls, Environment, ContactShadows } from '@react-three/drei'
 import { useControls, folder, Leva } from 'leva'
 import { Perf } from 'r3f-perf'
 import * as THREE from 'three'
@@ -51,11 +51,6 @@ function useLowResMode() {
     })
   }
   return [lowRes, toggle]
-}
-
-function Loader() {
-  const { progress } = useProgress()
-  return <Html center>{progress.toFixed(1)} % loaded</Html>
 }
 
 import { AnimatePresence } from 'framer-motion'
@@ -215,7 +210,7 @@ export default function App() {
         <CameraController targetView={view} cameraPositions={CAMERA_POSITIONS} />
 
         {/* Interactive Scene */}
-        <Suspense fallback={<Loader />}>
+        <Suspense fallback={null}>
           <InteractiveScene
             view={view}
             onMonitorClick={handleMonitorClick}
