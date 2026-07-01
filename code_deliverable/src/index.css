@@ -44,7 +44,8 @@ canvas {
 .syllabus-md li { margin: 0.2em 0; }
 .syllabus-md a { color: #1d4ed8; text-decoration: underline; }
 .syllabus-md strong { font-weight: 700; }
-.syllabus-md table { border-collapse: collapse; margin: 0.8em 0; font-size: 0.85em; width: 100%; }
+.syllabus-md .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0.8em 0; }
+.syllabus-md table { border-collapse: collapse; margin: 0; font-size: 0.85em; width: 100%; min-width: 640px; }
 .syllabus-md th, .syllabus-md td { border: 1px solid #d4d4d4; padding: 0.35em 0.55em; text-align: left; vertical-align: top; }
 .syllabus-md th { background: #ececec; font-weight: 700; }
 .syllabus-md hr { border: 0; border-top: 1px solid #d4d4d4; margin: 1em 0; }

@@ -118,6 +118,14 @@ const READINGS = [
         abstract: 'Ten enduring rules of thumb — visibility of system status, match to the real world, error prevention. The checklist for week 3\'s user-evaluation activity.',
     },
     {
+        title: 'Making Indecent Persuasion Visible',
+        authors: 'Sandhaus, Rhomberg, Nissenbaum — CHIWORK 2026',
+        venue: 'CHIWORK (preprint)',
+        kind: 'paper',
+        url: 'https://osf.io/nw2tj/files/g2ctu',
+        abstract: 'How the metrics UX teams optimize — conversion, engagement — quietly shape what designers treat as ethical. Connects week 3\'s evaluation focus back to the dark-pattern discussion.',
+    },
+    {
         title: 'Public Interest Technology Ethics Workshop',
         authors: 'Cornell PiTech',
         venue: 'Workshop site',
@@ -134,6 +142,18 @@ const READINGS = [
         abstract: 'Field report from China: workers use AI to track each other, then use AI again to push back. A glimpse at what "AI for protection from work automation" looks like in practice.',
     },
 ]
+
+// Required (read before class) — one primary source per session. Everything
+// else is recommended/optional background.
+const REQUIRED = new Set([
+    'Why Johnny Can\'t Prompt',
+    'This Is How AI Bias Really Happens',
+    'The Values Map',
+    'Values at Play in Digital Games',
+    '"Create a Fear of Missing Out"',
+    'Obfuscation: A User\'s Guide for Privacy and Protest',
+    '10 Usability Heuristics for UI Design',
+])
 
 const KIND_TAG = {
     paper: { label: 'Paper', color: 'bg-blue-50 text-blue-800 border-blue-200' },
@@ -175,14 +195,15 @@ const GROUP_DEFS = [
         sub: 'User-centered design · VAP',
         titles: [
             '10 Usability Heuristics for UI Design',
+            'Making Indecent Persuasion Visible',
             'Public Interest Technology Ethics Workshop',
         ],
     },
 ]
 
-function GroupDivider({ label, sub }) {
+function GroupDivider({ id, label, sub }) {
     return (
-        <div className="flex-shrink-0 w-14 h-[520px] flex items-center justify-center snap-center">
+        <div id={id} className="flex-shrink-0 w-14 h-[520px] flex items-center justify-center snap-center">
             <div className="[writing-mode:vertical-rl] rotate-180 text-center px-1">
                 <span className="font-serif font-bold text-lg text-[#2a2a2a] tracking-wide whitespace-nowrap">{label}</span>
                 <span className="block text-[10px] text-gray-500 mt-3 uppercase tracking-[0.2em] whitespace-nowrap">{sub}</span>
@@ -193,6 +214,7 @@ function GroupDivider({ label, sub }) {
 
 function ReadingCard({ reading }) {
     const tag = KIND_TAG[reading.kind] ?? KIND_TAG.paper
+    const required = REQUIRED.has(reading.title)
     return (
         <a
             href={reading.url}
@@ -201,9 +223,16 @@ function ReadingCard({ reading }) {
             className="flex-shrink-0 w-[360px] h-[520px] bg-white shadow-md hover:shadow-2xl hover:border-gray-400 transition-all duration-200 border border-gray-200 p-7 flex flex-col snap-center group rounded"
         >
             <div className="flex items-center justify-between mb-4">
-                <span className={`text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded border ${tag.color}`}>
-                    {tag.label}
-                </span>
+                <div className="flex items-center gap-2">
+                    <span className={`text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded border ${tag.color}`}>
+                        {tag.label}
+                    </span>
+                    {required && (
+                        <span className="text-[10px] font-mono uppercase tracking-widest px-2 py-0.5 rounded border bg-[#00ff41]/15 text-green-900 border-green-300">
+                            ★ Required
+                        </span>
+                    )}
+                </div>
                 <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">
                     {reading.venue}
                 </span>
@@ -253,17 +282,28 @@ export function SuggestedReadingsView({ onClose, origin }) {
                     ✕
                 </button>
 
-                <div className="mb-6 pr-12">
+                <div className="mb-4 pr-12">
                     <h2 className="text-3xl font-bold text-[#222] font-serif">Suggested Readings</h2>
                     <p className="text-sm text-gray-500 mt-1">
-                        Selected sources, grouped by week. Click any card to open the source in a new tab.
+                        Grouped by week. <span className="text-green-800 font-semibold">★ Required</span> before class; the rest are recommended background. Click any card to open the source.
                     </p>
+                    <div className="flex flex-wrap gap-2 mt-3">
+                        {GROUP_DEFS.map((g, i) => (
+                            <button
+                                key={g.label}
+                                onClick={() => document.getElementById(`readings-group-${i}`)?.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' })}
+                                className="text-xs font-mono uppercase tracking-wider px-3 py-1 rounded-full border border-gray-300 text-gray-700 hover:bg-[#2a2a2a] hover:text-white hover:border-[#2a2a2a] transition-colors"
+                            >
+                                {g.label.split(' · ')[0]}
+                            </button>
+                        ))}
+                    </div>
                 </div>
 
                 <div className="flex-1 overflow-x-auto overflow-y-hidden flex items-stretch gap-6 px-1 py-4 snap-x snap-mandatory">
-                    {GROUP_DEFS.map((g) => (
+                    {GROUP_DEFS.map((g, gi) => (
                         <Fragment key={g.label}>
-                            <GroupDivider label={g.label} sub={g.sub} />
+                            <GroupDivider id={`readings-group-${gi}`} label={g.label} sub={g.sub} />
                             {g.titles
                                 .map((t) => READINGS.find((r) => r.title === t))
                                 .filter(Boolean)

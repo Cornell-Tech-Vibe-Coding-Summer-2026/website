@@ -121,7 +121,7 @@ Topics covered:
 * Ethics: Doing the right thing  
 * Outcomes: Designing systems that are useful and empowering
 
-> **Readings** are maintained in one place — [`planning/readings.md`](readings.md), generated from `activities-manifest.json`. Edit readings there and run `python3 scripts/sync_readings.py`; the website and each activity brief update automatically. Treat `readings.md` as canonical; the Reading column below may lag.
+> **Readings** are maintained in one place — [`planning/readings.md`](readings.md), generated from `activities-manifest.json`. Edit readings there and run `python3 scripts/sync_readings.py`; the website and each activity brief update automatically. The **Reading** column below is each session's **required** reading; the full list — including recommended and optional background — is in `readings.md`.
 
 | Theme | Weekday | Topic | Project / Activity | Reading |
 | :---- | :---- | :---- | :---- | :---- |

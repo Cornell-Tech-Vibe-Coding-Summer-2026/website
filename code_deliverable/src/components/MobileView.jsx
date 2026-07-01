@@ -126,6 +126,9 @@ function SyllabusModal() {
                                 : src
                             return <img src={rewritten} alt={alt} {...rest} />
                         },
+                        table: ({ node, ...props }) => (
+                            <div className="table-scroll"><table {...props} /></div>
+                        ),
                     }}
                 >
                     {md}
