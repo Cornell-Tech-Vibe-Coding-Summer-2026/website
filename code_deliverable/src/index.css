@@ -45,7 +45,9 @@ canvas {
 .syllabus-md a { color: #1d4ed8; text-decoration: underline; }
 .syllabus-md strong { font-weight: 700; }
 .syllabus-md .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0.8em 0; }
-.syllabus-md table { border-collapse: collapse; margin: 0; font-size: 0.85em; width: 100%; min-width: 640px; }
+.syllabus-md table { border-collapse: collapse; margin: 0; font-size: 0.85em; width: 100%; }
+/* Only force a scrollable min-width on narrow screens; desktop tables fit as-is. */
+@media (max-width: 640px) { .syllabus-md .table-scroll table { min-width: 560px; } }
 .syllabus-md th, .syllabus-md td { border: 1px solid #d4d4d4; padding: 0.35em 0.55em; text-align: left; vertical-align: top; }
 .syllabus-md th { background: #ececec; font-weight: 700; }
 .syllabus-md hr { border: 0; border-top: 1px solid #d4d4d4; margin: 1em 0; }

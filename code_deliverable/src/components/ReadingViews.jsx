@@ -6,6 +6,14 @@ import { createPortal } from 'react-dom'
 // in the class repo (planning/readings.md, generated from activities-manifest.json).
 const READINGS = [
     {
+        title: 'Vibe Coding in Product Teams',
+        authors: 'Li et al. — CHIWORK 2026',
+        venue: 'arXiv / CHIWORK',
+        kind: 'paper',
+        url: 'https://arxiv.org/abs/2509.10652',
+        abstract: 'Interviews with 22 product-team members map how vibe coding reshapes real workflows — ideation, generation, debugging, review — and the new tensions in trust, responsibility, and over-reliance it introduces. The week-1 framing of what vibe coding actually is.',
+    },
+    {
         title: 'Why Johnny Can\'t Prompt',
         authors: 'Zamfirescu-Pereira, Wong, Hartmann, Yang — CHI 2023',
         venue: 'ACM CHI',
@@ -146,6 +154,7 @@ const READINGS = [
 // Required (read before class) — one primary source per session. Everything
 // else is recommended/optional background.
 const REQUIRED = new Set([
+    'Vibe Coding in Product Teams',
     'Why Johnny Can\'t Prompt',
     'This Is How AI Bias Really Happens',
     'The Values Map',
@@ -168,6 +177,7 @@ const GROUP_DEFS = [
         label: 'Week 1 · Gaining Control',
         sub: 'Vibe coding · prompting · bias',
         titles: [
+            'Vibe Coding in Product Teams',
             'Why Johnny Can\'t Prompt',
             'Prompt Engineering Overview',
             'This Is How AI Bias Really Happens',
