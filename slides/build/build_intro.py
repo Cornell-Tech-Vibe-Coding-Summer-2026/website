@@ -35,12 +35,15 @@ columns("AGENDA", "Three weeks",
       "Usability testing · values testing · final project & presentations.")], FOOT)
 
 # 3 — Rhythm & deliverables
-bullets("HOW IT WORKS", "The rhythm — and what you hand in",
+s = bullets("HOW IT WORKS", "The rhythm — and what you hand in",
     ["Mon–Thu for three weeks (Jul 13–30).",
      "Each week: three hands-on activity days + a Thursday group-project day.",
      "Keep a Vibe-Trace — your AI prompts are logged as you build. It’s graded.",
      "Repo-only: your GitHub repo is your submission, and it deploys to a live page.",
+     "Deadline: activities and projects are due the next morning — pushed and deployed live.",
+     "Next day we open a few of your deployed sites and walk through them together in class.",
      "Three group projects build toward a final that helps someone outside the class."], FOOT)
+notes(s, "Emphasize the deadline: everything is due the next morning, and the site must actually be deployed — we'll pull up a handful of live pages the next day and review them with the whole class.")
 
 # 4 — Setup
 s = bullets("GET SET UP", "Before we start",
