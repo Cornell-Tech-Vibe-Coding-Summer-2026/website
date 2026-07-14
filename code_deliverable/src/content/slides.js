@@ -2,13 +2,14 @@
 // truth — instructors edit there; this repo only keeps the python-pptx build
 // scripts that generated the originals, in ../../slides/build/).
 //
-// `gsId` is the Google Slides presentation id. Decks without an id yet show a
-// "posted after class" placeholder — paste the id in as each deck goes live.
+// `gsId` is the Google Slides presentation id (a pasted sharing URL also works).
+// Decks without an id yet show a "posted after class" placeholder — paste the
+// id or URL in as each deck goes live.
 // NOTE: a deck only embeds if its Drive sharing is "Anyone with the link — Viewer".
 
 export const SLIDE_DECKS = [
-    { id: 'intro', week: 0, chip: 'Intro', day: 'Course intro', title: 'Good Code, Good Vibes — Course Intro', gsId: null },
-    { id: 'w1mon', week: 1, chip: 'W1 Mon', day: 'Mon · Jul 13', title: 'What is Vibe Coding?', gsId: '1ovlW0uOY5lG4N4bo8PKNDypr1TWusjhj' },
+    { id: 'intro', week: 0, chip: 'Intro', day: 'Course intro', title: 'Good Code, Good Vibes — Course Intro', gsId: '1VXtqzi7QO9PKTYdUh-uWI_Ve98rFvOnF' },
+    { id: 'w1mon', week: 1, chip: 'W1 Mon', day: 'Mon · Jul 13', title: 'What is Vibe Coding?', gsId: '1ovlW0uOY9lG4N4bo8PKNDypr1TWusjhj' },
     { id: 'w1tue', week: 1, chip: 'W1 Tue', day: 'Tue · Jul 14', title: 'Prompt Engineering', gsId: '11QFBjn5Qu2jgw6uLcIJZTObD5t10kIUU' },
     { id: 'w1wed', week: 1, chip: 'W1 Wed', day: 'Wed · Jul 15', title: 'Bias in Vibe Coding', gsId: null },
     { id: 'w1thu', week: 1, chip: 'W1 Thu', day: 'Thu · Jul 16', title: 'Project Day — Project 1', gsId: null },
@@ -22,7 +23,14 @@ export const SLIDE_DECKS = [
     { id: 'w3thu', week: 3, chip: 'W3 Thu', day: 'Thu · Jul 30', title: 'Final Presentations', gsId: null },
 ]
 
+// `gsId` may be a bare presentation id OR a pasted docs.google.com sharing URL —
+// the id is extracted either way.
+const idOf = (gsId) => {
+    const m = String(gsId).match(/\/d\/([\w-]+)/)
+    return m ? m[1] : gsId
+}
+
 // /preview renders an embeddable viewer for both native Slides decks and
 // .pptx files opened in Slides (the ?rtpof kind), unlike /embed.
-export const deckEmbedUrl = (gsId) => `https://docs.google.com/presentation/d/${gsId}/preview`
-export const deckOpenUrl = (gsId) => `https://docs.google.com/presentation/d/${gsId}/preview`
+export const deckEmbedUrl = (gsId) => `https://docs.google.com/presentation/d/${idOf(gsId)}/preview`
+export const deckOpenUrl = (gsId) => `https://docs.google.com/presentation/d/${idOf(gsId)}/preview`

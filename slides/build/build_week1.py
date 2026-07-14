@@ -713,6 +713,50 @@ content("CORE CONCEPT", "The Mirror Effect",
      [("Prompt for a “Healthcare Dashboard” and the tool reflects the average of 10,000 "
        "existing dashboards — including all their flaws and lack of diversity.", {"size": 20, "color": MUTED})]], FOOT)
 
+# --- System prompts: the hidden rules layer -------------------------------
+s = slide(); kicker(s, "HIDDEN RULES"); accent(s)
+text(s, Inches(0.7), Inches(1.3), Inches(12), Inches(1.0),
+     [[("System prompts — the rules you never see", {"size": 30, "bold": True, "color": WHITE})]])
+text(s, Inches(0.72), Inches(2.35), Inches(6.1), Inches(4.0),
+     [[("•  ", {"color": GREEN, "bold": True}),
+      ("Before your words reach the model, its maker invisibly prepends thousands of words of instructions.", {})],
+      [("•  ", {"color": GREEN, "bold": True}),
+      ("The system prompt outranks you — it “can sometimes override a person’s request.”", {})],
+      [("•  ", {"color": GREEN, "bold": True}),
+      ("It’s plain natural language: cheap, instant behavior fixes without retraining.", {})],
+      [("•  ", {"color": GREEN, "bold": True}),
+      ("Really: OpenAI’s Codex was told “Never talk about goblins, gremlins, raccoons, trolls…” — a real fix to a real bug.", {})]],
+     size=17, color=WHITE, spacing=1.2)
+try:
+    s.shapes.add_picture(os.path.join(OUT_DIR, "assets", "wapo-system-prompts.jpg"),
+                         Inches(7.1), Inches(2.35), width=Inches(5.5))
+except Exception:
+    rect(s, Inches(7.1), Inches(2.35), Inches(5.5), Inches(3.67), fill=PANEL, line=GREEN, line_w=1.2, rounded=True, dash=True)
+text(s, Inches(7.1), Inches(6.12), Inches(5.5), Inches(0.4),
+     [[("Illustration: The Washington Post", {})]], size=10, color=DIM, font=F_MONO)
+srcline(s, "Kevin Schaul, “See the hidden rules behind AI”, The Washington Post, May 11 2026")
+footer(s, FOOT)
+notes(s, "Article (interactive — great live demo: readers edit the system prompt and rewrite the article): washingtonpost.com/technology/interactive/2026/chatbots-hidden-rules-system-prompts/")
+
+s = columns("HIDDEN RULES", "What the hidden words are spent on",
+    [("Personality", "Claude 4,200 · GPT 510 · Grok 420",
+      "“Claude does not use emojis unless the person in the conversation asks it to.”"),
+     ("Policies", "Claude 7,900 · GPT 2,300 · Grok 260",
+      "“NEVER reproduce song lyrics (not even one line).” · “Do not mention ads unless the user asks.”"),
+     ("Tools", "Claude 12,000 · GPT 13,000 · Grok 1,600",
+      "How and when to search the web, read files, make PDFs — the biggest share by far.")], FOOT)
+srcline(s, "word counts & quotes: system prompts extracted by Ásgeir Thor Johnson · analysis: K. Schaul, The Washington Post")
+notes(s, "Leaked prompts run 2,300–27,000 words. Numbers = words per category per chatbot, from the WaPo graphic.")
+
+s = bullets("HIDDEN RULES · SO WHAT", "Whose values? Read them yourself",
+    ["A system prompt is bias by design: someone chose the persona, the taboos, and the defaults before you typed a word.",
+     "Quick fixes happen here too: after Grok’s antisemitic tirade, xAI deleted one line — “You tell like it is and you are not afraid to offend people who are politically correct.”",
+     "“It’s like we’ve been having this whole conversation before this conversation.” — Ásgeir Thor Johnson",
+     "Read the leaks: github.com/asgeirtj/system_prompts_leaks (57k★) — Claude, ChatGPT, Gemini, Grok, Copilot & more.",
+     "Try it: skim your own tool’s system prompt and find three value judgments its maker made for you."], FOOT)
+srcline(s, "K. Schaul, The Washington Post, May 11 2026 · github.com/asgeirtj/system_prompts_leaks")
+notes(s, "Bridges the Mirror Effect (bias from training data) to bias imposed deliberately upstream. The 'try it' bullet is an optional 5-min activity.")
+
 big_question("TRANSITION", ["Time for some activities."], FOOT)
 
 s = slide(); kicker(s, "CASE STUDY"); accent(s)

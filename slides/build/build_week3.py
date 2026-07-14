@@ -67,12 +67,23 @@ bullets("HOW TO RUN IT", "A quick usability test in 4 moves",
      "Ask them to think aloud — narrate what they expect.",
      "Note every hesitation, wrong turn, and dead end."], FOOT)
 
+s = bullets("SLOP CHECK", "Does it look AI-generated? Run the slop detector",
+    ["impeccable.style/slop catalogs 46 deterministic patterns that mark an interface as AI-generated.",
+     "The tells: side-tab accent borders (“the most recognizable tell”), purple/violet gradients, gradient text, italic-serif display headlines, hero “pill chips”, dark mode with glowing accents…",
+     "Free Chrome extension overlays your live page — hover any outlined element to see which rule fired. CLI: npx impeccable detect <url>.",
+     "In today’s peer test: run it on the project you’re testing. Do the flagged tells overlap with where real users hesitated?",
+     "It grades taste, not truth — a flag is a question to ask, not a verdict. (Nielsen #8: aesthetic & minimalist design.)"], FOOT)
+text(s, Inches(0.7), Inches(6.62), Inches(12), Inches(0.35),
+     [[("Source: impeccable.style/slop — Paul Bakaus (free & open source)", {})]],
+     size=10.5, color=DIM, font=F_MONO)
+notes(s, "Ties the aesthetics thread from Week 1 Tuesday (AI-slop / impeccable.style) into usability testing. Detector: https://impeccable.style/slop/")
+
 s = bullets("ACTIVITY · ROUND 1", "Peer-test for usability",
     ["Each team tests other teams’ projects — and gets tested.",
      "Testers: run the 4 moves above; log issues against Nielsen’s heuristics.",
      "Teams: watch your users struggle — resist the urge to explain.",
      "Rank fixes by how badly they block the task, then iterate."], FOOT)
-notes(s, "Repo 7_27 peer-testing. Bring your findings to Tuesday's values test.")
+notes(s, "Repo 7_27 peer-testing. Bring your findings to Tuesday's values test. Include the slop-detector pass from the previous slide as an extra lens.")
 
 # ===========================================================================
 # TUESDAY 7/28 — User Testing II: Values (VAP) — RICHER
