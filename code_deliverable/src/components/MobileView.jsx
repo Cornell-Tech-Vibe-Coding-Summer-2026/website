@@ -8,6 +8,7 @@ import { ColophonContent } from './Colophon'
 import syllabusMarkdown from '../content/syllabus.md?raw'
 import { VIBE_FEED } from '../content/vibe-feed'
 import { VibeReel } from './VibeReel'
+import { SlidesBrowser } from './SlidesBrowser'
 
 const ACTIVITIES_URL = 'https://vibe-coding-ethics.tech.cornell.edu/'
 const PROJECTS_URL = 'https://vibe-coding-ethics.tech.cornell.edu/projects/'
@@ -217,6 +218,7 @@ function NotepadModal() {
 // Desk item card definitions
 const DESK_ITEMS = [
     { id: 'desktop', label: 'Desktop', sublabel: 'Syllabus · Activities · Projects', links: [['syllabus', 'Syllabus'], ['activities', 'Activities'], ['projects', 'Group Projects']], icon: '🖥️', wide: true },
+    { id: 'slides',  label: 'Slides',  sublabel: 'Lecture Decks by Day', icon: '📽️', wide: false },
     { id: 'phone',   label: 'Phone',   sublabel: 'Social Feed',     icon: '📱', wide: false },
     { id: 'notepad', label: 'AI Disclosure', sublabel: 'Colophon',  icon: '📝', wide: false },
     { id: 'book',    label: 'Values at Play', sublabel: 'Core Framework', icon: '📖', wide: false },
@@ -297,6 +299,7 @@ export function MobileView() {
         if (!h) return
         if (h === 'syllabus' || h === 'activities' || h === 'projects') { setDesktopTab(h); setOpen('desktop') }
         else if (h === 'readings' || h === 'papers') setOpen('papers')
+        else if (h === 'slides' || h === 'decks') setOpen('slides')
         else if (h === 'notepad') setOpen('notepad')
         else if (h === 'phone') setOpen('phone')
         else if (h === 'book' || h === 'values') setOpen('book')
@@ -405,6 +408,11 @@ export function MobileView() {
                 {open === 'desktop' && (
                     <FullscreenModal title="Desktop" onClose={close}>
                         <DesktopModal onClose={close} initialTab={desktopTab} />
+                    </FullscreenModal>
+                )}
+                {open === 'slides' && (
+                    <FullscreenModal title="Slides" onClose={close}>
+                        <SlidesBrowser />
                     </FullscreenModal>
                 )}
                 {open === 'phone' && (

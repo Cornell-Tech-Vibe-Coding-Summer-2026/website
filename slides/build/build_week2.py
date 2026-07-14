@@ -107,6 +107,7 @@ s = content("WHAT’S NEXT", "Start noticing your value",
     FOOT)
 
 # ================= TUESDAY — AI Safety: Red-Teaming (7/21) =================
+save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week2-Mon-Values-In-Vibe-Coding.pptx"); prs = init_deck()
 divider("WEEK 2 · TUESDAY", "AI Safety: Red-Teaming", "Ethics — Doing the right thing")
 
 s = content("SET-UP", "Red-teaming: attack your own build",
@@ -154,6 +155,7 @@ s = content("THE FLIP SIDE", "Bright patterns",
 notes(s, "Reading: Krauß et al. 2025 (CHI) — dark patterns. Bright patterns = the constructive counter.")
 
 # ================= WEDNESDAY — AI Against AI (7/22) =================
+save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week2-Tue-AI-Safety-Red-Teaming.pptx"); prs = init_deck()
 divider("WEEK 2 · WEDNESDAY", "AI Against AI", "Ethics — Doing the right thing")
 
 quote("WARM-UP",
@@ -196,6 +198,7 @@ s = big_question("THE ETHICS",
 notes(s, "Reading: Obfuscation, Ch. 1 (Brunton & Nissenbaum).")
 
 # ================= THURSDAY — Project 2 (7/23) =================
+save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week2-Wed-AI-Against-AI.pptx"); prs = init_deck()
 divider("WEEK 2 · THURSDAY", "Project Day — Project 2")
 
 s = bullets("PROJECT 2", "Build for a human value",
@@ -211,5 +214,5 @@ columns("MAKE IT SHARP", "Name three things before you build",
      ("The tell", "How you’d know", "What would you see if the value is actually being served?")], FOOT)
 notes(prs.slides[-1], "Discovery-lite bridge from Monday's VAP teaser — value / user / success, without the full canvas.")
 
-n = save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week2-Good-Code-Good-Vibes.pptx")
-print("Week 2 saved ·", n, "slides")
+n = save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week2-Thu-Project-Day.pptx")
+print("Week 2 saved as 4 per-day decks (Thu:", n, "slides)")

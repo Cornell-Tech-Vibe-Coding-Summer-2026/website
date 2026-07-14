@@ -8,10 +8,14 @@ The four lecture decks in `../` are generated from these scripts with
 - `deck_common.py` — palette + all slide templates (`cover`, `divider`, `content`,
   `bullets`, `columns`, `big_question`, `media`, `checklist`, `quote`, …). Import with
   `from deck_common import *; prs = init_deck(); … ; save(path)`.
-- `build_intro.py` → `../Intro-Good-Code-Good-Vibes.pptx` (9 slides)
-- `build_week1.py` → `../Week1-Good-Code-Good-Vibes.pptx` (39 slides)
-- `build_week2.py` → `../Week2-Good-Code-Good-Vibes.pptx` (27 slides)
-- `build_week3.py` → `../Week3-Good-Code-Good-Vibes.pptx` (28 slides)
+- `build_intro.py` → `../Intro-Good-Code-Good-Vibes.pptx`
+- `build_week1.py` → four per-day decks: `../Week1-{Mon,Tue,Wed,Thu}-….pptx`
+- `build_week2.py` → `../Week2-{Mon,Tue,Wed,Thu}-….pptx`
+- `build_week3.py` → `../Week3-{Mon,Tue,Wed,Thu}-….pptx`
+
+Decks are split **by day** (one file per class session). The live, hand-edited
+copies are Google Slides (see `code_deliverable/src/content/slides.js` for the
+registry that the course site embeds); these scripts regenerate the originals.
 
 ## Regenerate
 ```bash

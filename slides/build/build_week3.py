@@ -77,6 +77,7 @@ notes(s, "Repo 7_27 peer-testing. Bring your findings to Tuesday's values test."
 # ===========================================================================
 # TUESDAY 7/28 — User Testing II: Values (VAP) — RICHER
 # ===========================================================================
+save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week3-Mon-User-Testing-I.pptx"); prs = init_deck()
 divider("WEEK 3 · TUESDAY", "User Testing II: Does It Do the Right Thing?",
         "Values at Play — the ethics of what you built")
 
@@ -187,6 +188,7 @@ notes(prs.slides[-1], "The VAP deck's 'most critical finding'. Gives the session
 # ===========================================================================
 # WEDNESDAY 7/29 — Working Day
 # ===========================================================================
+save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week3-Tue-User-Testing-II.pptx"); prs = init_deck()
 divider("WEEK 3 · WEDNESDAY", "Working Day")
 
 checklist("USE TODAY WELL", "Working day — before final presentations",
@@ -200,6 +202,7 @@ checklist("USE TODAY WELL", "Working day — before final presentations",
 # ===========================================================================
 # THURSDAY 7/30 — Final Presentations
 # ===========================================================================
+save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week3-Wed-Working-Day.pptx"); prs = init_deck()
 divider("WEEK 3 · THURSDAY", "Final Presentations")
 
 content("THE BRIEF", "Make something that benefits someone outside the class",
@@ -231,5 +234,5 @@ content("THAT’S A WRAP", "Good code, good vibes",
      [("", {})],
      [("Now go make something the world keeps benefiting from.", {"size": 20, "color": GREEN, "bold": True})]], FOOT)
 
-n = save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week3-Good-Code-Good-Vibes.pptx")
-print("Week 3 saved ·", n, "slides")
+n = save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week3-Thu-Final-Presentations.pptx")
+print("Week 3 saved as 4 per-day decks (Thu:", n, "slides)")

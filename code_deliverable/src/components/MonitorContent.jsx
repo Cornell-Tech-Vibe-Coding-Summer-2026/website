@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { FileText, Terminal, X, Globe, Folder } from 'lucide-react'
+import { FileText, Terminal, X, Globe, Folder, Presentation } from 'lucide-react'
+import { SlidesBrowser } from './SlidesBrowser'
 import { motion, useDragControls } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -9,7 +10,8 @@ const WINDOWS = {
     TERMINAL: 'terminal',
     SYLLABUS: 'syllabus',
     ACTIVITIES: 'activities',
-    PROJECTS: 'projects'
+    PROJECTS: 'projects',
+    SLIDES: 'slides'
 }
 
 // Live pages on the class site (single source of truth — this repo hosts no copies).
@@ -155,7 +157,8 @@ export function MonitorContent({ onBack }) {
         [WINDOWS.TERMINAL]: true,
         [WINDOWS.SYLLABUS]: false,
         [WINDOWS.ACTIVITIES]: false,
-        [WINDOWS.PROJECTS]: false
+        [WINDOWS.PROJECTS]: false,
+        [WINDOWS.SLIDES]: false
     })
     const [focused, setFocused] = useState(WINDOWS.TERMINAL)
 
@@ -221,6 +224,16 @@ export function MonitorContent({ onBack }) {
                         <Folder className="text-green-400 group-hover:text-green-300 transition-colors" size={24} />
                     </div>
                     <span className="text-white/80 text-[10px] font-bold tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-md">projects.url</span>
+                </div>
+
+                <div
+                    className="flex flex-col items-center gap-2 group cursor-pointer active:scale-95 transition-transform"
+                    onClick={() => toggleWindow(WINDOWS.SLIDES)}
+                >
+                    <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 group-hover:bg-white/10 group-hover:border-white/20 transition-all shadow-lg backdrop-blur-sm">
+                        <Presentation className="text-yellow-400 group-hover:text-yellow-300 transition-colors" size={24} />
+                    </div>
+                    <span className="text-white/80 text-[10px] font-bold tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-md">slides/</span>
                 </div>
 
                 <div
@@ -315,6 +328,19 @@ export function MonitorContent({ onBack }) {
                 />
             </Window>
 
+            {/* Slides Window (per-day lecture decks) */}
+            <Window
+                title="SLIDES — lecture decks by day"
+                icon={Presentation}
+                isOpen={openWindows[WINDOWS.SLIDES]}
+                onClose={() => toggleWindow(WINDOWS.SLIDES)}
+                onFocus={() => setFocused(WINDOWS.SLIDES)}
+                zIndex={zFor(WINDOWS.SLIDES)}
+                x={180} y={30} width={820} height={560}
+            >
+                <SlidesBrowser />
+            </Window>
+
             {/* Taskbar */}
             <div className="absolute bottom-0 w-full h-10 bg-[#0e101a]/90 backdrop-blur-md border-t border-white/5 flex items-center px-4 justify-between z-50">
                 <div className="flex items-center gap-2">
@@ -351,6 +377,12 @@ export function MonitorContent({ onBack }) {
                         className={`w-8 h-8 flex items-center justify-center rounded transition-all ${openWindows[WINDOWS.PROJECTS] ? 'bg-white/10 border-b-2 border-green-500' : 'hover:bg-white/5 opacity-50'}`}
                     >
                         <Folder size={16} className="text-green-400" />
+                    </button>
+                    <button
+                        onClick={() => toggleWindow(WINDOWS.SLIDES)}
+                        className={`w-8 h-8 flex items-center justify-center rounded transition-all ${openWindows[WINDOWS.SLIDES] ? 'bg-white/10 border-b-2 border-yellow-500' : 'hover:bg-white/5 opacity-50'}`}
+                    >
+                        <Presentation size={16} className="text-yellow-400" />
                     </button>
                 </div>
 
