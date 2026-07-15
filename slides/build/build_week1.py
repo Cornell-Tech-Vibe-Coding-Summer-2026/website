@@ -803,15 +803,114 @@ columns("STRATEGIES", "Strategies for control",
 
 # ================= THURSDAY — Project Day =================
 cut_deck("Week1-Wed-Bias-In-Vibe-Coding.pptx")
-divider("WEEK 1 · THURSDAY", "Project Day — Project 1")
+divider("WEEK 1 · THURSDAY", "Project Day — Fake It, Then Make It")
 
 s = bullets("PROJECT 1", "Vibe code something your team wants or needs",
     ["Teams of 3–4. Everyone codes — rotate who drives the AI.",
-     "Pick a real problem your team has and ship a small hosted app for it.",
+     "Pick a real problem from a team member's own life and ship a small hosted app for it.",
      "Use the strongest tool + prompt approach you found Mon–Wed.",
-     "Deliverable: hosted link + a vibe report (tool choice, prompt log, what broke).",
-     "Work happens in your team’s Group Project repo. Due Monday of Week 2, before class."], FOOT)
-notes(s, "Enriched the empty 'Project Day' slide with the Project 1 brief essentials from the repo. Group projects are separate Classroom team repos (confirm details with Jonathan).")
+     "It must DO something, be hosted and reachable by link, and be vibe-coded — prompt trail included.",
+     "Accept the team assignment: classroom.github.com/a/fw74T59W — one member creates the team, the others join.",
+     "Due Monday of Week 2, before class."], FOOT)
+notes(s, "Project 1 brief essentials. The team repo comes pre-seeded: code_deliverable/, log_deliverable/, project-report.md template, Vibe-Trace configs, Pages deploy workflow.")
+
+s = big_question("THE TRAP",
+    ["How do you know you're building the RIGHT thing —",
+     "before you've spent hours building it?"], FOOT)
+notes(s, "Motivation beat. Vibe coding makes building cheap — which makes building the WRONG thing the biggest remaining waste. Today's method spends 30 minutes of theater to save days of misdirected code.")
+
+# --- custom slide: the Double Diamond ---
+s = slide(); kicker(s, "DESIGN THINKING"); accent(s)
+text(s, Inches(0.7), Inches(1.15), Inches(11.9), Inches(0.7),
+     "The Double Diamond — diverge, converge, twice", size=34, bold=True)
+# left diamond (problem space), right diamond (solution space)
+for (cx, label_top, l_edge, r_edge) in [
+        (Inches(3.6), "PROBLEM SPACE", "Discover\n(diverge)", "Define\n(converge)"),
+        (Inches(9.0), "SOLUTION SPACE", "Develop\n(diverge)", "Deliver\n(converge)")]:
+    d = s.shapes.add_shape(MSO_SHAPE.DIAMOND, cx - Inches(2.1), Inches(2.5), Inches(4.2), Inches(2.6))
+    d.fill.solid(); d.fill.fore_color.rgb = PANEL
+    d.line.color.rgb = GREEN; d.line.width = Pt(1.5)
+    text(s, cx - Inches(2.1), Inches(2.05), Inches(4.2), Inches(0.4), label_top,
+         size=13, color=GREEN, bold=True, font=F_MONO, align=PP_ALIGN.CENTER)
+    text(s, cx - Inches(2.05), Inches(3.35), Inches(2.0), Inches(0.9), l_edge,
+         size=14, color=WHITE, align=PP_ALIGN.CENTER)
+    text(s, cx + Inches(0.05), Inches(3.35), Inches(2.0), Inches(0.9), r_edge,
+         size=14, color=WHITE, align=PP_ALIGN.CENTER)
+# the pinch point = today's fake-it test
+rect(s, Inches(5.85), Inches(2.85), Inches(0.9), Inches(1.9), fill=BG, line=GREEN, line_w=2.0, rounded=True, dash=True)
+text(s, Inches(4.85), Inches(4.9), Inches(2.9), Inches(0.8),
+     "the fake-it test\nlives HERE", size=14, color=GREEN, bold=True, align=PP_ALIGN.CENTER)
+text(s, Inches(0.7), Inches(5.9), Inches(11.9), Inches(1.0),
+     "Brainstorm wide, then commit to one problem. Your Wizard-of-Oz test sits at the pinch: it's how you "
+     "converge on the right problem before you diverge into building.", size=16, color=MUTED)
+footer(s, FOOT)
+notes(s, "Double Diamond (UK Design Council). Map to today: Discover = team brainstorm; Define = pick one + the in-class fake-it test + redefinition; Develop = co-design options with the AI; Deliver = the focused build, hosted by Monday.")
+
+s = content("METHOD", "Wizard of Oz — the human behind the curtain",
+    ["A classic HCI method: the user interacts with what looks like a working system — "
+     "but a hidden human is playing the machine.",
+     "Named for the man behind the curtain; used since the 1980s to test systems that "
+     "would be expensive to build (early speech interfaces were 'recognized' by a typist next door).",
+     "The point: you can test the EXPERIENCE before you've built the ENGINEERING.",
+     "If the experience fails with a perfect human playing the system, no amount of code will save it."], FOOT)
+notes(s, "Origin: J.F. Kelley's 'listening typewriter' experiments at IBM (1983–84) coined the term. Keep it light — the man-behind-the-curtain image carries the idea.")
+
+s = content("READING", "Fake It to Make It — prototyping as theater",
+    ["Zamfirescu-Pereira et al., HRI '21 — same first author as Tuesday's 'Why Johnny Can't "
+     "Prompt', co-authored at Cornell Tech (yes, that Wendy Ju).",
+     "Exploratory prototyping: act out the parts of the system that don't exist — with bodies, "
+     "props, sticky notes — to learn whether it's worth building at all.",
+     "Faking is not cheating. It's the cheapest possible probe of the riskiest question: "
+     "does anyone want this, and does the flow make sense?",
+     "Their domain is robots; yours is apps. The move is identical."], FOOT)
+notes(s, "Primary reading for today. Emphasize legitimacy: professional researchers do this deliberately — theater is a research instrument, not a shortcut.")
+
+columns("AI + WOZ", "Partial Wizard of Oz — AI moved the curtain",
+    [("Make it real", "AI builds it in minutes",
+      "Screens, button flows, one core interaction — if vibe coding gets it working fast, build it for real."),
+     ("Wizard it", "A teammate plays it",
+      "The recommendation 'algorithm', the notification, the other user — speak it, hand it over on a sticky note."),
+     ("Don't build it yet", "Stay imaginary",
+      "Everything else waits. If the test says it doesn't matter, you never build it at all.")], FOOT)
+
+s = content("RESEARCH", "Co-designing with AI — what we learned",
+    ["Sandhaus, Gu, Parreira & Ju, DIS '25 — your instructor's own research on GenAI in "
+     "interactive-device design education.",
+     "When transformers compress the build step, design iterations accelerate: students got "
+     "through more design loops in the same time — more chances to catch the wrong thing early.",
+     "But the role of GenAI is complex: accept its defaults passively and it can flatten your "
+     "exploration instead of widening it.",
+     "So treat the AI as a design COLLABORATOR — push back, ask it for alternatives, make it "
+     "argue — not as a vending machine for code."], FOOT)
+notes(s, "Co-Designing with Transformers (DIS '25), doi 10.1145/3715336.3735805. Personal-experience beat: tell the story from the HCI course studies. The acceleration point motivates why one in-class loop is now feasible at all.")
+
+checklist("TODAY", "The method — one loop, then build",
+    ["DIVERGE — brainstorm problems fast, pick one that's genuinely yours.",
+     "FAKE IT (in class) — AI-build the quick parts, wizard the rest, test ONCE with a teammate or neighboring team.",
+     "CONVERGE — are we making the right thing? Redefine the problem, re-scope the build.",
+     "BUILD FOCUSED — co-design the re-scoped app with the AI. No re-test required — deep user testing comes in Weeks 2–3."], FOOT)
+
+columns("TEAMWORK", "The focused build — split the roles",
+    [("The Designer", "Owns the experience",
+      "Sketches flows, decides what it should feel like, judges every AI proposal against the user."),
+     ("The AI Orchestrator", "Drives the tools",
+      "Writes the prompts, manages context, keeps the Vibe-Trace log honest."),
+     ("The Architect", "Owns the structure",
+      "Decides file layout, data flow, hosting — keeps the AI's code explainable.")], FOOT)
+s = checklist("RUN THE TEST", "How to run your fake-it test",
+    ["Give the tester ONE task ('split last night's dinner bill') — not a tour of features.",
+     "Act the whole flow through, start to finish, realistically — theater, not description.",
+     "Watch what they DO: hesitations, wrong turns, questions. Don't explain, don't rescue.",
+     "Afterwards ask: what did you think just happened? What would you use this for?",
+     "Then decide as a team: right problem? right scope? Write the re-scope decision down."], FOOT)
+
+s = bullets("DELIVERABLES", "What's due Monday (before class)",
+    ["Hosted app — live link, source in code_deliverable/.",
+     "AI interaction log — history.md (Vibe-Trace fills it; verify everyone's prompts show up).",
+     "Project report — fake-it loop record, re-scope decision, role split, team ethical reflection.",
+     "Individual reflections — every member, human-written: collaborating with humans, collaborating with AI.",
+     "Your team decides how much time to invest — a sharp scope decision beats hours of extra features."], FOOT)
+notes(s, "Report template is pre-seeded in the team repo as project-report.md. Ethical reflection and individual reflections are human-written (AI grammar-checking only).")
 
 # ---------------------------------------------------------------------------
 cut_deck("Week1-Thu-Project-Day.pptx")
