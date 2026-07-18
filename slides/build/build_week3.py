@@ -106,6 +106,15 @@ columns("THE FRAMEWORK", "Values at Play — three moves",
      ("03 · Verification", "Did it work?", "Check whether the built thing delivers the value.")], FOOT)
 notes(prs.slides[-1], "Recap from Week 2 Monday's teaser — now we go deeper on Discovery and Implementation.")
 
+columns("TODAY, VIBE-CODED", "The three moves become Plan → Run → Verify",
+    [("Plan", "planning.md, before you prompt",
+      "Name the value, who it's for, how you'd know — and write the exact prompts you'll run. Verbatim. Before running them."),
+     ("Run", "Prompts + a real test",
+      "Execute your planned prompts unchanged, then let another team test whether the value survives contact with a user."),
+     ("Verify", "Claim vs. reality",
+      "Find the biggest gap between planning.md and what testers experienced. Close it with one commit.")], FOOT)
+notes(prs.slides[-1], "The session's spine: VAP translated into the vibe-coding workflow. Writing value-centered prompts BEFORE running them is Discovery→Implementation made checkable; the log shows whether you stuck to the plan.")
+
 # --- Discovery ---
 columns("DISCOVERY · SOURCES", "Where do values come from? Look at the sources",
     [("Functional", "What it’s for", "The system’s explicit purpose, mission, and promise."),
@@ -174,18 +183,25 @@ content("VERIFICATION", "Did the value actually land?",
      [("Did we build it ", {}), ("right", {"color": GREEN, "bold": True}),
       ("? — do real people, in real contexts, experience the value?", {})]], FOOT)
 
-s = numbered_two_col("THE ACTIVITY", "The 3-question values check",
+s = numbered_two_col("ACTIVITY · PLAN", "planning.md — the 3-question values check + your prompts",
     [("What value does it claim?", "the value the team says the project serves"),
      ("Who’s it for — who’s left out?", "who it serves, and who it could exclude or harm"),
      ("How would you know?", "the observable tell that the value is being delivered")], FOOT)
-notes(s, "The 'light 3-question check' the syllabus asks for. Adapt each team's project into these three, then verify with a real user.")
+notes(s, "Phase 1, in planning.md BEFORE anyone prompts: the three answers, plus the verbatim value-centered prompts the team intends to run for today's iteration. A template is provided in week3/7_28/.")
 
-s = bullets("ACTIVITY · ROUND 2", "Peer-test for values",
-    ["Swap projects again — run the 3-question check on a classmate’s project.",
-     "Name the values tension you find; suggest a dissolve / compromise / trade-off.",
-     "Teams: take the tension back into your build and iterate toward the final.",
+s = bullets("ACTIVITY · RUN", "Execute the plan, then test the value",
+    ["Run your planned prompts unchanged — the auto-log will show whether you drifted.",
+     "Swap projects with another team — they run YOUR 3-question check as real users.",
+     "Testers: does the tool move you toward the value? Did it feel on your side? Who's excluded?",
+     "Name the values tension you find; suggest a dissolve / compromise / trade-off."], FOOT)
+notes(s, "Phase 2: implementation + the reality check. Peer value-test rotation (round 2, after Monday's usability round).")
+
+s = bullets("ACTIVITY · VERIFY", "Close the claim-vs-reality gap",
+    ["Compare what testers experienced against your planning.md — where's the biggest gap?",
+     "Where did the AI's defaults bend your value while you weren't looking?",
+     "Close the biggest gap with one commit. Link it in your report.",
      "Reading: Values at Play, Ch. 5 (Discovery)."], FOOT)
-notes(s, "Repo 7_28 peer-testing round 2 (values). Ties Monday usability + Tuesday values into the final iteration.")
+notes(s, "Phase 3: verification against the written plan — the plan makes the gap measurable, which is the whole reason planning.md exists.")
 
 content("A HONEST CAUTION", "VAP runs in your head — so bring real people in",
     [[("The framework’s blind spot: reflection and specification both happen in the designer’s "

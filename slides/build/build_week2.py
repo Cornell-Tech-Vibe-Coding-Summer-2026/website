@@ -85,14 +85,15 @@ columns("A PEEK AHEAD", "One framework, three moves — Values at Play",
 notes(prs.slides[-1], "Light teaser only — plants VAP so Project 2 has vocabulary and Week 3 (7/28) can go deep with the Discovery reading. Do NOT run the full canvas workshop here.")
 
 # --- Activity ---
-s = bullets("ACTIVITY", "AI as Moral Assistant — Footprint Calculator",
-    ["Use AI to help yourself act more ethically.",
-     "Vibe-code a personal calculator: feed in your last week of AI use (tokens / requests).",
-     "Translate it into CO₂, energy, and water — using validated data sources (cite them!).",
-     "Compare it to your meals over the same week (e.g. tofu vs. beef).",
-     "Deliverable: hosted calculator + a reflection on what changed once the numbers were visible."],
+s = bullets("ACTIVITY", "AI as Moral Assistant — build a tool that argues for a value",
+    ["Build a small tool that helps someone act more morally — calculator, nudge, checker, check-in.",
+     "The tool must ARGUE for something — name the value explicitly in the UI.",
+     "Write your value-centered first prompt BEFORE you run it — verbatim, in your report.",
+     "Then compare: did the artifact carry YOUR value, or the tool's defaults?",
+     "Numbers need visible sources — cited on the page, not buried in the report.",
+     "Deliverable: hosted one-pager + reflection. Example precedents: footprint/offset calculator, protein-suffering index."],
     FOOT)
-notes(s, "From syllabus/repo 7_20. Optional precedent: Hauke's protein-suffering calculator. Reading: 'The Values Map' (Common Cause).")
+notes(s, "Generalized from the footprint framing — any moral-assistant tool qualifies (footprint calculator is one precedent, Hauke's protein-suffering calculator another). The write-prompt-first rule previews the full plan→run→verify loop on 7/28. Reading: 'The Values Map' (Common Cause).")
 
 # --- Toward Project 2 ---
 s = content("WHAT’S NEXT", "Start noticing your value",
