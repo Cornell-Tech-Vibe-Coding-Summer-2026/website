@@ -13,6 +13,11 @@ export function SubmissionsBrowser() {
     const [setId, setSetId] = useState(firstLive.id)
     const set = SUBMISSION_SETS.find((s) => s.id === setId) || SUBMISSION_SETS[0]
     const [entryId, setEntryId] = useState(set.entries[0]?.id)
+    // Several activities have an index page linking to per-attempt files, so you
+    // can navigate *into* a submission. We can't read a cross-origin iframe's
+    // history, so "back" = remount the iframe at the entry URL (bump the key).
+    const [nonce, setNonce] = useState(0)
+    const backToStart = () => setNonce((n) => n + 1)
 
     // Keep the selected entry valid when the set changes.
     useEffect(() => {
@@ -51,7 +56,8 @@ export function SubmissionsBrowser() {
                     {set.entries.map((e) => (
                         <button
                             key={e.id}
-                            onClick={() => setEntryId(e.id)}
+                            // Clicking the already-selected name returns to its start page.
+                            onClick={() => (e.id === entryId ? backToStart() : setEntryId(e.id))}
                             className={`shrink-0 px-2 py-1 rounded text-[10px] font-semibold whitespace-nowrap border transition-colors ${
                                 e.id === entryId
                                     ? 'bg-white/15 text-white border-white/30'
@@ -80,6 +86,14 @@ export function SubmissionsBrowser() {
                         )}
                     </div>
                     <div className="shrink-0 flex gap-1.5">
+                        <button
+                            onClick={backToStart}
+                            onPointerDown={(e) => e.stopPropagation()}
+                            title="Back to this submission's start page"
+                            className="px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-white/5 text-white/70 border border-white/15 hover:bg-white/10 transition-colors"
+                        >
+                            ↺ Back
+                        </button>
                         {isProject && entry.report && (
                             <a
                                 href={entry.report}
@@ -108,7 +122,7 @@ export function SubmissionsBrowser() {
             <div className="flex-1 relative bg-black">
                 {entry ? (
                     <iframe
-                        key={entry.url}
+                        key={`${entry.url}|${nonce}`}
                         src={entry.url}
                         title={label(entry)}
                         className="absolute inset-0 w-full h-full bg-white border-0"
