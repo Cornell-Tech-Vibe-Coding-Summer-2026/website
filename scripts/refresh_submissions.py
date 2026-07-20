@@ -20,6 +20,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 ORG = "Cornell-Tech-Vibe-Coding-Summer-2026"
 BASE = f"https://{ORG.lower()}.github.io"
+READER = "https://vibe-coding-ethics.tech.cornell.edu/instructions.html?"
 GH = "/opt/homebrew/bin/gh"
 REGISTRY = __file__.replace("scripts/refresh_submissions.py",
                             "code_deliverable/src/content/submissions.js")
@@ -120,8 +121,13 @@ def check(repo, act):
         "title": title,
         "url": url,
         "repo": f"https://github.com/{ORG}/{repo}/tree/main/{act}",
-        "report": (f"https://github.com/{ORG}/{repo}/blob/main/{act}/vibe-report.md"
-                   if report_ok(repo, act) else None),
+        # Reports render in the course site's markdown reader (styled, images and
+        # all) rather than GitHub's blob view. The reader fetches the .md straight
+        # from the student's own Pages site.
+        "report": (READER + urllib.parse.urlencode({
+            "file": f"{BASE}/{repo}/{act}/vibe-report.md",
+            "title": f"{NAMES.get(handle, handle)} — vibe report",
+        }) if report_ok(repo, act) else None),
     }
 
 
