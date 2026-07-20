@@ -88,12 +88,20 @@ notes(prs.slides[-1], "Light teaser only — plants VAP so Project 2 has vocabul
 s = bullets("ACTIVITY", "AI as Moral Assistant — build a tool that argues for a value",
     ["Build a small tool that helps someone act more morally — calculator, nudge, checker, check-in.",
      "The tool must ARGUE for something — name the value explicitly in the UI.",
-     "Write your value-centered first prompt BEFORE you run it — verbatim, in your report.",
-     "Then compare: did the artifact carry YOUR value, or the tool's defaults?",
-     "Numbers need visible sources — cited on the page, not buried in the report.",
+     "Keep it small: one page, built and hosted in one session.",
+     "Don't let it fabricate the facts people decide on — check the AI's sources, or say you're estimating.",
      "Deliverable: hosted one-pager + reflection. Example precedents: footprint/offset calculator, protein-suffering index."],
     FOOT)
-notes(s, "Generalized from the footprint framing — any moral-assistant tool qualifies (footprint calculator is one precedent, Hauke's protein-suffering calculator another). The write-prompt-first rule previews the full plan→run→verify loop on 7/28. Reading: 'The Values Map' (Common Cause).")
+notes(s, "Generalized from the footprint framing — any moral-assistant tool qualifies (footprint calculator is one precedent, Hauke's protein-suffering calculator another). Hallucinated numbers/citations are the real failure mode here. Reading: 'The Values Map' (Common Cause).")
+
+s = columns("PROJECT TIME", "Vibe coding ambassadors",
+    [("One per team", "Your AI power user",
+      "Each team has an ambassador account with a stronger agentic tool. They drive the heavy builds — the rest of you still prompt on Gemini."),
+     ("Rotate the driver", "Not a bottleneck",
+      "The ambassador runs the session, but everyone takes the keyboard. Every member's prompts must show up in history.md."),
+     ("Ask early", "Don't burn the day",
+      "Blocked on access, quota, or setup? Flag it at the start of project time — not at 11:55.")], FOOT)
+notes(s, "Practical slide for project work time: how the per-team ambassador accounts work alongside Gemini Code Assist for everyone. Adjust the middle column if the role split changed.")
 
 # --- Toward Project 2 ---
 s = content("WHAT’S NEXT", "Start noticing your value",

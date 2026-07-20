@@ -108,7 +108,7 @@ notes(prs.slides[-1], "Recap from Week 2 Monday's teaser — now we go deeper on
 
 columns("TODAY, VIBE-CODED", "The three moves become Plan → Run → Verify",
     [("Plan", "planning.md, before you prompt",
-      "Name the value, who it's for, how you'd know — and write the exact prompts you'll run. Verbatim. Before running them."),
+      "Name the value, define what it MEANS here, who it's for, how you'd know — and write the exact prompts you'll run. Verbatim. Before running them."),
      ("Run", "Prompts + a real test",
       "Execute your planned prompts unchanged, then let another team test whether the value survives contact with a user."),
      ("Verify", "Claim vs. reality",
@@ -183,11 +183,12 @@ content("VERIFICATION", "Did the value actually land?",
      [("Did we build it ", {}), ("right", {"color": GREEN, "bold": True}),
       ("? — do real people, in real contexts, experience the value?", {})]], FOOT)
 
-s = numbered_two_col("ACTIVITY · PLAN", "planning.md — the 3-question values check + your prompts",
+s = numbered_two_col("ACTIVITY · PLAN", "planning.md — the values check + your prompts",
     [("What value does it claim?", "the value the team says the project serves"),
+     ("What does it MEAN here?", "operationalize it — privacy as control? secrecy? contextual integrity?"),
      ("Who’s it for — who’s left out?", "who it serves, and who it could exclude or harm"),
      ("How would you know?", "the observable tell that the value is being delivered")], FOOT)
-notes(s, "Phase 1, in planning.md BEFORE anyone prompts: the three answers, plus the verbatim value-centered prompts the team intends to run for today's iteration. A template is provided in week3/7_28/.")
+notes(s, "Phase 1, in planning.md BEFORE anyone prompts. Operationalization is the move students skip: the same value word means different things, and the definition has to go INTO the prompt or the AI supplies its own. Template in week3/7_28/planning-template.md.")
 
 s = bullets("ACTIVITY · RUN", "Execute the plan, then test the value",
     ["Run your planned prompts unchanged — the auto-log will show whether you drifted.",
