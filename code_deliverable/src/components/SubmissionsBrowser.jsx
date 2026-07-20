@@ -94,7 +94,7 @@ export function SubmissionsBrowser() {
                         >
                             ↺ Back
                         </button>
-                        {isProject && entry.report && (
+                        {entry.report && (
                             <a
                                 href={entry.report}
                                 target="_blank"
