@@ -17,16 +17,21 @@ export function SubmissionsBrowser() {
     // can navigate *into* a submission. We can't read a cross-origin iframe's
     // history, so "back" = remount the iframe at the entry URL (bump the key).
     const [nonce, setNonce] = useState(0)
-    const backToStart = () => setNonce((n) => n + 1)
+    // The report opens in this same iframe (it's just another page), not a new tab.
+    const [view, setView] = useState('site') // 'site' | 'report'
+    const backToStart = () => { setView('site'); setNonce((n) => n + 1) }
 
-    // Keep the selected entry valid when the set changes.
+    // Keep the selected entry valid when the set changes, and reset to the site view.
     useEffect(() => {
         if (!set.entries.some((e) => e.id === entryId)) setEntryId(set.entries[0]?.id)
+        setView('site')
     }, [setId]) // eslint-disable-line react-hooks/exhaustive-deps
+    useEffect(() => { setView('site') }, [entryId])
 
     const entry = set.entries.find((e) => e.id === entryId) || set.entries[0]
     const isProject = set.kind === 'project'
     const label = (e) => (isProject ? e.team : e.student)
+    const frameUrl = view === 'report' && entry?.report ? entry.report : entry?.url
 
     return (
         <div className="flex flex-col h-full bg-[#0a0c12] font-mono">
@@ -89,27 +94,31 @@ export function SubmissionsBrowser() {
                         <button
                             onClick={backToStart}
                             onPointerDown={(e) => e.stopPropagation()}
-                            title="Back to this submission's start page"
+                            title={view === 'report' ? 'Back to the live site' : "Back to this submission's start page"}
                             className="px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-white/5 text-white/70 border border-white/15 hover:bg-white/10 transition-colors"
                         >
-                            ↺ Back
+                            ↺ {view === 'report' ? 'Site' : 'Back'}
                         </button>
                         {entry.report && (
-                            <a
-                                href={entry.report}
-                                target="_blank"
-                                rel="noreferrer"
+                            <button
+                                onClick={() => setView((v) => (v === 'report' ? 'site' : 'report'))}
                                 onPointerDown={(e) => e.stopPropagation()}
-                                className="px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-white/5 text-white/70 border border-white/15 hover:bg-white/10 transition-colors"
+                                title="Read this submission's vibe report"
+                                className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border transition-colors ${
+                                    view === 'report'
+                                        ? 'bg-[#00ff41]/15 text-[#00ff41] border-[#00ff41]/40'
+                                        : 'bg-white/5 text-white/70 border-white/15 hover:bg-white/10'
+                                }`}
                             >
                                 Report
-                            </a>
+                            </button>
                         )}
                         <a
-                            href={entry.url}
+                            href={frameUrl}
                             target="_blank"
                             rel="noreferrer"
                             onPointerDown={(e) => e.stopPropagation()}
+                            title="Open the current view in a new tab"
                             className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[#00ff41]/10 text-[#00ff41] border border-[#00ff41]/25 hover:bg-[#00ff41]/20 transition-colors"
                         >
                             Open ↗
@@ -122,8 +131,8 @@ export function SubmissionsBrowser() {
             <div className="flex-1 relative bg-black">
                 {entry ? (
                     <iframe
-                        key={`${entry.url}|${nonce}`}
-                        src={entry.url}
+                        key={`${frameUrl}|${nonce}`}
+                        src={frameUrl}
                         title={label(entry)}
                         className="absolute inset-0 w-full h-full bg-white border-0"
                         sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
