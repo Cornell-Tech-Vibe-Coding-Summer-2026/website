@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { FileText, Terminal, X, Globe, Folder, Presentation } from 'lucide-react'
+import { FileText, Terminal, X, Globe, Folder, Presentation, Users } from 'lucide-react'
 import { SlidesBrowser } from './SlidesBrowser'
+import { SubmissionsBrowser } from './SubmissionsBrowser'
 import { motion, useDragControls } from 'framer-motion'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -11,7 +12,8 @@ const WINDOWS = {
     SYLLABUS: 'syllabus',
     ACTIVITIES: 'activities',
     PROJECTS: 'projects',
-    SLIDES: 'slides'
+    SLIDES: 'slides',
+    SUBMISSIONS: 'submissions'
 }
 
 // Live pages on the class site (single source of truth — this repo hosts no copies).
@@ -158,7 +160,8 @@ export function MonitorContent({ onBack }) {
         [WINDOWS.SYLLABUS]: false,
         [WINDOWS.ACTIVITIES]: false,
         [WINDOWS.PROJECTS]: false,
-        [WINDOWS.SLIDES]: false
+        [WINDOWS.SLIDES]: false,
+        [WINDOWS.SUBMISSIONS]: false
     })
     const [focused, setFocused] = useState(WINDOWS.TERMINAL)
 
@@ -234,6 +237,16 @@ export function MonitorContent({ onBack }) {
                         <Presentation className="text-yellow-400 group-hover:text-yellow-300 transition-colors" size={24} />
                     </div>
                     <span className="text-white/80 text-[10px] font-bold tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-md">slides/</span>
+                </div>
+
+                <div
+                    className="flex flex-col items-center gap-2 group cursor-pointer active:scale-95 transition-transform"
+                    onClick={() => toggleWindow(WINDOWS.SUBMISSIONS)}
+                >
+                    <div className="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center border border-white/10 group-hover:bg-white/10 group-hover:border-white/20 transition-all shadow-lg backdrop-blur-sm">
+                        <Users className="text-cyan-400 group-hover:text-cyan-300 transition-colors" size={24} />
+                    </div>
+                    <span className="text-white/80 text-[10px] font-bold tracking-wide bg-black/50 px-2 py-0.5 rounded-full backdrop-blur-md">submissions/</span>
                 </div>
 
                 <div
@@ -341,6 +354,19 @@ export function MonitorContent({ onBack }) {
                 <SlidesBrowser />
             </Window>
 
+            {/* Submissions Window (student live sites + group projects) */}
+            <Window
+                title="SUBMISSIONS — student live sites"
+                icon={Users}
+                isOpen={openWindows[WINDOWS.SUBMISSIONS]}
+                onClose={() => toggleWindow(WINDOWS.SUBMISSIONS)}
+                onFocus={() => setFocused(WINDOWS.SUBMISSIONS)}
+                zIndex={zFor(WINDOWS.SUBMISSIONS)}
+                x={140} y={20} width={860} height={580}
+            >
+                <SubmissionsBrowser />
+            </Window>
+
             {/* Taskbar */}
             <div className="absolute bottom-0 w-full h-10 bg-[#0e101a]/90 backdrop-blur-md border-t border-white/5 flex items-center px-4 justify-between z-50">
                 <div className="flex items-center gap-2">
@@ -383,6 +409,12 @@ export function MonitorContent({ onBack }) {
                         className={`w-8 h-8 flex items-center justify-center rounded transition-all ${openWindows[WINDOWS.SLIDES] ? 'bg-white/10 border-b-2 border-yellow-500' : 'hover:bg-white/5 opacity-50'}`}
                     >
                         <Presentation size={16} className="text-yellow-400" />
+                    </button>
+                    <button
+                        onClick={() => toggleWindow(WINDOWS.SUBMISSIONS)}
+                        className={`w-8 h-8 flex items-center justify-center rounded transition-all ${openWindows[WINDOWS.SUBMISSIONS] ? 'bg-white/10 border-b-2 border-cyan-500' : 'hover:bg-white/5 opacity-50'}`}
+                    >
+                        <Users size={16} className="text-cyan-400" />
                     </button>
                 </div>
 

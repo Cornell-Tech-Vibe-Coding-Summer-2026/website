@@ -9,6 +9,7 @@ import syllabusMarkdown from '../content/syllabus.md?raw'
 import { VIBE_FEED } from '../content/vibe-feed'
 import { VibeReel } from './VibeReel'
 import { SlidesBrowser } from './SlidesBrowser'
+import { SubmissionsBrowser } from './SubmissionsBrowser'
 
 const ACTIVITIES_URL = 'https://vibe-coding-ethics.tech.cornell.edu/'
 const PROJECTS_URL = 'https://vibe-coding-ethics.tech.cornell.edu/projects/'
@@ -219,6 +220,7 @@ function NotepadModal() {
 const DESK_ITEMS = [
     { id: 'desktop', label: 'Desktop', sublabel: 'Syllabus · Activities · Projects', links: [['syllabus', 'Syllabus'], ['activities', 'Activities'], ['projects', 'Group Projects']], icon: '🖥️', wide: true },
     { id: 'slides',  label: 'Slides',  sublabel: 'Lecture Decks by Day', icon: '📽️', wide: false },
+    { id: 'submissions', label: 'Submissions', sublabel: 'Student Sites · Group Projects', icon: '🗂️', wide: false },
     { id: 'phone',   label: 'Phone',   sublabel: 'Social Feed',     icon: '📱', wide: false },
     { id: 'notepad', label: 'AI Disclosure', sublabel: 'Colophon',  icon: '📝', wide: false },
     { id: 'book',    label: 'Values at Play', sublabel: 'Core Framework', icon: '📖', wide: false },
@@ -293,13 +295,14 @@ export function MobileView() {
 
     const close = () => setOpen(null)
 
-    // Deep links: /website/#syllabus | #activities | #projects | #readings | #notepad | #phone
+    // Deep links: /website/#syllabus | #activities | #projects | #submissions | #readings | #notepad | #phone
     useEffect(() => {
         const h = (window.location.hash || '').replace('#', '').toLowerCase()
         if (!h) return
         if (h === 'syllabus' || h === 'activities' || h === 'projects') { setDesktopTab(h); setOpen('desktop') }
         else if (h === 'readings' || h === 'papers') setOpen('papers')
         else if (h === 'slides' || h === 'decks') setOpen('slides')
+        else if (h === 'submissions' || h === 'gallery') setOpen('submissions')
         else if (h === 'notepad') setOpen('notepad')
         else if (h === 'phone') setOpen('phone')
         else if (h === 'book' || h === 'values') setOpen('book')
@@ -413,6 +416,11 @@ export function MobileView() {
                 {open === 'slides' && (
                     <FullscreenModal title="Slides" onClose={close}>
                         <SlidesBrowser />
+                    </FullscreenModal>
+                )}
+                {open === 'submissions' && (
+                    <FullscreenModal title="Submissions" onClose={close}>
+                        <SubmissionsBrowser />
                     </FullscreenModal>
                 )}
                 {open === 'phone' && (
