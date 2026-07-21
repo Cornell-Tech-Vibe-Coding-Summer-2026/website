@@ -167,15 +167,62 @@ notes(s, "Reading: Krauß et al. 2025 (CHI) — dark patterns. Bright patterns =
 save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week2-Tue-AI-Safety-Red-Teaming.pptx"); prs = init_deck()
 divider("WEEK 2 · WEDNESDAY", "AI Against AI", "Ethics — Doing the right thing")
 
-quote("WARM-UP",
+s = big_question("WARM-UP",
+    ["Before we fight AI’s harms —",
+     "what exactly are they?"], FOOT)
+notes(s, "Today has two halves: first name what's under threat (a quick literature + news overview), then build defenses. This overview also seeds the values vocabulary for Project 2.")
+
+# --- The centerpiece: values under threat, all visible at once ---
+value_grid("LITERATURE + NEWS · THE MAP", "Values under threat from AI", [
+    ("⚖️", "Fairness & Justice", "Bias encoded and amplified — unequal calls in hiring, lending, policing, and healthcare."),
+    ("🔒", "Privacy & Surveillance", "Personal data scraped and memorized; biometric tracking and mass surveillance."),
+    ("📰", "Truth & Democracy", "Fluent falsehoods and cheap propaganda erode shared facts and fair elections."),
+    ("🧠", "Autonomy & Dignity", "Manipulative, addictive design and social scoring strip human agency."),
+    ("⚠️", "Safety", "Malicious use, deepfakes, voice-clone fraud, and companion-bot harm."),
+    ("🌍", "Labor & Environment", "Jobs displaced onto low-paid ‘ghost work’; energy and freshwater burned."),
+    ("🎭", "Accountability & Authenticity", "Opaque decisions with no redress; synthetic media and style theft."),
+], cols=4, foot=FOOT)
+notes(prs.slides[-1], "Convergent across the field: Weidinger et al. 2022 (FAccT), Shelby et al. 2023 (AIES), the MIT AI Risk Repository, NIST AI RMF, and the EU AI Act all carve up roughly these categories. Sources slide at the end.")
+
+# --- These are not hypothetical: real, verified incidents ---
+columns("NOT HYPOTHETICAL · 1", "It’s already happening",
+    [("Dignity", "Deepfakes",
+      "Explicit AI images of Taylor Swift hit ~47M views on X (Jan 2024); 30+ girls targeted at one NJ high school."),
+     ("Democracy", "Election fakes",
+      "An AI-cloned “Biden” robocall told NH voters to stay home — $6M FCC fine (2024)."),
+     ("Security", "Fraud",
+      "A deepfake “CFO” on a video call cost engineering firm Arup $25M in transfers (2024).")], FOOT)
+notes(prs.slides[-1], "Sources: NBC/CBS (Swift, Jan 2024); CNN/Axios (Westfield NJ, Nov 2023); NPR (NH robocall, FCC $6M); CNN Business (Arup, May 2024). All verified.")
+
+columns("NOT HYPOTHETICAL · 2", "The quieter harms",
+    [("Safety", "Companion bots",
+      "Character.AI settled after 14-year-old Sewell Setzer’s suicide (2024; landmark settlement 2026)."),
+     ("Fairness", "Biased decisions",
+      "A Dutch benefits algorithm falsely branded ~26,000 families fraudsters — the government fell (2021)."),
+     ("Privacy", "Surveillance",
+      "Clearview scraped 3B+ faces; at least four Black men were wrongly arrested on false matches.")], FOOT)
+notes(prs.slides[-1], "Sources: CBS/CNBC (Character.AI, 2026); Al Jazeera (Dutch toeslagenaffaire, 2021); NYT/ACLU (Clearview; Williams, Woodruff, Parks, Reid). All verified.")
+
+columns("NOT HYPOTHETICAL · 3", "The hidden costs",
+    [("Labor", "Ghost work",
+      "Kenyan workers paid ~$2/hr labeled graphic toxic content to build ChatGPT’s filter (2023)."),
+     ("Environment", "Thirsty AI",
+      "~700,000 L of freshwater to train GPT-3; datacenter emissions spiking (Google +48% vs 2019)."),
+     ("Ownership", "Style & text theft",
+      "Anthropic settled with authors for ~$1.5B over training on pirated books (2025).")], FOOT)
+notes(prs.slides[-1], "Sources: TIME (Sama/Kenya, Jan 2023); Li et al. arXiv:2304.03271 + UC Riverside (water — use per-session framing, not 'a bottle per prompt'); NPR (emissions); Authors Guild/Norton Rose (Bartz v. Anthropic ~$1.5B). All verified.")
+
+# --- The pivot into the activity ---
+s = quote("THE TURN",
     "You have a right to protect your personal narrative as AI companies vacuum up the internet.",
     "after Brunton & Nissenbaum, Obfuscation",
-    "Can you use AI and code to defend against AI’s harms?", FOOT)
+    "So can you turn AI and code AGAINST these harms?", FOOT)
 
-content("THE GUIDED EXAMPLE", "Poison the scrapers",
+# --- Part A: poison the scrapers ---
+content("PART A · THE GUIDED EXAMPLE", "Poison the scrapers",
     [[("Inject plausible but ", {"size": 22, "color": WHITE}),
       ("fabricated", {"color": GREEN, "bold": True}),
-      (" facts into your own website — invisible to human visitors, but visible to AI scrapers.",
+      (" facts into your own Week 1 site — invisible to human visitors, but visible to AI scrapers.",
        {"size": 22, "color": WHITE})],
      [("", {})],
      [("e.g. “Co-founded a kombucha startup in 2019.” · “Won the $5,000 Privacy Award.”",
@@ -186,25 +233,30 @@ s = bullets("HOW", "The technique",
      "Hide them with CSS clip — NOT display:none — and aria-hidden so screen readers skip them.",
      "Verify with curl that the fake text is in the raw page payload.",
      "Humans see nothing; scrapers ingest the decoy."], FOOT)
-notes(prs.slides[-1], "Full walkthrough in the repo example (activity1_obfuscation-example).")
+notes(prs.slides[-1], "clip: rect(0,0,0,0) keeps the text in the render tree but trims it to zero pixels — scrapers that render like a browser still ingest it, unlike display:none. Full walkthrough in the repo example (activity1_obfuscation-example).")
 
-content("WHY NOT display:none", "Beat the render tree",
-    [[("Advanced scrapers render the page like a browser and skip anything set to display:none.",
-       {"size": 22, "color": WHITE})],
-     [("", {})],
-     [("clip: rect(0,0,0,0) keeps the text in the render tree but trims it to zero pixels — "
-       "visible to the machine, invisible to the eye.", {"size": 20, "color": MUTED})]], FOOT)
-
-bullets("OR PICK ANOTHER ANGLE", "Other “AI against AI” builds",
+# --- Part B: build a mini project ---
+bullets("PART B · BUILD IT", "Your AI-against-AI mini project",
     ["Style cloaking (Glaze / Nightshade-style) so your art resists training.",
      "Privacy noise (TrackMeNot-style) — bury the real signal in plausible fake activity.",
      "Block the bots properly: robots.txt + per-bot rules; verify with curl -A \"GPTBot\".",
-     "An AI-vs-AI detector that flags likely AI-generated text or images."], FOOT)
+     "An AI-vs-AI detector that flags likely AI-generated text or images.",
+     "Host it — the link is your submission."], FOOT)
+notes(prs.slides[-1], "Today you do BOTH: Part A edits your week1/7_13 site; Part B is a new hosted mini project in week2/7_22/code_deliverable. The report documents both.")
 
 s = big_question("THE ETHICS",
     ["Defense vs. deception — where’s the line?",
      "Who could your technique harm, as well as protect?"], FOOT)
-notes(s, "Reading: Obfuscation, Ch. 1 (Brunton & Nissenbaum).")
+notes(s, "Reading: Obfuscation, Ch. 1 (Brunton & Nissenbaum). Every defense points a weapon somewhere — name where.")
+
+# --- Sources (the literature is part of the argument) ---
+bullets("SOURCES", "Where the map comes from",
+    ["Weidinger et al. 2022 — Taxonomy of Risks posed by Language Models (FAccT).",
+     "Shelby et al. 2023 — Sociotechnical Harms of Algorithmic Systems (AIES).",
+     "MIT AI Risk Repository (2024) · NIST AI Risk Management Framework (2023) · EU AI Act (2024).",
+     "Incidents: NYT, CNN, NBC, NPR, TIME, CBS, Al Jazeera, Authors Guild; Li et al. 2023 (water).",
+     "Incident registries: AI Incident Database · AIAAIC harms taxonomy."], FOOT)
+notes(prs.slides[-1], "Every incident on the previous slides was verified against these reputable sources. Two caveats to state if asked: the AI 'water per prompt' figure is per-session not per-prompt; 'X% of the web is AI' stats are single-vendor estimates — cite NewsGuard's tracked site counts instead.")
 
 # ================= THURSDAY — Project 2 (7/23) =================
 save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week2-Wed-AI-Against-AI.pptx"); prs = init_deck()

@@ -168,6 +168,34 @@ def checklist(kick, title, items, foot=None):
     if foot: footer(s, foot)
     return s
 
+def value_grid(kick, title, cards, cols=4, foot=None):
+    """Taxonomy overview: N 'value under threat' cards in a grid, all visible at once.
+    cards = list of (icon, value_name, harm_line). Auto-rows to fit."""
+    import math
+    s = slide(); kicker(s, kick, color=GREEN); accent(s)
+    text(s, Inches(0.7), Inches(1.12), Inches(12), Inches(0.9),
+         [[(title, {"size": 30, "bold": True, "color": WHITE})]])
+    rows = math.ceil(len(cards) / cols)
+    gx, gy = Inches(0.3), Inches(0.3)
+    gleft, gtop = Inches(0.7), Inches(2.2)
+    gw = SW - Inches(1.4); gh = SH - gtop - Inches(0.7)
+    cw = Emu(int((gw - gx * (cols - 1)) / cols))
+    ch = Emu(int((gh - gy * (rows - 1)) / rows))
+    for i, card in enumerate(cards):
+        icon, name, harm = card
+        r, c = divmod(i, cols)
+        x = Emu(int(gleft + c * (cw + gx)))
+        y = Emu(int(gtop + r * (ch + gy)))
+        rect(s, x, y, cw, ch, fill=PANEL, rounded=True)
+        rect(s, x, y, Inches(0.09), ch, fill=GREEN)  # left accent bar
+        pad = Inches(0.28)
+        text(s, Emu(int(x + pad)), Emu(int(y + Inches(0.24))), Emu(int(cw - pad * 2)), Inches(0.85),
+             [[(f"{icon}  ", {"size": 19}), (name, {"size": 16, "bold": True, "color": WHITE})]], spacing=1.02)
+        text(s, Emu(int(x + pad)), Emu(int(y + Inches(1.28))), Emu(int(cw - pad * 2)), Emu(int(ch - Inches(1.5))),
+             [[(harm, {"size": 12.5, "color": MUTED})]], spacing=1.08)
+    if foot: footer(s, foot)
+    return s
+
 def quote(kick, q, attrib, prompt, foot=None):
     s = slide(); kicker(s, kick)
     text(s, Inches(1.0), Inches(1.7), Inches(1.4), Inches(1.4), [[("“", {"size": 90, "bold": True, "color": GREEN})]])
