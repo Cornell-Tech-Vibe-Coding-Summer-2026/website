@@ -265,6 +265,21 @@ def headline_cards(kick, title, cards, foot=None, accent_color=RED):
     if foot: footer(s, foot)
     return s
 
+def refs(kick, title, entries, foot=None, accent_color=GREEN):
+    """A compact citation slide: entries = (label, url). Label bold white, URL mono green.
+    Fits ~11 entries; URLs are real text so they survive a Google Slides import."""
+    s = slide(); kicker(s, kick, color=accent_color); accent(s, color=accent_color)
+    text(s, Inches(0.7), Inches(1.12), Inches(12), Inches(0.8),
+         [[(title, {"size": 28, "bold": True, "color": WHITE})]])
+    top = Inches(2.05); row = Inches(0.44); tw = Emu(int(SW - Inches(1.4)))
+    for i, (label, url) in enumerate(entries):
+        y = Emu(int(top + i * row))
+        text(s, Inches(0.7), y, tw, row,
+             [[(label + "  —  ", {"size": 12.5, "bold": True, "color": WHITE}),
+               (url, {"size": 11, "color": accent_color, "font": F_MONO})]], spacing=1.0)
+    if foot: footer(s, foot)
+    return s
+
 def discuss(kick, question, prompts, howto, foot=None, accent_color=GREEN):
     """An ENGAGED discussion slide: a provocation, concrete sub-prompts to grab, and a
     'how to run it' strip (format · time · what to produce)."""
