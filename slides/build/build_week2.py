@@ -204,33 +204,56 @@ columns("HOW IT HAPPENS", "The harm enters at every stage",
       "Confident output at massive scale, in hiring, courts, feeds, and chats — with no one accountable.")], FOOT, accent_color=RED)
 notes(prs.slides[-1], "Grounding slide: harms aren't one bug — they enter at data, training, AND deployment. This also previews WHERE defenses can intervene (poison the data, audit the model, detect the output).")
 
-# --- These are not hypothetical: real, verified incidents (RED) ---
-columns("NOT HYPOTHETICAL · 1", "It’s already happening",
-    [("Dignity", "Deepfakes",
-      "Explicit AI images of Taylor Swift hit ~47M views on X (Jan 2024); 30+ girls targeted at one NJ high school."),
-     ("Democracy", "Election fakes",
-      "An AI-cloned “Biden” robocall told NH voters to stay home — $6M FCC fine (2024)."),
-     ("Security", "Fraud",
-      "A deepfake “CFO” on a video call cost engineering firm Arup $25M in transfers (2024).")], FOOT, accent_color=RED)
-notes(prs.slides[-1], "Sources: NBC/CBS (Swift, Jan 2024); CNN/Axios (Westfield NJ, Nov 2023); NPR (NH robocall, FCC $6M); CNN Business (Arup, May 2024). All verified.")
+# --- These are not hypothetical: real, cited incidents as a press wall (RED) ---
+headline_cards("NOT HYPOTHETICAL · THE RECEIPTS", "It’s already happening",
+    [("PBS / AP · Jan 2024",
+      "X blocks Taylor Swift searches as explicit AI deepfakes circulate — one post seen ~47M times.",
+      "Dignity"),
+     ("NPR · 2024",
+      "An AI-cloned ‘Biden’ robocall told N.H. voters to stay home — the FCC issued a $6M fine.",
+      "Democracy"),
+     ("CNN Business · May 2024",
+      "A deepfake ‘CFO’ on a video call cost engineering firm Arup $25M in transfers.",
+      "Security")], FOOT, accent_color=RED)
+notes(prs.slides[-1], "Cited claims (source + date on each card), all verified. Sources: PBS/AP + NBC/CBS (Swift); NPR (NH robocall, FCC $6M); CNN Business (Arup, May 2024).")
 
-columns("NOT HYPOTHETICAL · 2", "The quieter harms",
-    [("Safety", "Companion bots",
-      "Character.AI settled after 14-year-old Sewell Setzer’s suicide (2024; landmark settlement 2026)."),
-     ("Fairness", "Biased decisions",
-      "A Dutch benefits algorithm falsely branded ~26,000 families fraudsters — the government fell (2021)."),
-     ("Privacy", "Surveillance",
-      "Clearview scraped 3B+ faces; at least four Black men were wrongly arrested on false matches.")], FOOT, accent_color=RED)
-notes(prs.slides[-1], "Sources: CBS/CNBC (Character.AI, 2026); Al Jazeera (Dutch toeslagenaffaire, 2021); NYT/ACLU (Clearview; Williams, Woodruff, Parks, Reid). All verified.")
+headline_cards("NOT HYPOTHETICAL · THE RECEIPTS", "The automated harms",
+    [("CBS / CNBC · 2026",
+      "Google and Character.AI settle a suit over a 14-year-old’s suicide after months with a companion bot.",
+      "Safety"),
+     ("Al Jazeera · 2021",
+      "A Dutch benefits algorithm branded ~26,000 families fraudsters — the government resigned.",
+      "Fairness"),
+     ("TechCrunch · 2025",
+      "Anthropic settles with authors for ~$1.5B over training on pirated books — a record.",
+      "Ownership")], FOOT, accent_color=RED)
+notes(prs.slides[-1], "Sources: CBS/CNBC (Character.AI settlement, 2026); Al Jazeera (Dutch toeslagenaffaire, 2021); TechCrunch/Authors Guild (Bartz v. Anthropic ~$1.5B, 2025).")
 
-columns("NOT HYPOTHETICAL · 3", "The hidden costs",
-    [("Labor", "Ghost work",
-      "Kenyan workers paid ~$2/hr labeled graphic toxic content to build ChatGPT’s filter (2023)."),
-     ("Environment", "Thirsty AI",
-      "~700,000 L of freshwater to train GPT-3; datacenter emissions spiking (Google +48% vs 2019)."),
-     ("Ownership", "Style & text theft",
-      "Anthropic settled with authors for ~$1.5B over training on pirated books (2025).")], FOOT, accent_color=RED)
-notes(prs.slides[-1], "Sources: TIME (Sama/Kenya, Jan 2023); Li et al. arXiv:2304.03271 + UC Riverside (water — use per-session framing, not 'a bottle per prompt'); NPR (emissions); Authors Guild/Norton Rose (Bartz v. Anthropic ~$1.5B). All verified.")
+# --- Photo slide: privacy & surveillance ---
+photo_split("NOT HYPOTHETICAL · PRIVACY", "Your face is in the training set",
+    [[("Clearview AI scraped ", {"size": 20, "color": WHITE}),
+      ("3 billion+ faces", {"size": 20, "color": RED, "bold": True}),
+      (" from the web to sell facial ID to police — without anyone’s consent.", {"size": 20, "color": WHITE})],
+     [("", {})],
+     [("At least ", {"size": 20, "color": WHITE}),
+      ("four Black men", {"size": 20, "color": RED, "bold": True}),
+      (" have been wrongly arrested on false facial-recognition matches.", {"size": 20, "color": WHITE})]],
+    "facerec.jpg", "Photo: Pete Woodhead / Wikimedia Commons · CC BY 2.0",
+    FOOT, accent_color=RED)
+notes(prs.slides[-1], "Sources: NYT (Kashmir Hill, Clearview 2020); ACLU (Williams, Woodruff, Parks, Reid wrongful arrests). Image is a facial-recognition demo, CC BY 2.0 — illustrative, not the actual cases.")
+
+# --- Photo slide: the hidden costs (labor + environment) ---
+photo_split("NOT HYPOTHETICAL · THE HIDDEN COSTS", "Someone pays for the magic",
+    [[("Training GPT-3 evaporated an estimated ", {"size": 20, "color": WHITE}),
+      ("~700,000 L of freshwater", {"size": 20, "color": RED, "bold": True}),
+      ("; datacenter emissions are spiking (Google +48% vs 2019).", {"size": 20, "color": WHITE})],
+     [("", {})],
+     [("And the humans: Kenyan workers paid ", {"size": 20, "color": WHITE}),
+      ("~$2/hour", {"size": 20, "color": RED, "bold": True}),
+      (" labeled graphic toxic content to build ChatGPT’s safety filter.", {"size": 20, "color": WHITE})]],
+    "datacenter.jpg", "Photo: BalticServers.com / Wikimedia Commons · CC BY-SA 3.0",
+    FOOT, accent_color=RED)
+notes(prs.slides[-1], "Sources: Li et al. arXiv:2304.03271 + UC Riverside (water — per-session framing, not 'a bottle per prompt'); NPR (emissions); TIME (Sama/Kenya, Jan 2023, <$2/hr).")
 
 # --- Discussion beat (long-class pacing) ---
 s = big_question("TALK · 3 MIN",

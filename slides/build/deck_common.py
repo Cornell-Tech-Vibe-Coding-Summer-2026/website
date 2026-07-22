@@ -11,7 +11,9 @@ from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.enum.shapes import MSO_SHAPE
 from pptx.oxml import parse_xml
-import os
+import os, re, subprocess
+
+ASSETS = os.path.join(os.path.dirname(__file__), "assets")
 
 # ---- palette ----
 BG    = RGBColor(0x0B, 0x0E, 0x14)
@@ -206,6 +208,60 @@ def value_grid(kick, title, cards, cols=4, foot=None, accent_color=GREEN):
              [[(f"{icon}  ", {"size": 19}), (name, {"size": 16, "bold": True, "color": WHITE})]], spacing=1.02)
         text(s, Emu(int(x + pad)), Emu(int(y + Inches(1.28))), Emu(int(cw - pad * 2)), Emu(int(ch - Inches(1.5))),
              [[(harm, {"size": 12.5, "color": MUTED})]], spacing=1.08)
+    if foot: footer(s, foot)
+    return s
+
+def _img_dims(path):
+    out = subprocess.run(["sips", "-g", "pixelWidth", "-g", "pixelHeight", path],
+                         capture_output=True, text=True).stdout
+    w = int(re.search(r"pixelWidth: (\d+)", out).group(1))
+    h = int(re.search(r"pixelHeight: (\d+)", out).group(1))
+    return w, h
+
+def photo_fill(s, path, l, t, w, h):
+    """Add an image cropped to completely fill the box (l,t,w,h) without distortion."""
+    iw, ih = _img_dims(path)
+    box_ar = w / h; img_ar = iw / ih
+    pic = s.shapes.add_picture(path, l, t, width=w, height=h)
+    if img_ar > box_ar:
+        crop = (1 - box_ar / img_ar) / 2; pic.crop_left = crop; pic.crop_right = crop
+    else:
+        crop = (1 - img_ar / box_ar) / 2; pic.crop_top = crop; pic.crop_bottom = crop
+    return pic
+
+def photo_split(kick, title, body_paras, img_path, credit, foot=None, accent_color=GREEN):
+    """Image fills the right ~42%; kicker/title/body on the left. Credit caption over the image."""
+    s = slide(); kicker(s, kick, color=accent_color); accent(s, color=accent_color)
+    half = Inches(5.6)
+    photo_fill(s, os.path.join(ASSETS, img_path), Emu(int(SW - half)), 0, half, SH)
+    tx = Inches(0.7); tw = Emu(int(SW - half - Inches(1.15)))
+    text(s, tx, Inches(1.3), tw, Inches(1.4), [[(title, {"size": 30, "bold": True, "color": WHITE})]])
+    if body_paras:
+        text(s, tx, Inches(2.8), tw, Inches(3.4), body_paras, size=19, color=WHITE, spacing=1.16)
+    rect(s, Emu(int(SW - half)), Emu(int(SH - Inches(0.34))), half, Inches(0.34), fill=BG)
+    text(s, Emu(int(SW - half + Inches(0.15))), Emu(int(SH - Inches(0.32))), Emu(int(half - Inches(0.3))), Inches(0.3),
+         [[(credit, {"size": 8.5, "color": MUTED, "font": F_MONO})]])
+    if foot: footer(s, foot)
+    return s
+
+def headline_cards(kick, title, cards, foot=None, accent_color=RED):
+    """A press wall: cards = (source, headline, value_tag). Reads like cited news clippings."""
+    s = slide(); kicker(s, kick, color=accent_color); accent(s, color=accent_color)
+    text(s, Inches(0.7), Inches(1.25), Inches(12), Inches(0.9), [[(title, {"size": 30, "bold": True, "color": WHITE})]])
+    n = len(cards); gap = Inches(0.4); left = Inches(0.7)
+    total = SW - Inches(1.4) - gap * (n - 1); cw = Emu(int(total / n))
+    top = Inches(2.45); ch = Inches(4.0)
+    for i, (source, headline, tag) in enumerate(cards):
+        x = Emu(int(left + i * (cw + gap)))
+        rect(s, x, top, cw, ch, fill=PANEL, rounded=True)
+        rect(s, x, top, cw, Inches(0.5), fill=accent_color)  # outlet band
+        text(s, Emu(int(x + Inches(0.28))), Emu(int(top + Inches(0.06))), Emu(int(cw - Inches(0.56))), Inches(0.4),
+             [[(source.upper(), {"size": 11, "bold": True, "color": BG, "font": F_MONO})]], anchor=MSO_ANCHOR.MIDDLE)
+        text(s, Emu(int(x + Inches(0.28))), Emu(int(top + Inches(0.75))), Emu(int(cw - Inches(0.56))), Inches(2.4),
+             [[("“" + headline + "”", {"size": 18, "bold": True, "color": WHITE})]], spacing=1.1)
+        text(s, Emu(int(x + Inches(0.28))), Emu(int(top + ch - Inches(0.62))), Emu(int(cw - Inches(0.56))), Inches(0.5),
+             [[("▸ threatens ", {"size": 12, "color": MUTED, "font": F_MONO}),
+               (tag, {"size": 12, "bold": True, "color": accent_color, "font": F_MONO})]])
     if foot: footer(s, foot)
     return s
 
