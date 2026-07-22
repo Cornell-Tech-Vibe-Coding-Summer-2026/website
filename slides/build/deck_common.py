@@ -16,7 +16,8 @@ import os
 # ---- palette ----
 BG    = RGBColor(0x0B, 0x0E, 0x14)
 PANEL = RGBColor(0x15, 0x1B, 0x26)
-GREEN = RGBColor(0x00, 0xFF, 0x41)
+GREEN = RGBColor(0x00, 0xFF, 0x41)   # good / defense
+RED   = RGBColor(0xFF, 0x4D, 0x4D)   # harm / problem
 WHITE = RGBColor(0xF5, 0xF7, 0xFA)
 MUTED = RGBColor(0x8A, 0x94, 0xA6)
 DIM   = RGBColor(0x5A, 0x64, 0x74)
@@ -83,8 +84,20 @@ def footer(s, txt):
     text(s, Inches(0.7), Inches(6.95), Inches(12), Inches(0.4),
          [[(txt, {})]], size=10, color=DIM, font=F_MONO)
 
-def accent(s, l=Inches(0.7), t=Inches(1.02), w=Inches(0.9), h=Inches(0.08)):
-    rect(s, l, t, w, h, fill=GREEN)
+def accent(s, l=Inches(0.7), t=Inches(1.02), w=Inches(0.9), h=Inches(0.08), color=GREEN):
+    rect(s, l, t, w, h, fill=color)
+
+def section(kick, title, color=GREEN, sub=None):
+    """Act divider — a full-bleed section break, color-coded (red=problem, green=defense)."""
+    s = slide(); rect(s, 0, 0, Inches(0.28), SH, fill=color)
+    text(s, Inches(0.9), Inches(2.4), Inches(11.5), Inches(0.6),
+         [[(kick, {"size": 18, "color": color, "bold": True, "font": F_MONO})]])
+    text(s, Inches(0.88), Inches(3.0), Inches(11.5), Inches(1.7),
+         [[(title, {"size": 48, "bold": True, "color": WHITE})]])
+    if sub:
+        text(s, Inches(0.92), Inches(4.7), Inches(11), Inches(0.7),
+             [[(sub, {"size": 19, "color": MUTED})]])
+    return s
 
 def notes(s, txt):
     s.notes_slide.notes_text_frame.text = txt
@@ -141,8 +154,8 @@ def media(kick, title, label, hint, foot=None):
     if foot: footer(s, foot)
     return s
 
-def columns(kick, title, cols, foot=None):
-    s = slide(); kicker(s, kick); accent(s)
+def columns(kick, title, cols, foot=None, accent_color=GREEN):
+    s = slide(); kicker(s, kick, color=accent_color); accent(s, color=accent_color)
     text(s, Inches(0.7), Inches(1.3), Inches(12), Inches(1.0), [[(title, {"size": 32, "bold": True, "color": WHITE})]])
     n = len(cols); gap = Inches(0.4); left = Inches(0.7)
     total = SW - Inches(1.4) - gap * (n - 1); cw = Emu(int(total / n))
@@ -150,9 +163,9 @@ def columns(kick, title, cols, foot=None):
     for i, (label, head, desc) in enumerate(cols):
         x = Emu(int(left + i * (cw + gap)))
         rect(s, x, top, cw, ch, fill=PANEL, rounded=True)
-        rect(s, x, top, cw, Inches(0.09), fill=GREEN)
+        rect(s, x, top, cw, Inches(0.09), fill=accent_color)
         text(s, Emu(int(x + Inches(0.3))), Emu(int(top + Inches(0.35))), Emu(int(cw - Inches(0.6))), Inches(0.5),
-             [[(label.upper(), {"size": 12, "bold": True, "color": GREEN, "font": F_MONO})]])
+             [[(label.upper(), {"size": 12, "bold": True, "color": accent_color, "font": F_MONO})]])
         text(s, Emu(int(x + Inches(0.3))), Emu(int(top + Inches(0.85))), Emu(int(cw - Inches(0.6))), Inches(0.9),
              [[(head, {"size": 20, "bold": True, "color": WHITE})]])
         text(s, Emu(int(x + Inches(0.3))), Emu(int(top + Inches(1.8))), Emu(int(cw - Inches(0.6))), Inches(1.7),
@@ -168,11 +181,11 @@ def checklist(kick, title, items, foot=None):
     if foot: footer(s, foot)
     return s
 
-def value_grid(kick, title, cards, cols=4, foot=None):
-    """Taxonomy overview: N 'value under threat' cards in a grid, all visible at once.
-    cards = list of (icon, value_name, harm_line). Auto-rows to fit."""
+def value_grid(kick, title, cards, cols=4, foot=None, accent_color=GREEN):
+    """Taxonomy overview: N cards in a grid, all visible at once.
+    cards = list of (icon, name, line). accent_color: RED for harms, GREEN for defenses."""
     import math
-    s = slide(); kicker(s, kick, color=GREEN); accent(s)
+    s = slide(); kicker(s, kick, color=accent_color); accent(s, color=accent_color)
     text(s, Inches(0.7), Inches(1.12), Inches(12), Inches(0.9),
          [[(title, {"size": 30, "bold": True, "color": WHITE})]])
     rows = math.ceil(len(cards) / cols)
@@ -187,7 +200,7 @@ def value_grid(kick, title, cards, cols=4, foot=None):
         x = Emu(int(gleft + c * (cw + gx)))
         y = Emu(int(gtop + r * (ch + gy)))
         rect(s, x, y, cw, ch, fill=PANEL, rounded=True)
-        rect(s, x, y, Inches(0.09), ch, fill=GREEN)  # left accent bar
+        rect(s, x, y, Inches(0.09), ch, fill=accent_color)  # left accent bar
         pad = Inches(0.28)
         text(s, Emu(int(x + pad)), Emu(int(y + Inches(0.24))), Emu(int(cw - pad * 2)), Inches(0.85),
              [[(f"{icon}  ", {"size": 19}), (name, {"size": 16, "bold": True, "color": WHITE})]], spacing=1.02)
