@@ -15,6 +15,7 @@ export const SLIDE_DECKS = [
     { id: 'w1thu', week: 1, chip: 'W1 Thu', day: 'Thu · Jul 16', title: 'Project Day — Project 1', gsId: '1mQlRy2Ue1D2YDtnpUYaZ9ZdmAhDf7Dep' },
     { id: 'w2mon', week: 2, chip: 'W2 Mon', day: 'Mon · Jul 20', title: 'Values in Vibe Coding', gsId: '1UsDXaNL9w2TFWGAj0hw9Gzyl4jDrN_A0' },
     { id: 'w2tue', week: 2, chip: 'W2 Tue', day: 'Tue · Jul 21', title: 'AI Safety: Red-Teaming', gsId: null },
+    { id: 'w2tueguest', week: 2, chip: 'W2 Tue ✦', day: 'Tue · Jul 21 · guest', title: 'Guest Speaker — AI Safety: Red-Teaming', gsId: '1oNtQGMaUXK15dKLMyMrszYOyvDuOvIqK' },
     { id: 'w2wed', week: 2, chip: 'W2 Wed', day: 'Wed · Jul 22', title: 'AI Against AI', gsId: null },
     { id: 'w2thu', week: 2, chip: 'W2 Thu', day: 'Thu · Jul 23', title: 'Project Day — Project 2', gsId: null },
     { id: 'w3mon', week: 3, chip: 'W3 Mon', day: 'Mon · Jul 27', title: 'User Testing I: Does It Work?', gsId: null },
