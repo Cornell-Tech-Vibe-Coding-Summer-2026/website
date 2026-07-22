@@ -61,6 +61,23 @@ def tree(repo):
     return []
 
 
+def template_filled(repo, act):
+    """True if the student wrote their report INTO vibe-report-template.md instead of
+    copying it to vibe-report.md — i.e. the name placeholder is gone / slots are filled."""
+    out = subprocess.run([GH, "api", f"repos/{ORG}/{repo}/contents/{act}/vibe-report-template.md"],
+                         capture_output=True, text=True)
+    try:
+        import base64
+        md = base64.b64decode(json.loads(out.stdout)["content"]).decode("utf8", "ignore")
+    except Exception:
+        return False
+    name_line = next((l for l in md.splitlines() if "Student Name" in l), "")
+    if name_line and "[Your Name]" not in name_line:
+        return True   # they replaced the name placeholder → they filled it in
+    slots = len(re.findall(r"\[Your [A-Za-z]+\]|\[e\.g\.|\[Describe|\[paste|\[list ", md))
+    return slots <= 1   # nearly all placeholders replaced
+
+
 def app_live(repo, act):
     url = f"{BASE}/{repo}/{act}/code_deliverable/"
     try:
@@ -93,6 +110,8 @@ def check(repo, act, paths):
         report = "ok"
     elif real_reports:
         report = "misplaced"
+    elif f"{act}/vibe-report-template.md" in paths and template_filled(repo, act):
+        report = "intemplate"   # wrote the report INTO the template file, not vibe-report.md
     else:
         report = "missing"
 
@@ -116,7 +135,7 @@ def check(repo, act, paths):
     return app, report, log
 
 
-GLYPH = {"ok": "✅", "misplaced": "⚠️", "missing": "—"}
+GLYPH = {"ok": "✅", "misplaced": "⚠️", "intemplate": "📄", "missing": "—"}
 
 
 def main():
@@ -146,12 +165,17 @@ def main():
                 if state == "misplaced":
                     issues.append(f"- **{name}** · {label}: {kind} is in the wrong place or name "
                                   f"(expected `{act}/` per the instructions).")
+                elif state == "intemplate":
+                    issues.append(f"- **{name}** · {label}: report was written **inside "
+                                  f"`vibe-report-template.md`** — copy it to `{act}/vibe-report.md` "
+                                  f"so it's graded and shows in the gallery.")
         rows.append((name, cells))
 
     out = ["# Submission status — expected locations",
            "",
-           "Each cell = **app · report · log** for that activity. ✅ all three in place · "
-           "⚠️ present but in the wrong place/name · — missing.",
+           "Each cell = **app · report · log** for that activity. ✅ in place · "
+           "⚠️ present but wrong place/name · 📄 report written inside vibe-report-template.md "
+           "(needs copying to vibe-report.md) · — missing.",
            "",
            "| Student | " + " | ".join(l for _, l in ACTIVITIES) + " |",
            "| :--- | " + " | ".join(":---:" for _ in ACTIVITIES) + " |"]
