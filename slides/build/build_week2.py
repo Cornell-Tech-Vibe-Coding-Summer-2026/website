@@ -173,17 +173,20 @@ s = big_question("TODAY",
 notes(s, "3-hour class. The whole deck is a split: RED = the problem (how AI harms), GREEN = the defense (AI against AI). Say that up front so the colors read as good/bad.")
 
 # --- Warm-up brainstorm (generate now, build later) ---
-s = big_question("WARM-UP · 5 MIN",
-    ["Name one AI harm you’ve felt or seen —",
-     "and one way you’d fight back. Keep it."], FOOT)
-notes(s, "Everyone jots 1–2 on paper / a sticky. No wrong answers — activate what they already know before the lecture enriches it. Tell them: hold onto your fightback idea — you can BUILD it as your Part B project this afternoon. We come back to these before the activity.")
+s = discuss("WARM-UP · 5 MIN",
+    "When did AI last unsettle you?",
+    ["Creeped you out, cost someone a job, got a fact wrong that mattered, or felt unfair?",
+     "Jot ONE harm — and one way you’d fight back against it."],
+    "2 min solo, on paper. Keep your fightback idea — you may BUILD it as your Part B this afternoon.",
+    FOOT, accent_color=RED)
+notes(s, "Personal and visceral on purpose — pull from their own life, not the abstract. No wrong answers. We return to these ideas right before the build; the fightback becomes a candidate Part B project.")
 
 # ======== ACT 1 · THE PROBLEM (red) ========
 section("⚠  ACT 1 · THE PROBLEM", "How AI is unethical", color=RED,
-        sub="A map of the values AI puts under threat — then the receipts.")
+        sub="An overview of the seven values AI puts at risk — then the real cases.")
 
 # --- The centerpiece: values under threat, all visible at once (RED) ---
-value_grid("THE MAP · VALUES UNDER THREAT", "What AI puts at risk", [
+value_grid("OVERVIEW · SEVEN VALUES AT RISK", "What AI puts at risk", [
     ("⚖️", "Fairness & Justice", "Bias encoded and amplified — unequal calls in hiring, lending, policing, and healthcare."),
     ("🔒", "Privacy & Surveillance", "Personal data scraped and memorized; biometric tracking and mass surveillance."),
     ("📰", "Truth & Democracy", "Fluent falsehoods and cheap propaganda erode shared facts and fair elections."),
@@ -205,7 +208,7 @@ columns("HOW IT HAPPENS", "The harm enters at every stage",
 notes(prs.slides[-1], "Grounding slide: harms aren't one bug — they enter at data, training, AND deployment. This also previews WHERE defenses can intervene (poison the data, audit the model, detect the output).")
 
 # --- These are not hypothetical: real, cited incidents as a press wall (RED) ---
-headline_cards("NOT HYPOTHETICAL · THE RECEIPTS", "It’s already happening",
+headline_cards("REAL CASES · IN THE NEWS", "It’s already happening",
     [("PBS / AP · Jan 2024",
       "X blocks Taylor Swift searches as explicit AI deepfakes circulate — one post seen ~47M times.",
       "Dignity"),
@@ -217,7 +220,7 @@ headline_cards("NOT HYPOTHETICAL · THE RECEIPTS", "It’s already happening",
       "Security")], FOOT, accent_color=RED)
 notes(prs.slides[-1], "Cited claims (source + date on each card), all verified. Sources: PBS/AP + NBC/CBS (Swift); NPR (NH robocall, FCC $6M); CNN Business (Arup, May 2024).")
 
-headline_cards("NOT HYPOTHETICAL · THE RECEIPTS", "The automated harms",
+headline_cards("REAL CASES · IN THE NEWS", "The automated harms",
     [("CBS / CNBC · 2026",
       "Google and Character.AI settle a suit over a 14-year-old’s suicide after months with a companion bot.",
       "Safety"),
@@ -230,7 +233,7 @@ headline_cards("NOT HYPOTHETICAL · THE RECEIPTS", "The automated harms",
 notes(prs.slides[-1], "Sources: CBS/CNBC (Character.AI settlement, 2026); Al Jazeera (Dutch toeslagenaffaire, 2021); TechCrunch/Authors Guild (Bartz v. Anthropic ~$1.5B, 2025).")
 
 # --- Photo slide: privacy & surveillance ---
-photo_split("NOT HYPOTHETICAL · PRIVACY", "Your face is in the training set",
+photo_split("REAL CASES · PRIVACY", "Your face is in the training set",
     [[("Clearview AI scraped ", {"size": 20, "color": WHITE}),
       ("3 billion+ faces", {"size": 20, "color": RED, "bold": True}),
       (" from the web to sell facial ID to police — without anyone’s consent.", {"size": 20, "color": WHITE})],
@@ -243,7 +246,7 @@ photo_split("NOT HYPOTHETICAL · PRIVACY", "Your face is in the training set",
 notes(prs.slides[-1], "Sources: NYT (Kashmir Hill, Clearview 2020); ACLU (Williams, Woodruff, Parks, Reid wrongful arrests). Image is a facial-recognition demo, CC BY 2.0 — illustrative, not the actual cases.")
 
 # --- Photo slide: the hidden costs (labor + environment) ---
-photo_split("NOT HYPOTHETICAL · THE HIDDEN COSTS", "Someone pays for the magic",
+photo_split("REAL CASES · THE HIDDEN COSTS", "Someone pays for the magic",
     [[("Training GPT-3 evaporated an estimated ", {"size": 20, "color": WHITE}),
       ("~700,000 L of freshwater", {"size": 20, "color": RED, "bold": True}),
       ("; datacenter emissions are spiking (Google +48% vs 2019).", {"size": 20, "color": WHITE})],
@@ -255,17 +258,20 @@ photo_split("NOT HYPOTHETICAL · THE HIDDEN COSTS", "Someone pays for the magic"
     FOOT, accent_color=RED)
 notes(prs.slides[-1], "Sources: Li et al. arXiv:2304.03271 + UC Riverside (water — per-session framing, not 'a bottle per prompt'); NPR (emissions); TIME (Sama/Kenya, Jan 2023, <$2/hr).")
 
-# --- Discussion beat (long-class pacing) ---
-s = big_question("TALK · 3 MIN",
-    ["Which of these hits closest to home?",
-     "Which value would YOU most want to protect?"], FOOT)
-notes(s, "Turn-to-your-neighbor. Surfaces the value each student cares about — which becomes the lens for their defense/Part B. Take 2–3 out loud, map each to the red grid.")
+# --- Discussion beat (force a stance, create disagreement) ---
+s = discuss("TAKE A SIDE · 3 MIN",
+    "Which harm scares you most?",
+    ["Pick ONE of the seven — the one you’d least want done to you or someone you love.",
+     "Find a neighbor who picked a different one. Defend yours; hear theirs."],
+    "3 min in pairs → we take three to the room. Your pick is the value you’ll defend all afternoon.",
+    FOOT, accent_color=RED)
+notes(s, "Forcing a single choice + pairing with someone who disagreed creates real engagement (a mini-debate, not a vague 'thoughts?'). The value they defend here becomes the lens for their Part B.")
 
-# ======== THE TURN ========
-s = quote("THE TURN",
+# ======== FROM PROBLEM TO DEFENSE ========
+s = quote("FROM PROBLEM TO DEFENSE",
     "You have a right to protect your personal narrative as AI companies vacuum up the internet.",
     "after Brunton & Nissenbaum, Obfuscation",
-    "For every harm on that map — is there a defense?", FOOT)
+    "For every harm we just saw — is there a defense?", FOOT)
 notes(s, "Pivot from red to green. Not every harm has a clean technical fix — but some do, and that's where we go deep.")
 
 # ======== ACT 2 · THE DEFENSE (green) ========
@@ -273,7 +279,7 @@ section("✓  ACT 2 · THE DEFENSE", "AI against AI", color=GREEN,
         sub="Turn the same tools back around — to protect instead of extract.")
 
 # --- The mirror: defenses, same 7 values (GREEN) ---
-value_grid("THE COUNTER-MAP · DEFENSES", "Turning AI against AI", [
+value_grid("DEFENSES · ONE PER VALUE", "Turning AI against AI", [
     ("⚖️", "Fairness", "Bias audits & adversarial fairness testing — red-team the model before it ships."),
     ("🔒", "Privacy", "Obfuscation, scraper-poisoning, Glaze/Nightshade cloaking — poison the training set."),
     ("📰", "Truth", "Provenance & watermarking (C2PA), deepfake & AI-text detectors."),
@@ -351,16 +357,20 @@ content("DEEP DIVE · TRUTH", "Prove what’s real",
 notes(prs.slides[-1], "C2PA content credentials (Adobe/BBC/etc.). The framing shift: 'proof of human' beats 'detect the machine' as detectors get worse. Detectors are probabilistic — teach students to state confidence, not certainty.")
 
 # --- The honest catch: it's an arms race ---
-s = big_question("THE CATCH",
+s = big_question("A REALITY CHECK",
     ["Every defense provokes a counter-move.",
      "The same inference that protects can also expose."], FOOT)
 notes(s, "Intellectual honesty: cloaks get broken, detectors get evaded, poisoning gets filtered. And the DSI paper is the flip — inference used defensively (to prove anonymization fails) is the SAME tool an attacker uses. Defense is a posture, not a finish line.")
 
 # --- Brainstorm revisited: now pick one to BUILD ---
-s = big_question("BACK TO YOUR WARM-UP",
-    ["Pick a harm from the red map —",
-     "your defense becomes your Part B. Build it."], FOOT)
-notes(s, "Return to the fightback idea they jotted at the start. Now they DECIDE: is that the thing they build for Part B? Seed with the counter-map + deep dives if stuck. A few shout one out; map each to a value. This is the hand-off into the activity.")
+s = discuss("DECIDE · YOUR PART B",
+    "That fightback idea from this morning — build it?",
+    ["Too big? Cut it to one page you can finish and demo today.",
+     "No idea, or it fizzled? Steal one from the green side, or defend the value you argued for.",
+     "Still stuck? Pair up — two people, one defense."],
+    "Commit to ONE in 3 min. That’s your Part B. Then we build.",
+    FOOT, accent_color=GREEN)
+notes(s, "Callback to the warm-up they held onto. This is the decision point — everyone leaves this slide with one buildable idea. Take a few out loud to seed the room. Hand-off into the activity.")
 
 # ======== DO IT · the activity ========
 s = bullets("DO IT · PART A", "First: poison your own scraper",
@@ -383,7 +393,7 @@ s = big_question("THE ETHICS",
 notes(s, "Reading: Obfuscation, Ch. 1 (Brunton & Nissenbaum). Every defense points a weapon somewhere — name where. The DSI paper is the cautionary flip: the same inference that defends can also expose.")
 
 # --- Sources ---
-bullets("SOURCES", "Where the map comes from",
+bullets("SOURCES", "Where this comes from",
     ["Weidinger et al. 2022 — Taxonomy of Risks posed by Language Models (FAccT).",
      "Shelby et al. 2023 — Sociotechnical Harms of Algorithmic Systems (AIES).",
      "MIT AI Risk Repository (2024) · NIST AI Risk Management Framework (2023) · EU AI Act (2024).",

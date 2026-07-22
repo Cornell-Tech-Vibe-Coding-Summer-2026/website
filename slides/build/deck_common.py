@@ -265,6 +265,23 @@ def headline_cards(kick, title, cards, foot=None, accent_color=RED):
     if foot: footer(s, foot)
     return s
 
+def discuss(kick, question, prompts, howto, foot=None, accent_color=GREEN):
+    """An ENGAGED discussion slide: a provocation, concrete sub-prompts to grab, and a
+    'how to run it' strip (format · time · what to produce)."""
+    s = slide(); kicker(s, kick, color=accent_color); accent(s, color=accent_color)
+    text(s, Inches(0.7), Inches(1.45), Inches(12), Inches(2.0),
+         [[(question, {"size": 38, "bold": True, "color": WHITE})]], spacing=1.05)
+    text(s, Inches(0.72), Inches(3.95), Inches(12), Inches(1.9),
+         [[("→  ", {"color": accent_color, "bold": True, "size": 19}), (p, {"size": 19, "color": MUTED})]
+          for p in prompts], spacing=1.35)
+    rect(s, Inches(0.7), Inches(6.05), Emu(int(SW - Inches(1.4))), Inches(0.72),
+         fill=PANEL, line=accent_color, line_w=1.5, rounded=True)
+    text(s, Inches(1.0), Inches(6.05), Emu(int(SW - Inches(2.0))), Inches(0.72),
+         [[("▶  ", {"color": accent_color, "bold": True, "size": 16}),
+           (howto, {"size": 16, "color": WHITE, "bold": True})]], anchor=MSO_ANCHOR.MIDDLE)
+    if foot: footer(s, foot)
+    return s
+
 def quote(kick, q, attrib, prompt, foot=None):
     s = slide(); kicker(s, kick)
     text(s, Inches(1.0), Inches(1.7), Inches(1.4), Inches(1.4), [[("“", {"size": 90, "bold": True, "color": GREEN})]])
