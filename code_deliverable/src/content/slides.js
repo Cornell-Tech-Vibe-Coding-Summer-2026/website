@@ -14,7 +14,7 @@ export const SLIDE_DECKS = [
     { id: 'w1wed', week: 1, chip: 'W1 Wed', day: 'Wed · Jul 15', title: 'Bias in Vibe Coding', gsId: '1F23L1LKi5UY97Pklnn_1H36qSSIBHcUm' },
     { id: 'w1thu', week: 1, chip: 'W1 Thu', day: 'Thu · Jul 16', title: 'Project Day — Project 1', gsId: '1mQlRy2Ue1D2YDtnpUYaZ9ZdmAhDf7Dep' },
     { id: 'w2mon', week: 2, chip: 'W2 Mon', day: 'Mon · Jul 20', title: 'Values in Vibe Coding', gsId: '1UsDXaNL9w2TFWGAj0hw9Gzyl4jDrN_A0' },
-    { id: 'w2tue', week: 2, chip: 'W2 Tue', day: 'Tue · Jul 21', title: 'AI Safety: Red-Teaming', gsId: null },
+    { id: 'w2tue', week: 2, chip: 'W2 Tue', day: 'Tue · Jul 21', title: 'AI Safety: Red-Teaming', gsId: '1472xwruqTo9llSoL-sxSwG4PM6gYQrgj' },
     { id: 'w2tueguest', week: 2, chip: 'W2 Tue ✦', day: 'Tue · Jul 21 · guest', title: 'Guest Speaker — AI Safety: Red-Teaming', gsId: '1oNtQGMaUXK15dKLMyMrszYOyvDuOvIqK' },
     { id: 'w2wed', week: 2, chip: 'W2 Wed', day: 'Wed · Jul 22', title: 'AI Against AI', gsId: '172fIcOWEa22iafr6q8wX1t41FSDdQHIp' },
     { id: 'w2thu', week: 2, chip: 'W2 Thu', day: 'Thu · Jul 23', title: 'Project Day — Project 2', gsId: null },
