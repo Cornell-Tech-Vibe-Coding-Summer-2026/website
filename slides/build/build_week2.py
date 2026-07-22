@@ -167,10 +167,16 @@ notes(s, "Reading: Krauß et al. 2025 (CHI) — dark patterns. Bright patterns =
 save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week2-Tue-AI-Safety-Red-Teaming.pptx"); prs = init_deck()
 divider("WEEK 2 · WEDNESDAY", "AI Against AI", "Ethics — Doing the right thing")
 
-s = big_question("WARM-UP",
-    ["Two questions, all class:",
-     "How is AI unethical — and can we fight back with it?"], FOOT)
-notes(s, "The whole deck is a split: RED = the problem (how AI harms), GREEN = the defense (AI against AI). Say that up front so the colors read as good/bad.")
+s = big_question("TODAY",
+    ["How is AI unethical —",
+     "and can we fight back with it?"], FOOT)
+notes(s, "3-hour class. The whole deck is a split: RED = the problem (how AI harms), GREEN = the defense (AI against AI). Say that up front so the colors read as good/bad.")
+
+# --- Warm-up brainstorm (generate now, build later) ---
+s = big_question("WARM-UP · 5 MIN",
+    ["Name one AI harm you’ve felt or seen —",
+     "and one way you’d fight back. Keep it."], FOOT)
+notes(s, "Everyone jots 1–2 on paper / a sticky. No wrong answers — activate what they already know before the lecture enriches it. Tell them: hold onto your fightback idea — you can BUILD it as your Part B project this afternoon. We come back to these before the activity.")
 
 # ======== ACT 1 · THE PROBLEM (red) ========
 section("⚠  ACT 1 · THE PROBLEM", "How AI is unethical", color=RED,
@@ -187,6 +193,16 @@ value_grid("THE MAP · VALUES UNDER THREAT", "What AI puts at risk", [
     ("🎭", "Accountability & Authenticity", "Opaque decisions with no redress; synthetic media and style theft."),
 ], cols=4, foot=FOOT, accent_color=RED)
 notes(prs.slides[-1], "Convergent across the field: Weidinger et al. 2022 (FAccT), Shelby et al. 2023 (AIES), MIT AI Risk Repository, NIST AI RMF, EU AI Act all carve up roughly these categories. This is the general OVERVIEW; we go deep on the ones we can defend. Sources slide at the end.")
+
+# --- How the harm gets in (mechanism) ---
+columns("HOW IT HAPPENS", "The harm enters at every stage",
+    [("1 · Data", "What it learns from",
+      "Scraped without consent; carries society’s bias, private info, and copyrighted work into the model."),
+     ("2 · Training", "What gets baked in",
+      "The model memorizes and amplifies patterns — including the ones we’d never choose on purpose."),
+     ("3 · Deployment", "Where it lands",
+      "Confident output at massive scale, in hiring, courts, feeds, and chats — with no one accountable.")], FOOT, accent_color=RED)
+notes(prs.slides[-1], "Grounding slide: harms aren't one bug — they enter at data, training, AND deployment. This also previews WHERE defenses can intervene (poison the data, audit the model, detect the output).")
 
 # --- These are not hypothetical: real, verified incidents (RED) ---
 columns("NOT HYPOTHETICAL · 1", "It’s already happening",
@@ -215,6 +231,12 @@ columns("NOT HYPOTHETICAL · 3", "The hidden costs",
      ("Ownership", "Style & text theft",
       "Anthropic settled with authors for ~$1.5B over training on pirated books (2025).")], FOOT, accent_color=RED)
 notes(prs.slides[-1], "Sources: TIME (Sama/Kenya, Jan 2023); Li et al. arXiv:2304.03271 + UC Riverside (water — use per-session framing, not 'a bottle per prompt'); NPR (emissions); Authors Guild/Norton Rose (Bartz v. Anthropic ~$1.5B). All verified.")
+
+# --- Discussion beat (long-class pacing) ---
+s = big_question("TALK · 3 MIN",
+    ["Which of these hits closest to home?",
+     "Which value would YOU most want to protect?"], FOOT)
+notes(s, "Turn-to-your-neighbor. Surfaces the value each student cares about — which becomes the lens for their defense/Part B. Take 2–3 out loud, map each to the red grid.")
 
 # ======== THE TURN ========
 s = quote("THE TURN",
@@ -280,19 +302,57 @@ content("DEEP DIVE · PRIVACY OF GROUPS", "When blurring isn’t enough (Franchi
        {"size": 20, "color": WHITE})]], FOOT)
 notes(prs.slides[-1], "Hauke's FAccT 2025 paper (paired reading). Uses inference (AI) to expose that individual anonymization fails at the GROUP level — a contextual-integrity argument. Refine framing to taste.")
 
-# --- Brainstorm: pull students in ---
-s = big_question("YOUR TURN · 5 MIN",
-    ["What else could ‘AI against AI’ be?",
-     "Pick a harm from the red map — invent its defense."], FOOT)
-notes(s, "Quick brainstorm before building. Prompts to seed it: detectors, cloaks, noise, provenance, refusal/withholding, audits, watermarks. Have a few teams shout one out and map it to a value. This warms up Part B.")
+# --- Deep dive 4: cloak & poison (protect creative work) ---
+content("DEEP DIVE · CREATIVE OWNERSHIP", "Cloak it, or poison it",
+    [[("Glaze", {"size": 21, "color": GREEN, "bold": True}),
+      (" adds perturbations invisible to you but confusing to a model — it can’t copy your style.",
+       {"size": 21, "color": WHITE})],
+     [("", {})],
+     [("Nightshade", {"size": 21, "color": GREEN, "bold": True}),
+      (" goes further — poisoned images corrupt any model that trains on them. ",
+       {"size": 21, "color": WHITE}),
+      ("PhotoGuard", {"size": 21, "color": GREEN, "bold": True}),
+      (" immunizes photos so AI can’t edit them into deepfakes.",
+       {"size": 21, "color": WHITE})]], FOOT)
+notes(prs.slides[-1], "Glaze/Nightshade from the SAND Lab (UChicago); PhotoGuard from MIT. Defense for creative ownership + anti-deepfake. All student-buildable as conceptual demos. Ties back to the NYT/Getty/Anthropic harms.")
+
+# --- Deep dive 5: prove what's real (provenance & detection) ---
+content("DEEP DIVE · TRUTH", "Prove what’s real",
+    [[("Instead of spotting fakes after the fact, sign the ", {"size": 21, "color": WHITE}),
+      ("real", {"size": 21, "color": GREEN, "bold": True}),
+      (" thing at creation.", {"size": 21, "color": WHITE})],
+     [("", {})],
+     [("C2PA / Content Credentials", {"size": 20, "color": GREEN, "bold": True}),
+      (" attach tamper-evident provenance to media. Pair with AI-text and deepfake detectors — imperfect, but a signal.",
+       {"size": 20, "color": WHITE})]], FOOT)
+notes(prs.slides[-1], "C2PA content credentials (Adobe/BBC/etc.). The framing shift: 'proof of human' beats 'detect the machine' as detectors get worse. Detectors are probabilistic — teach students to state confidence, not certainty.")
+
+# --- The honest catch: it's an arms race ---
+s = big_question("THE CATCH",
+    ["Every defense provokes a counter-move.",
+     "The same inference that protects can also expose."], FOOT)
+notes(s, "Intellectual honesty: cloaks get broken, detectors get evaded, poisoning gets filtered. And the DSI paper is the flip — inference used defensively (to prove anonymization fails) is the SAME tool an attacker uses. Defense is a posture, not a finish line.")
+
+# --- Brainstorm revisited: now pick one to BUILD ---
+s = big_question("BACK TO YOUR WARM-UP",
+    ["Pick a harm from the red map —",
+     "your defense becomes your Part B. Build it."], FOOT)
+notes(s, "Return to the fightback idea they jotted at the start. Now they DECIDE: is that the thing they build for Part B? Seed with the counter-map + deep dives if stuck. A few shout one out; map each to a value. This is the hand-off into the activity.")
 
 # ======== DO IT · the activity ========
-s = bullets("DO IT · BOTH PARTS", "Today you build two things",
-    ["Part A — poison your Week 1 site (obfuscation): fake facts via CSS clip + aria-hidden, verified with curl.",
-     "Part B — a hosted AI-against-AI mini project of your own (the link is your submission).",
-     "Options for B: style cloaking · privacy noise · block-the-bots · an AI-vs-AI detector · worker-autonomy tool.",
-     "The report documents BOTH parts."], FOOT, )
-notes(prs.slides[-1], "Part A edits week1/7_13; Part B lives in week2/7_22/code_deliverable. Template: vibe-report-template.md.")
+s = bullets("DO IT · PART A", "First: poison your own scraper",
+    ["Open your Week 1 site (week1/7_13).",
+     "Add 2–3 plausible fake facts, hidden with CSS clip + aria-hidden — NOT display:none.",
+     "Verify with curl that the decoy is in the raw payload but invisible on the page.",
+     "~30 minutes — then move to your own build."], FOOT)
+notes(prs.slides[-1], "Part A edits week1/7_13. Guided; the example project has the exact snippet. Keep it short so most of the session goes to Part B.")
+
+s = bullets("DO IT · PART B", "Then: build your AI-against-AI project",
+    ["Build the defense you picked — hosted, in week2/7_22/code_deliverable.",
+     "Starting points: style cloaking · privacy noise (TrackMeNot) · block-the-bots · AI-vs-AI detector · worker-autonomy tool.",
+     "Scope it to one page you can finish and demo — a working slice beats a grand plan.",
+     "The live link is your submission; the report documents BOTH parts."], FOOT)
+notes(prs.slides[-1], "Part B is the main event of the afternoon. Rotate who drives the AI. Template: vibe-report-template.md. Remind them: name who your tool could harm as well as protect.")
 
 s = big_question("THE ETHICS",
     ["Defense vs. deception — where’s the line?",
