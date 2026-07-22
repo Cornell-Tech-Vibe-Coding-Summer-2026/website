@@ -89,7 +89,15 @@ def app_live(repo, act):
         return False
     m = TITLE_RE.search(html)
     title = " ".join(m.group(1).split()) if m else ""
-    return bool(title) and not any(p in title for p in PLACEHOLDER)
+    if title and not any(p in title for p in PLACEHOLDER):
+        return True
+    for href in re.findall(r'href=["\']([^"\']+)["\']', html, re.I):
+        low = href.lower()
+        if low.startswith(("http", "#", "mailto", "//")) or "instructions" in low:
+            continue
+        if (low.endswith(".html") and low not in ("index.html", "./index.html")) or href.rstrip().endswith("/"):
+            return True
+    return False
 
 
 def check(repo, act, paths):

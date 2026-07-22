@@ -88,9 +88,17 @@ def page_title(url):
         return None
     m = TITLE_RE.search(html)
     title = " ".join(m.group(1).split()) if m else ""
-    if not title or any(p in title for p in PLACEHOLDER_TITLES):
-        return None
-    return title
+    if title and not any(p in title for p in PLACEHOLDER_TITLES):
+        return title
+    # An overview index that links to the student's own pages counts, even with the
+    # starter <title>. Fall back to a neutral label so the gallery entry appears.
+    for href in re.findall(r'href=["\']([^"\']+)["\']', html, re.I):
+        low = href.lower()
+        if low.startswith(("http", "#", "mailto", "//")) or "instructions" in low:
+            continue
+        if (low.endswith(".html") and low not in ("index.html", "./index.html")) or href.rstrip().endswith("/"):
+            return title if title else "Overview"
+    return None
 
 
 def report_ok(repo, act):
