@@ -147,12 +147,17 @@ export const SUBMISSION_SETS = [
         ],
     },
     {
-        id: "week3-7_27", kind: 'activity', chip: "W3 Mon", day: "Mon · Jul 27", title: "User Testing I",
+        // Deliverable is a testing VIDEO, not a live site. Give each entry a `video`
+        // (YouTube watch/share URL) instead of `url`; the browser embeds it and the
+        // open button reads "Testing video ↗". `report` still points at the write-up.
+        //   { id: "ay487-maker", student: "Ajin Yohannan", title: "Usability test — About Me",
+        //     video: "https://youtu.be/XXXXXXXXXXX", report: "https://…vibe-report.md&title=…" },
+        id: "week3-7_27", kind: 'activity', deliverable: 'video', chip: "W3 Mon", day: "Mon · Jul 27", title: "Usability Testing (video)",
         entries: [
         ],
     },
     {
-        id: "week3-7_28", kind: 'activity', chip: "W3 Tue", day: "Tue · Jul 28", title: "User Testing II",
+        id: "week3-7_28", kind: 'activity', chip: "W3 Tue", day: "Tue · Jul 28", title: "Value Verification",
         entries: [
         ],
     },

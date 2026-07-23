@@ -1,6 +1,12 @@
 import { useState, useEffect } from 'react'
 import { SUBMISSION_SETS, hasEntries } from '../content/submissions'
 
+// Some deliverables are a testing VIDEO, not a live site (see week3-7_27).
+// Those entries carry `video` (a YouTube watch/share URL) instead of `url`;
+// we embed the player and the open link points at YouTube.
+const ytId = (u = '') => (u.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/)([\w-]{11})/) || [])[1]
+const ytEmbed = (u) => { const id = ytId(u); return id ? `https://www.youtube.com/embed/${id}` : u }
+
 // Student submissions browser: used inside the 3D monitor's SUBMISSIONS window
 // and the lite-mode Submissions modal. Same three-band shape as SlidesBrowser —
 // a chip row picks the activity/project, a second row picks the student or team,
@@ -31,7 +37,12 @@ export function SubmissionsBrowser() {
     const entry = set.entries.find((e) => e.id === entryId) || set.entries[0]
     const isProject = set.kind === 'project'
     const label = (e) => (isProject ? e.team : e.student)
-    const frameUrl = view === 'report' && entry?.report ? entry.report : entry?.url
+    // A video entry has no live site — its "site" view is the embedded player.
+    const hasVideo = !!entry?.video
+    const siteSrc = hasVideo ? ytEmbed(entry.video) : entry?.url
+    const frameUrl = view === 'report' && entry?.report ? entry.report : siteSrc
+    // Opening in a new tab should go to the real YouTube page, not the embed.
+    const openHref = view === 'report' && entry?.report ? entry.report : (hasVideo ? entry.video : entry?.url)
 
     return (
         <div className="flex flex-col h-full bg-[#0a0c12] font-mono">
@@ -94,7 +105,7 @@ export function SubmissionsBrowser() {
                         <button
                             onClick={backToStart}
                             onPointerDown={(e) => e.stopPropagation()}
-                            title={view === 'report' ? 'Back to the live site' : "Back to this submission's start page"}
+                            title={view === 'report' ? (hasVideo ? 'Back to the testing video' : 'Back to the live site') : "Back to this submission's start page"}
                             className="px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-white/5 text-white/70 border border-white/15 hover:bg-white/10 transition-colors"
                         >
                             ↺ {view === 'report' ? 'Site' : 'Back'}
@@ -114,14 +125,14 @@ export function SubmissionsBrowser() {
                             </button>
                         )}
                         <a
-                            href={frameUrl}
+                            href={openHref}
                             target="_blank"
                             rel="noreferrer"
                             onPointerDown={(e) => e.stopPropagation()}
-                            title="Open the current view in a new tab"
+                            title={hasVideo && view === 'site' ? 'Open the testing video on YouTube' : 'Open the current view in a new tab'}
                             className="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[#00ff41]/10 text-[#00ff41] border border-[#00ff41]/25 hover:bg-[#00ff41]/20 transition-colors"
                         >
-                            Open ↗
+                            {hasVideo && view === 'site' ? '🎬 Testing video ↗' : 'Open ↗'}
                         </a>
                     </div>
                 </div>
@@ -135,7 +146,9 @@ export function SubmissionsBrowser() {
                         src={frameUrl}
                         title={label(entry)}
                         className="absolute inset-0 w-full h-full bg-white border-0"
-                        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+                        sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-presentation"
+                        allow="fullscreen; encrypted-media; picture-in-picture"
+                        allowFullScreen
                     />
                 ) : (
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-center px-8">
