@@ -56,6 +56,39 @@ function useLowResMode() {
 
 import { AnimatePresence } from 'framer-motion'
 
+// Safari/WebKit renders the CSS3D-transformed screen overlays (drei's
+// <Html transform> for the monitor + phone) shifted whenever the canvas box
+// has an odd or fractional pixel size: drei centers the overlay with
+// translate(width/2, height/2), and a half-pixel translate inside a
+// perspective container is mispositioned by WebKit (bugs.webkit.org 278898,
+// pmndrs/drei #720, mrdoob/three.js #19854). Chrome is tolerant. Clamping the
+// canvas box to even integer pixel dimensions keeps that translate integral
+// in every browser; the ≤2px sliver left uncovered sits on the page's own
+// #050505 background.
+function EvenPixelBox({ children }) {
+  const ref = useRef(null)
+  const [box, setBox] = useState(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const update = () => {
+      const { width, height } = el.getBoundingClientRect()
+      setBox({ width: Math.floor(width / 2) * 2, height: Math.floor(height / 2) * 2 })
+    }
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+  return (
+    <div ref={ref} className="absolute inset-0 overflow-hidden">
+      <div style={box ? { width: `${box.width}px`, height: `${box.height}px` } : { width: '100%', height: '100%' }}>
+        {children}
+      </div>
+    </div>
+  )
+}
+
 export default function App() {
   const isMobile = useIsMobile()
   const [lowRes, toggleLowRes] = useLowResMode()
@@ -199,6 +232,7 @@ export default function App() {
 
   return (
     <div className="relative h-full bg-[#050505] overflow-hidden" style={{ width: 'max(100vw, 1100px)' }}>
+      <EvenPixelBox>
       <Canvas shadows camera={{ position: config.defaultPos, fov: 50 }} gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.0 }}>
 
         {/* Lights */}
@@ -268,6 +302,7 @@ export default function App() {
           }}
         />
       </Canvas>
+      </EvenPixelBox>
 
       <LoadingOverlay />
 
