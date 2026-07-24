@@ -142,133 +142,109 @@ refs("SOURCES", "Watch, test, cite", [
     ("Usability-study material adapted from S. Azenkot, INFO 5305 UX & User Research", "Cornell Tech")], FOOT)
 
 save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week3-Mon-User-Testing-I.pptx"); prs = init_deck()
-divider("WEEK 3 · TUESDAY", "User Testing II: Does It Do the Right Thing?",
-        "Values at Play — the ethics of what you built")
-
-content("THE SECOND TEST", "Usable ≠ right",
-    [[("A dark pattern can be beautifully usable. “Does it work?” and “does it do the right "
-       "thing?” are different questions.", {"size": 22, "color": WHITE})],
-     [("", {})],
-     [("Today we test the second one — with a framework: ", {}),
-      ("Values at Play", {"color": GREEN, "bold": True}),
-      (" (Flanagan & Nissenbaum).", {})]], FOOT)
-
-columns("THE FRAMEWORK", "Values at Play — three moves",
-    [("01 · Discovery", "What values?", "Find the values at play; define them in concrete terms."),
-     ("02 · Implementation", "Build them in", "Turn values into features; resolve the clashes."),
-     ("03 · Verification", "Did it work?", "Check whether the built thing delivers the value.")], FOOT)
-notes(prs.slides[-1], "Recap from Week 2 Monday's teaser — now we go deeper on Discovery and Implementation.")
-
-columns("TODAY, VIBE-CODED", "The three moves become Plan → Run → Verify",
-    [("Plan", "planning.md, before you prompt",
-      "Name the value, define what it MEANS here, who it's for, how you'd know — and write the exact prompts you'll run. Verbatim. Before running them."),
-     ("Run", "Prompts + a real test",
-      "Execute your planned prompts unchanged, then let another team test whether the value survives contact with a user."),
-     ("Verify", "Claim vs. reality",
-      "Find the biggest gap between planning.md and what testers experienced. Close it with one commit.")], FOOT)
-notes(prs.slides[-1], "The session's spine: VAP translated into the vibe-coding workflow. Writing value-centered prompts BEFORE running them is Discovery→Implementation made checkable; the log shows whether you stuck to the plan.")
-
-# --- Discovery ---
-columns("DISCOVERY · SOURCES", "Where do values come from? Look at the sources",
-    [("Functional", "What it’s for", "The system’s explicit purpose, mission, and promise."),
-     ("Actors", "Who’s involved", "Users, creators, funders — and affected parties who never touch it."),
-     ("Constraints", "The material", "What the tech makes easy or hard — screen, sensors, data."),
-     ("Context", "The world around it", "Norms, culture, law, and standards it inherits.")], FOOT)
-notes(prs.slides[-1], "VAP Discovery heuristic (Ch. 5). Trace each source to the values it carries in.")
-
-content("DISCOVERY · DEFINE", "Make abstract values concrete",
-    [[("A value you can’t define, you can’t test. Turn it into operational terms:", {"size": 22, "color": WHITE})],
-     [("", {})],
-     [("Privacy", {"color": GREEN, "bold": True}), (" → control · secrecy · contextual integrity.    ", {}),
-      ("Fairness", {"color": GREEN, "bold": True}), (" → equal access.", {})],
-     [("Accessibility", {"color": GREEN, "bold": True}), (" → perceivable · operable for every body.    ", {}),
-      ("Autonomy", {"color": GREEN, "bold": True}), (" → act for your own reasons.", {})]], FOOT)
-
-# --- Examples (both threads) ---
-content("EXAMPLE · YOUR BUILD", "Discovery on a vibe-coded app",
-    [[("An accessible event sign-up form.", {"size": 22, "color": WHITE, "bold": True})],
-     [("", {})],
-     [("Sources → values: the ", {}), ("purpose", {"color": GREEN, "bold": True}),
-      (" (let anyone RSVP) → access; the ", {}), ("actors", {"color": GREEN, "bold": True}),
-      (" (screen-reader users) → dignity; the ", {}), ("context", {"color": GREEN, "bold": True}),
-      (" (you collect names) → privacy.", {})]], FOOT)
-
-content("EXAMPLE · REAL WORLD", "Discovery on a real system (YAI)",
-    [[("A computer-vision tool that watches for seizures for people with disabilities.", {"size": 22, "color": WHITE})],
-     [("", {})],
-     [("Values in tension: ", {}), ("safety", {"color": GREEN, "bold": True}),
-      (" (catch the seizure) vs. ", {}), ("privacy & dignity", {"color": GREEN, "bold": True}),
-      (" (a camera always watching a person in their home).", {})]], FOOT)
-notes(prs.slides[-1], "Hauke's own PiTech case (YAI). Real example of a genuine value conflict — sets up Implementation.")
-
-# --- Implementation ---
-content("IMPLEMENTATION", "Translate values into the build",
-    [[("Discovery names the values. Implementation puts them into features, architecture, and "
-       "lines of code — and forces the hard part: ", {"size": 22, "color": WHITE}),
-      ("what happens when two values collide?", {"size": 22, "color": GREEN, "bold": True})]], FOOT)
-
-columns("VALUE CONFLICTS", "Three ways to resolve a clash",
-    [("Dissolve", "Both, fully", "Redesign so the conflict disappears — no one loses."),
-     ("Compromise", "Both, partly", "Promote each value, but in less than full measure."),
-     ("Trade-off", "One over another", "Sacrifice one value for another — and name the cost.")], FOOT)
-notes(prs.slides[-1], "van de Poel / VAP. The goal is to reach for Dissolve first, and to make Trade-offs explicit.")
-
-s = content("WORKED EXAMPLE", "The same conflict, three ways",
-    [[("Dissolve — YAI", {"color": GREEN, "bold": True, "size": 20}),
-      (": run pose detection on optically blurred images + a rotating blocker that makes the "
-       "camera’s state legible. Privacy AND function.", {"size": 18, "color": WHITE})],
-     [("", {})],
-     [("Compromise — CFS", {"color": GREEN, "bold": True, "size": 20}),
-      (": use sensors instead of cameras, and alert the resident first. “As safety expands, "
-       "dignity expands too.”", {"size": 18, "color": WHITE})],
-     [("", {})],
-     [("Trade-off — JustFix", {"color": GREEN, "bold": True, "size": 20}),
-      (": keep the AI but change the use case — from legal advice (hallucination = harm) to "
-       "emotional support (lower-risk). Cost named.", {"size": 18, "color": WHITE})]], FOOT)
-notes(s, "Three real PiTech resolutions from the VAP deck — one per strategy. Vivid, and each maps to a move.")
-
-# --- Verification + the activity ---
-content("VERIFICATION", "Did the value actually land?",
-    [[("Two checks, borrowed from software testing:", {"size": 22, "color": WHITE})],
-     [("", {})],
-     [("Did we build the ", {}), ("right thing", {"color": GREEN, "bold": True}),
-      ("? — are the discovered values really in the system?", {})],
-     [("Did we build it ", {}), ("right", {"color": GREEN, "bold": True}),
-      ("? — do real people, in real contexts, experience the value?", {})]], FOOT)
-
-s = numbered_two_col("ACTIVITY · PLAN", "planning.md — the values check + your prompts",
-    [("What value does it claim?", "the value the team says the project serves"),
-     ("What does it MEAN here?", "operationalize it — privacy as control? secrecy? contextual integrity?"),
-     ("Who’s it for — who’s left out?", "who it serves, and who it could exclude or harm"),
-     ("How would you know?", "the observable tell that the value is being delivered")], FOOT)
-notes(s, "Phase 1, in planning.md BEFORE anyone prompts. Operationalization is the move students skip: the same value word means different things, and the definition has to go INTO the prompt or the AI supplies its own. Template in week3/7_28/planning-template.md.")
-
-s = bullets("ACTIVITY · RUN", "Execute the plan, then test the value",
-    ["Run your planned prompts unchanged — the auto-log will show whether you drifted.",
-     "Swap projects with another team — they run YOUR 3-question check as real users.",
-     "Testers: does the tool move you toward the value? Did it feel on your side? Who's excluded?",
-     "Name the values tension you find; suggest a dissolve / compromise / trade-off."], FOOT)
-notes(s, "Phase 2: implementation + the reality check. Peer value-test rotation (round 2, after Monday's usability round).")
-
-s = bullets("ACTIVITY · VERIFY", "Close the claim-vs-reality gap",
-    ["Compare what testers experienced against your planning.md — where's the biggest gap?",
-     "Where did the AI's defaults bend your value while you weren't looking?",
-     "Close the biggest gap with one commit. Link it in your report.",
-     "Reading: Values at Play, Ch. 5 (Discovery)."], FOOT)
-notes(s, "Phase 3: verification against the written plan — the plan makes the gap measurable, which is the whole reason planning.md exists.")
-
-content("A HONEST CAUTION", "VAP runs in your head — so bring real people in",
-    [[("The framework’s blind spot: reflection and specification both happen in the designer’s "
-       "mind. But the people affected — your users — aren’t in that loop.", {"size": 21, "color": WHITE})],
-     [("", {})],
-     [("So pair VAP with real testing. Be a ", {}),
-      ("value mediator", {"color": GREEN, "bold": True}),
-      (" — surface the values your users hold — not just a value selector.", {"size": 20})]], FOOT)
-notes(prs.slides[-1], "The VAP deck's 'most critical finding'. Gives the session intellectual honesty and connects straight to the peer-testing activity.")
-
 # ===========================================================================
-# WEDNESDAY 7/29 — Working Day
+# TUESDAY 7/28 - Value Verification: Does It Embed the Value It Claims?
 # ===========================================================================
+divider("WEEK 3 - TUESDAY", "Value Verification: Does It Do the Right Thing?",
+        "Values at Play - verifying the value you claimed")
+
+content("THE SECOND TEST", "Usable is not the same as right",
+    [[("Yesterday: can people ", {"size": 22, "color": WHITE}), ("use", {"size": 22, "color": GREEN, "bold": True}),
+      (" your Project 2? Today: does it deliver the ", {"size": 22, "color": WHITE}),
+      ("value your team claimed", {"size": 22, "color": GREEN, "bold": True}),
+      (" - for the person you claimed to serve?", {"size": 22, "color": WHITE})],
+     [("", {})],
+     [("A tool can be flawless to use and still fail its value - quietly nudging, excluding, or manipulating the very person it says it helps.", {"size": 19, "color": MUTED})]], FOOT)
+
+photo_split("THE FRAMEWORK", "Discovery -> Implementation -> Verification",
+    [[("Discovery", {"size": 19, "color": GREEN, "bold": True}), (" - what values, and what do they mean here?", {"size": 18, "color": WHITE})],
+     [("Implementation", {"size": 19, "color": GREEN, "bold": True}), (" - translate values into features; resolve conflicts.", {"size": 18, "color": WHITE})],
+     [("Verification", {"size": 19, "color": GREEN, "bold": True}), (" - did it work? That is today.", {"size": 18, "color": WHITE})],
+     [("", {})],
+     [("\"Assessing whether efforts to integrate values have succeeded.\" Cyclical - ask at every step.", {"size": 15, "color": MUTED})]],
+    "vap_book.png", "Flanagan & Nissenbaum, Values at Play (MIT Press) - VAP course, Engelmann & Nissenbaum, Cornell Tech", FOOT)
+
+content("STEP 1 - OPERATIONALIZE", "You can't verify a value you haven't defined",
+    [[("A value is too abstract to test directly. Define it in operational terms first - say what is concretely true if it is present:", {"size": 20, "color": WHITE})],
+     [("", {})],
+     [("Privacy", {"size": 19, "color": GREEN, "bold": True}), (" = control?  secrecy?  contextual integrity?", {"size": 19, "color": WHITE})],
+     [("Fairness", {"size": 19, "color": GREEN, "bold": True}), (" = equal access?  or equal outcome?", {"size": 19, "color": WHITE})],
+     [("Autonomy", {"size": 19, "color": GREEN, "bold": True}), (" = real choices?  no manipulation?  the freedom to leave?", {"size": 19, "color": WHITE})],
+     [("", {})],
+     [("Pick your reading. If you don't, the AI's default definition wins.", {"size": 17, "color": MUTED})]], FOOT)
+
+big_question("STEP 2 - VERIFY", [
+    "Did it work?",
+    "Three ways to ask:",
+    "behavior - understanding - affect."], FOOT)
+
+s = columns("THE THREE LENSES", "Verify a value three ways", [
+    ("BEHAVIOR", "Do they ACT differently?", "Action, decision, practice, outcome. Does the design change what people actually do?"),
+    ("UNDERSTANDING", "Do they GRASP it better?", "Cognition achieved, augmented, deepened. Does using it deepen understanding of the value or the harm?"),
+    ("AFFECT", "Do they FEEL differently?", "Attitude, empathy, preference. Does it shift how people feel or judge?")], FOOT)
+text(s, Inches(0.7), Inches(6.62), Inches(12), Inches(0.32),
+     [[("Verification lenses adapted from Values at Play - VAP course, Engelmann & Nissenbaum (Cornell Tech)", {})]],
+     size=9.5, color=DIM, font=F_MONO)
+
+photo_split("LENS 1 - BEHAVIOR", "Does the design change what people DO?",
+    [[("The sharpest test. A smart meter that shows live energy use only \"works\" for sustainability if people ", {"size": 18, "color": WHITE}),
+      ("use less", {"size": 18, "color": GREEN, "bold": True}), (".", {"size": 18, "color": WHITE})],
+     [("", {})],
+     [("Verify how:", {"size": 17, "color": GREEN, "bold": True})],
+     [("prototype - user study - before/after - A/B two versions - task completion", {"size": 16, "color": MUTED})]],
+    "smart_meter.jpg", "Behavior verification (Values at Play) - smart-meter image, educational use", FOOT)
+
+columns("LENSES 2 & 3 - VERIFY HOW", "Understanding & affect", [
+    ("UNDERSTANDING", "Test comprehension", "Survey, interview, think-aloud, scenario question, knowledge-transfer task. Do they understand the value better after using it?"),
+    ("AFFECT", "Test feeling", "Interview, attitude survey (pre/post), diary, empathy map, choice under pressure. Did attitudes actually move?"),
+    ("EVIDENCE", "Not opinion", "Record what they DID or what you measured - not \"they said they liked it.\" A hopeful yes is not evidence.")], FOOT)
+
+bullets("STEP 3 - USE A VALIDATED INSTRUMENT", "Don't invent the questions",
+    ["UEQ - measures UX beyond usability: attractiveness, novelty, stimulation. For delight / trust / craft.",
+     "HRI Scale Database (George Mason) - browse validated scales (trust, warmth, competence, safety), rated for quality.",
+     "METUX / Self-Determination scales - autonomy, competence, relatedness. For wellbeing & empowerment values.",
+     "Vibed Slop Detector (impeccable.style rules) - generic AI \"slop\" is evidence craft & originality didn't get in.",
+     "Match the instrument to the value - run the RIGHT one, not all of them."], FOOT)
+
+content("WHY MEASURE BEYOND USABILITY", "\"Usable but conventional\"",
+    [[("A 2026 study (Romero et al.) compared AI-generated and human interface prototypes with the UEQ:", {"size": 20, "color": WHITE})],
+     [("", {})],
+     [("Pragmatic quality (usability): ", {"size": 19, "color": WHITE}), ("fine.", {"size": 19, "color": GREEN, "bold": True})],
+     [("Hedonic quality (novelty, originality): ", {"size": 19, "color": WHITE}), ("neutral to negative.", {"size": 19, "color": RED, "bold": True})],
+     [("", {})],
+     [("AI makes things usable but generic. Usability alone would miss it - which is why you verify the value, not just the flow.", {"size": 17, "color": MUTED})]], FOOT)
+
+columns("WHEN VERIFICATION FINDS A CONFLICT", "Two values collide - name the resolution", [
+    ("DISSOLVE", "Redesign around it", "A design where the clash disappears and BOTH values hold. (Vacuum: on-device maps, nothing to the cloud.)"),
+    ("COMPROMISE", "Each in part", "Promote each value in less than full measure. (Vacuum: cloud data, but anonymized + opt-out.)"),
+    ("TRADE-OFF", "Sacrifice one", "One value is given up for another - say so honestly. (Vacuum: full collection for max automation.)")], FOOT)
+
+content("TODAY'S GUEST - ACCESSIBILITY", "Accessibility is a value you can verify",
+    [[("Accessibility runs cleanly through all three lenses:", {"size": 20, "color": WHITE})],
+     [("", {})],
+     [("Behavior", {"size": 19, "color": GREEN, "bold": True}), (" - can a screen-reader user actually complete the task?", {"size": 19, "color": WHITE})],
+     [("Understanding", {"size": 19, "color": GREEN, "bold": True}), (" - are labels, states, and errors legible to everyone?", {"size": 19, "color": WHITE})],
+     [("Affect", {"size": 19, "color": GREEN, "bold": True}), (" - does the design respect the user, or work around them?", {"size": 19, "color": WHITE})],
+     [("", {})],
+     [("Borrow today's guest lecture as a lens - even if your value is something else.", {"size": 17, "color": MUTED})]], FOOT)
+
+s = discuss("ACTIVITY - TODAY", "Verify the value your Project 2 claims - on your own.",
+    ["Operationalize the value your team claimed - what is concretely true if it is present?",
+     "Pick a lens (behavior / understanding / affect) + one validated instrument, and run a small check.",
+     "Verdict: does it deliver? For whom? Who is excluded? Then the ONE fix you would make."],
+    "Individual - on the group's Project 2 - deliverable = your value-verification report (vibe-report.md)", FOOT)
+notes(s, "Individual, on the shared Project 2 prototype. No coding required. Accessibility guest lecture today; Wed/Thu are the final project.")
+
+refs("SOURCES", "Verify, cite", [
+    ("Flanagan & Nissenbaum - Values at Play in Digital Games (MIT Press, 2014)", "mitpress.mit.edu"),
+    ("VAP verification framework - S. Engelmann & H. Nissenbaum", "Cornell Tech - INFO 5010 (PiTech Ethics)"),
+    ("UEQ - User Experience Questionnaire", "ueq-online.org"),
+    ("HRI Scale Database - Finding the Perfect Scale", "hriscaledatabase.psychology.gmu.edu"),
+    ("METUX / Self-Determination scales", "selfdeterminationtheory.org/metux-scales"),
+    ("Vibed Slop Detector + impeccable.style slop rules", "github.com/HaukeCornell/Vibed-Slop-Detector"),
+    ("Romero et al. 2026 - Usable but Conventional (UEQ-S)", "arxiv.org/abs/2605.15124"),
+    ("Sandhaus, Rhomberg, Nissenbaum 2026 - Indecent Persuasion (CHIWORK)", "osf.io/nw2tj")], FOOT)
+
 save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week3-Tue-User-Testing-II.pptx"); prs = init_deck()
 divider("WEEK 3 · WEDNESDAY", "Working Day")
 
