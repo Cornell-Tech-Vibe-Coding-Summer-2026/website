@@ -18,7 +18,7 @@ export const SLIDE_DECKS = [
     { id: 'w2tueguest', week: 2, chip: 'W2 Tue ✦', day: 'Tue · Jul 21 · guest', title: 'Guest Speaker — AI Safety: Red-Teaming', gsId: '1oNtQGMaUXK15dKLMyMrszYOyvDuOvIqK' },
     { id: 'w2wed', week: 2, chip: 'W2 Wed', day: 'Wed · Jul 22', title: 'AI Against AI', gsId: '172fIcOWEa22iafr6q8wX1t41FSDdQHIp' },
     { id: 'w2thu', week: 2, chip: 'W2 Thu', day: 'Thu · Jul 23', title: 'Project Day — Project 2', gsId: '1QmJdK_wHKG1nT7GPWvHe_VwFlnYLm48d' },
-    { id: 'w3mon', week: 3, chip: 'W3 Mon', day: 'Mon · Jul 27', title: 'User Testing I: Does It Work?', gsId: null },
+    { id: 'w3mon', week: 3, chip: 'W3 Mon', day: 'Mon · Jul 27', title: 'Usability Testing: Human & Agent', gsId: null },
     { id: 'w3tue', week: 3, chip: 'W3 Tue', day: 'Tue · Jul 28', title: 'User Testing II: Does It Do the Right Thing?', gsId: null },
     { id: 'w3wed', week: 3, chip: 'W3 Wed', day: 'Wed · Jul 29', title: 'Working Day', gsId: null },
     { id: 'w3thu', week: 3, chip: 'W3 Thu', day: 'Thu · Jul 30', title: 'Final Presentations', gsId: null },

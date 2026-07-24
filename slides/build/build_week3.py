@@ -30,64 +30,117 @@ def numbered_two_col(kick, title, items, foot=None):
     return s
 
 # ===========================================================================
-# MONDAY 7/27 — User Testing I: Usability
+# MONDAY 7/27 - Usability Testing: Human & Agent (video deliverable)
 # ===========================================================================
-divider("WEEK 3 · MONDAY", "User Testing I: Does It Work?",
-        "Outcomes — Designing systems that are useful and empowering")
+divider("WEEK 3 - MONDAY", "Usability Testing: Does It Work?",
+        "Human + agent testing on your Project 2 prototype")
 
-content("THE TURN", "You built it. Does it work — for someone who isn’t you?",
-    [[("This week your final project meets real users. Two questions, two days:", {"size": 22, "color": WHITE})],
+content("THE TURN", "You built it. Does it work - for someone who isn't you?",
+    [[("Weeks 1-2 you built. This week you evaluate, then build the final. Two testing days on ", {"size": 21, "color": WHITE}),
+      ("last week's Project 2 prototype:", {"size": 21, "color": WHITE, "bold": True})],
      [("", {})],
-     [("Today — ", {}), ("does it work?", {"color": GREEN, "bold": True}),
-      ("  (usability).   Tomorrow — ", {}),
-      ("does it do the right thing?", {"color": GREEN, "bold": True}), ("  (values).", {})]], FOOT)
+     [("Today - ", {"size": 21}), ("does it work?", {"color": GREEN, "bold": True, "size": 21}),
+      ("  (usability).    Tomorrow - ", {"size": 21}),
+      ("does it do the right thing?", {"color": GREEN, "bold": True, "size": 21}), ("  (values).", {"size": 21})]], FOOT)
 
 content("WHY TEST", "You are not your user",
-    [[("You know where every button is and what every label means — so you’re the worst "
-       "person to judge whether it’s usable.", {"size": 22, "color": WHITE})],
+    [[("You know where every button is and what every label means - so you are the worst person alive to judge whether your own app is usable.", {"size": 22, "color": WHITE})],
      [("", {})],
-     [("Watching one real person try your app tells you more than any amount of guessing.", {"size": 20, "color": MUTED})]], FOOT)
+     [("Watching ", {"size": 20, "color": MUTED}), ("one", {"size": 20, "color": GREEN, "bold": True}),
+      (" real person try it tells you more than a week of guessing. You test the design, not the person - confusion is the design's fault, and it is your best data.", {"size": 20, "color": MUTED})]], FOOT)
 
-numbered_two_col("READING · NIELSEN", "Nielsen’s 10 usability heuristics",
-    [("Visibility of system status", "always show what’s happening"),
-     ("Match the real world", "speak the user’s language"),
+big_question("WHAT IT IS", [
+    "Give one real person one real task.",
+    "Ask them to think aloud.",
+    "Stay quiet and watch what they DO."], FOOT)
+
+s = content("WATCH - A REAL USABILITY TEST", "See it done before you do it",
+    [[("A moderated think-aloud test. User goal: ", {"size": 20, "color": WHITE}),
+      ("order medications online", {"size": 20, "color": GREEN, "bold": True}),
+      (" - refill Vitamin D and Tylenol, check which card is on file, set up auto-refill.", {"size": 20, "color": WHITE})],
+     [("", {})],
+     [("Watch for: where they hesitate, what they say they expect, and how the moderator stays neutral and lets them struggle.", {"size": 18, "color": MUTED})],
+     [("", {})],
+     [("|>  youtube.com/watch?v=EH7Fx9rpC0c", {"size": 22, "color": GREEN, "bold": True, "font": F_MONO})]], FOOT)
+text(s, Inches(0.7), Inches(6.6), Inches(12), Inches(0.32),
+     [[("Demo video + usability-study framing adapted from S. Azenkot, INFO 5305 UX & User Research (Cornell Tech)", {})]],
+     size=9.5, color=DIM, font=F_MONO)
+notes(s, "Play EH7Fx9rpC0c (a few minutes). Pause to point out the think-aloud, the neutral moderation, and one breakdown. Source: Shiri Azenkot, 'Running a Usability Study'.")
+
+numbered_two_col("READING - NIELSEN", "Nielsen's 10 usability heuristics",
+    [("Visibility of system status", "always show what's happening"),
+     ("Match the real world", "speak the user's language"),
      ("User control & freedom", "easy undo / exits"),
      ("Consistency & standards", "follow conventions"),
      ("Error prevention", "stop mistakes before they happen"),
-     ("Recognition over recall", "show options, don’t make them remember"),
+     ("Recognition over recall", "show options, don't make them remember"),
      ("Flexibility & efficiency", "shortcuts for experts"),
      ("Aesthetic & minimalist", "no needless clutter"),
      ("Recover from errors", "plain-language fixes"),
      ("Help & documentation", "findable when needed")], FOOT)
-notes(prs.slides[-1], "Reading: Nielsen — 10 Usability Heuristics (NN/g). Use these as the lens for the peer test.")
+notes(prs.slides[-1], "Reading: Nielsen - 10 Usability Heuristics (NN/g). Use these as the lens for naming what broke.")
 
-bullets("HOW TO RUN IT", "A quick usability test in 4 moves",
-    ["Give a real task (“sign up and post one thing”) — don’t give a tour.",
-     "Watch, don’t help. Silence is data.",
-     "Ask them to think aloud — narrate what they expect.",
-     "Note every hesitation, wrong turn, and dead end."], FOOT)
+bullets("HOW TO RUN IT", "A usability test in 4 moves",
+    ["Give a real task (\"sign up and log your first entry\") - not a tour.",
+     "Watch, don't help. Let them struggle a bit - silence is data.",
+     "Ask them to think aloud - narrate what they see, expect, and want.",
+     "Note every hesitation, wrong turn, and dead end - name it against Nielsen's heuristics."], FOOT)
 
-s = bullets("SLOP CHECK", "Does it look AI-generated? Run the slop detector",
-    ["impeccable.style/slop catalogs 46 deterministic patterns that mark an interface as AI-generated.",
-     "The tells: side-tab accent borders (“the most recognizable tell”), purple/violet gradients, gradient text, italic-serif display headlines, hero “pill chips”, dark mode with glowing accents…",
-     "Free Chrome extension overlays your live page — hover any outlined element to see which rule fired. CLI: npx impeccable detect <url>.",
-     "In today’s peer test: run it on the project you’re testing. Do the flagged tells overlap with where real users hesitated?",
-     "It grades taste, not truth — a flag is a question to ask, not a verdict. (Nielsen #8: aesthetic & minimalist design.)"], FOOT)
-text(s, Inches(0.7), Inches(6.62), Inches(12), Inches(0.35),
-     [[("Source: impeccable.style/slop — Paul Bakaus (free & open source)", {})]],
-     size=10.5, color=DIM, font=F_MONO)
-notes(s, "Ties the aesthetics thread from Week 1 Tuesday (AI-slop / impeccable.style) into usability testing. Detector: https://impeccable.style/slop/")
+s = columns("MODERATION", "Prompt without leading", [
+    ("ENCOURAGE", "\"What are you thinking?\"", "Keep them talking without steering. Let silence sit, then nudge gently."),
+    ("EXPECTATION", "\"What did you expect to happen?\"", "Surfaces the gap between their mental model and your design."),
+    ("NEVER", "\"Did you like it?\"", "Leading and unstructured. Watch what they DO - don't fish for approval.")], FOOT)
+text(s, Inches(0.7), Inches(6.6), Inches(12), Inches(0.32),
+     [[("Moderation guidelines adapted from S. Azenkot, INFO 5305 (Cornell Tech)", {})]],
+     size=9.5, color=DIM, font=F_MONO)
 
-s = bullets("ACTIVITY · ROUND 1", "Peer-test for usability",
-    ["Each team tests other teams’ projects — and gets tested.",
-     "Testers: run the 4 moves above; log issues against Nielsen’s heuristics.",
-     "Teams: watch your users struggle — resist the urge to explain.",
-     "Rank fixes by how badly they block the task, then iterate."], FOOT)
-notes(s, "Repo 7_27 peer-testing. Bring your findings to Tuesday's values test. Include the slop-detector pass from the previous slide as an extra lens.")
+s = content("WHAT TO LOOK FOR", "Capture evidence, not your interpretation",
+    [[("Look for usability problems - and write down what happened, not what you think it means:", {"size": 20, "color": WHITE})],
+     [("", {})],
+     [("Breakdowns", {"size": 19, "color": GREEN, "bold": True}), (" - they get stuck, backtrack, or ask for help.", {"size": 19, "color": WHITE})],
+     [("Errors", {"size": 19, "color": GREEN, "bold": True}), (" - wrong action, wrong turn, wrong mental model.", {"size": 19, "color": WHITE})],
+     [("Workarounds", {"size": 19, "color": GREEN, "bold": True}), (" - they reach the goal, but not the way you designed.", {"size": 19, "color": WHITE})],
+     [("", {})],
+     [("Note the time, what they did, and a short quote. Refine from the recording afterwards.", {"size": 17, "color": MUTED})]], FOOT)
+text(s, Inches(0.7), Inches(6.6), Inches(12), Inches(0.32),
+     [[("Evidence framing adapted from S. Azenkot, INFO 5305 (Cornell Tech)", {})]],
+     size=9.5, color=DIM, font=F_MONO)
 
-# ===========================================================================
-# TUESDAY 7/28 — User Testing II: Values (VAP) — RICHER
-# ===========================================================================
+section("PART B", "Now let an AI agent test it", color=GREEN,
+        sub="An agent takes browser control of your live site and reports what breaks")
+
+columns("PART B - AGENT TESTING", "An AI drives your live site", [
+    ("WHAT", "Agent-based usability test", "Give an AI agent your live URL and the same task. It clicks through and reports where it gets stuck."),
+    ("WHY", "Fast, tireless, literal", "Catches broken flows, dead links, unclear labels, impossible steps - in minutes, at any hour."),
+    ("TOOLS", "Pick one you can run", "Antigravity | Chrome DevTools MCP | Playwright MCP | browser-use. Log your prompts in history.md.")], FOOT)
+
+columns("HUMAN vs AGENT", "Two testers, different eyes", [
+    ("HUMANS CATCH", "Confusion & feeling", "Hesitation, frustration, delight, misread labels, real-world mismatch, the value bending. Emotion you can't fake."),
+    ("AGENTS CATCH", "Breakage & coverage", "Dead ends, broken buttons, missing states, every link - fast and repeatable. No fatigue, no mercy."),
+    ("AGENTS MISS", "Being human", "They don't feel stuck, don't get embarrassed, don't bring context. Speed is not understanding.")], FOOT)
+
+checklist("THE DELIVERABLE - ONE VIDEO", "Compress hours of testing into 5 minutes", [
+    "Record >= 20 min of real testing (2 human tests + 1 agent test).",
+    "Cut and speed up to <= 5 minutes - keep the moments that show a finding.",
+    "Subtitles required (YouTube auto-captions are fine).",
+    "End with findings slides + your spoken summary.",
+    "Host unlisted on YouTube; link it in vibe-report.md. No coding today."], FOOT)
+
+s = discuss("ACTIVITY - TODAY", "Test your team's Project 2 prototype - on your own.",
+    ["Part A: 2 real testers (not teammates), think-aloud, ~10 min each, screen-recorded.",
+     "Part B: 1 agent takes browser control of the live site; log your prompts.",
+     "Edit it into one <=5-min subtitled video, then write up human vs agent in vibe-report.md."],
+    "Individual - on the group's Project 2 - deliverable = one video + one write-up (due Mon 7/27)", FOOT)
+notes(s, "Individual work on the shared Project 2 prototype. Everyone submits their own video + write-up.")
+
+refs("SOURCES", "Watch, test, cite", [
+    ("Nielsen - 10 Usability Heuristics (NN/g)", "nngroup.com/articles/ten-usability-heuristics/"),
+    ("UEQ - User Experience Questionnaire", "ueq-online.org"),
+    ("Usability test demo video", "youtube.com/watch?v=EH7Fx9rpC0c"),
+    ("Agent browser control - browser-use", "github.com/browser-use/browser-use"),
+    ("Chrome DevTools MCP", "github.com/ChromeDevTools/chrome-devtools-mcp"),
+    ("Usability-study material adapted from S. Azenkot, INFO 5305 UX & User Research", "Cornell Tech")], FOOT)
+
 save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week3-Mon-User-Testing-I.pptx"); prs = init_deck()
 divider("WEEK 3 · TUESDAY", "User Testing II: Does It Do the Right Thing?",
         "Values at Play — the ethics of what you built")
