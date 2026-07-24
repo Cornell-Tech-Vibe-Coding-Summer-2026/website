@@ -141,6 +141,17 @@ refs("SOURCES", "Watch, test, cite", [
     ("Chrome DevTools MCP", "github.com/ChromeDevTools/chrome-devtools-mcp"),
     ("Usability-study material adapted from S. Azenkot, INFO 5305 UX & User Research", "Cornell Tech")], FOOT)
 
+
+bullets("TOOLS FOR TODAY", "Record, drive, edit, caption",
+    ["Record: QuickTime (Mac) / Xbox Game Bar (Win) / Loom / OBS - screen + mic together.",
+     "Agent testing: Antigravity, Chrome DevTools MCP, Playwright MCP, or browser-use - an AI drives your live URL.",
+     "Edit + speed up: CapCut, iMovie, or Clipchamp - cut to <=5 min, speed the slow parts.",
+     "Captions: upload to YouTube (unlisted), turn on auto-captions.",
+     "Real UX tools (optional): Maze or Lyssna for prototype tests, Lookback for moderated sessions."], FOOT)
+media("SCREENSHOT SLOT", "Show a real test in action",
+    "[ screenshot / clip still goes here ]",
+    "e.g. a tester mid-task, or your AI agent driving the live site", FOOT)
+
 save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week3-Mon-User-Testing-I.pptx"); prs = init_deck()
 # ===========================================================================
 # TUESDAY 7/28 - Value Verification: does the design actually change anything?
@@ -265,49 +276,130 @@ refs("SOURCES", "Verify, cite", [
     ("Vibed Slop Detector + impeccable.style slop rules", "github.com/HaukeCornell/Vibed-Slop-Detector"),
     ("Romero et al. 2026 - Usable but Conventional (UEQ-S)", "arxiv.org/abs/2605.15124")], FOOT)
 
+
+bullets("RESEARCH TOOLS", "Find what's been tried, then measure it",
+    ["Google Scholar + its AI overview - how others defined and MEASURED your value.",
+     "Figma's design-research library - how to actually run a concept test, interview, or survey.",
+     "Instruments: UEQ (ueq-online.org), the HRI Scale Database, METUX / SDT scales.",
+     "Vibed Slop Detector - run it on your live page for a craft / originality read.",
+     "Keep real citations straight (Zotero or a shared doc) - never invent one."], FOOT)
+media("SCREENSHOT SLOT", "Show your evidence",
+    "[ screenshot goes here ]",
+    "a UEQ result, a scale, a paper finding, or a slop-detector report", FOOT)
+
 save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week3-Tue-User-Testing-II.pptx"); prs = init_deck()
-divider("WEEK 3 · WEDNESDAY", "Working Day")
-
-checklist("USE TODAY WELL", "Working day — before final presentations",
-    ["Fix the top usability issues from Monday.",
-     "Resolve the values tension from Tuesday (dissolve / compromise / trade-off).",
-     "Get the live demo solid — rehearse the happy path.",
-     "Write the deep ethical reflection (this is 25% — and AI writing isn’t allowed here).",
-     "Capture screenshots / a short video in case the live link fails.",
-     "Instructors are here — grab us for a check-in."], FOOT)
-
 # ===========================================================================
-# THURSDAY 7/30 — Final Presentations
+# WEDNESDAY 7/29 - Planning Day (Final Project, Day 2): What's the problem?
 # ===========================================================================
-save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week3-Wed-Working-Day.pptx"); prs = init_deck()
-divider("WEEK 3 · THURSDAY", "Final Presentations")
+divider("WEEK 3 - WEDNESDAY", "Planning Day: What's the problem?",
+        "Final project - value-centered need finding + storyboard")
 
-content("THE BRIEF", "Make something that benefits someone outside the class",
-    [[("…and that society keeps benefiting from after class ends.", {"size": 22, "color": WHITE})],
+content("THE TURN", "Tuesday told you IF it works. Today you decide what to build.",
+    [[("You verified your Project 2 and found where the design doesn't move the value. Today you plan the fix - for a real person ", {"size": 21, "color": WHITE}),
+      ("outside this class.", {"size": 21, "color": GREEN, "bold": True})],
      [("", {})],
-     [("Today you show it, demo it live, and tell us what you learned — about the build and "
-       "about the ethics.", {"size": 20, "color": MUTED})]], FOOT)
+     [("Open with the Figma guest talk, then find the real need.", {"size": 19, "color": MUTED})]], FOOT)
 
-bullets("HOW TO PRESENT", "Five minutes, five beats",
-    ["The value — who it serves, and why it matters.",
-     "The build — a live demo of the happy path.",
-     "What you tested — usability + values, and what changed.",
-     "The hard call — a value tension and how you resolved it.",
-     "What’s next — how it keeps helping after today."], FOOT)
+content("KEEP YOUR VALUE", "Change the design, not the commitment",
+    [[("You already have a value and Tuesday's verdict. The final is the NEXT iteration of that value - not a new theme.", {"size": 21, "color": WHITE})],
+     [("", {})],
+     [("Today's job: name a specific beneficiary, and find what they actually need.", {"size": 19, "color": MUTED})]], FOOT)
 
-columns("HOW IT’S GRADED", "What we’re looking for",
-    [("Good Vibes · 20%", "The idea", "Novelty and the case for why you built it."),
-     ("Good Code · 20%", "The build", "Functionality and technical execution."),
-     ("Live demo · 15%", "With users", "Plan, test, and documentation with real users.")], FOOT)
+columns("FIND THE NEED", "Talk to someone - don't guess", [
+    ("INTERVIEW", "Ask, don't pitch", "A short conversation with a real person outside the class. Ask about their problem, not your idea."),
+    ("PERSONA", "One specific human", "Name, situation, goal, frustration, context. Not 'students' - one person you design for."),
+    ("THE NEED", "In their words", "Write the need the way they would say it. That sentence is what your design has to serve.")], FOOT)
 
-columns("HOW IT’S GRADED", "…and the two that carry the most weight",
-    [("Deep Ethical Reflection · 25%", "Your own words", "The values thinking — AI writing is impermissible here (grammar only)."),
-     ("Communication · 20%", "The story", "Text, video, and photos documenting capability and process.")], FOOT)
-notes(prs.slides[-1], "Rubric straight from the syllabus. Flag the 25% ethical-reflection AI-writing rule loudly.")
+content("OPERATIONALIZE - THE VALUE TREE", "From value down to the prompts you'll build",
+    [[("Break your value down until it becomes something you can actually build:", {"size": 20, "color": WHITE})],
+     [("", {})],
+     [("value  ->  norms  ->  requirements  ->  features  ->  ", {"size": 22, "color": WHITE}),
+      ("the prompts you run tomorrow", {"size": 22, "color": GREEN, "bold": True})],
+     [("", {})],
+     [("The bottom of the tree IS your Thursday build plan - the exact prompts, grounded in the value.", {"size": 17, "color": MUTED})]], FOOT)
 
-content("THAT’S A WRAP", "Good code, good vibes",
-    [[("You learned to build fast with AI — and to build right: to name the values, test with "
-       "real people, and own the calls you made.", {"size": 22, "color": WHITE})],
+bullets("STORYBOARD IT", "4-8 frames: the value in use",
+    ["Frame the user, their problem, where your thing enters, and what changes.",
+     "Hand-drawn (photograph it) or AI-assisted - rough is fine.",
+     "It doubles as your Thursday pitch skeleton.",
+     "Show the value living in the design, not just in the copy."], FOOT)
+
+bullets("TOOLS FOR TODAY", "Storyboard + pitch",
+    ["Storyboard: FigJam / Figma, Canva, Google Slides (one frame per slide), or Storyboarder (free & open-source).",
+     "AI pitch video (for Thursday): Google Veo 3.1 (in Flow), Runway, Kling, or Pika.",
+     "Note: OpenAI retired the Sora app in April 2026 - use Veo / Runway / Kling / Pika instead.",
+     "Free tiers add watermarks + limits - fine for a class pitch.",
+     "Interview + persona: just talk to a person; capture notes in FigJam or a doc."], FOOT)
+notes(prs.slides[-1], "Sora web/app discontinued 2026-04-26. Recommend Veo 3.1 / Runway / Kling / Pika for pitch videos.")
+
+media("SCREENSHOT SLOT", "Show an example",
+    "[ example storyboard or persona goes here ]",
+    "a strong persona, a storyboard, or an AI-pitch still", FOOT)
+
+discuss("ACTIVITY - TODAY (TEAM)", "Plan the next iteration of your value.",
+    ["Interview a real person outside the class -> build a persona + the need in their words.",
+     "Operationalize: value -> norms -> requirements -> features -> the prompts you'll build.",
+     "Storyboard the solution (4-8 frames) and scope the smallest real thing for Thursday."],
+    "Deliverable = planning-report.md + your storyboard - this is Checkpoint 2 of the final", FOOT)
+
+content("CARRY IT TO THURSDAY", "Your plan is your build",
+    [[("Tomorrow you build straight from the prompts your value tree produced, test it, and present it in the evening.", {"size": 21, "color": WHITE})],
+     [("", {})],
+     [("Guest lecture today: Figma. Bring your questions about design + prototyping.", {"size": 17, "color": MUTED})]], FOOT)
+
+save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week3-Wed-Working-Day.pptx"); prs = init_deck()
+# ===========================================================================
+# THURSDAY 7/30 - Demo Night (Final Project, Day 3+4): What's the solution?
+# ===========================================================================
+divider("WEEK 3 - THURSDAY", "Demo Night: What's the solution?",
+        "Build by day - present in the evening")
+
+content("THE DAY", "Build in daylight. Show it tonight.",
+    [[("First half: build the smallest real thing from your storyboard. Evening: present it live on the monitors.", {"size": 21, "color": WHITE})],
+     [("", {})],
+     [("Everything you planned Wednesday becomes an artifact people can use.", {"size": 19, "color": MUTED})]], FOOT)
+
+bullets("BUILD", "The smallest real thing - done well",
+    ["Build from the prompts your value tree produced Wednesday.",
+     "One complete action a stranger can finish - no broken buttons, no fake features.",
+     "The value lives in the design, not just the copy.",
+     "Test with a couple of real people; change ONE thing on the evidence, and commit it."], FOOT)
+
+bullets("THE PITCH VIDEO", "Short - and it showcases the artifact",
+    ["Make a short pitch that shows your vibe-coded thing in action.",
+     "AI video: Google Veo 3.1 (Flow), Runway, Kling, or Pika. (OpenAI retired the Sora app in 2026.)",
+     "Or an animated walkthrough, or a plain screen recording - the artifact is the star.",
+     "Put it in presentation/ and link it in your report."], FOOT)
+
+media("SCREENSHOT SLOT", "Show a build / pitch still",
+    "[ demo screenshot or pitch still goes here ]",
+    "the app in use, or a frame from the pitch video", FOOT)
+
+bullets("HOW TO PRESENT", "Five beats on the monitor",
+    ["The artifact - a live demo of the happy path.",
+     "The value - what it operationalizes, and for whom outside the class.",
+     "The evidence - what you tested (Mon usability, Tue value) and what changed.",
+     "The pitch - your video.",
+     "The afterlife - who keeps using or maintaining it."], FOOT)
+
+columns("HOW IT'S GRADED", "Four checkpoints, one grade", [
+    ("TUE - VERIFY", "Checkpoint 1", "Value verification: research deck + canvas."),
+    ("WED - PLAN", "Checkpoint 2", "Value-centered planning: planning report + storyboard."),
+    ("THU - BUILD", "Checkpoint 3", "Hosted app + project report + pitch.")], FOOT)
+
+columns("HOW IT'S GRADED", "...and the evening", [
+    ("THU EVE - PRESENT", "Checkpoint 4", "The live demo on the monitors."),
+    ("PROJECT", "25%", "Summary of the four Canvas checkpoints, against the project rubric."),
+    ("PRESENTATION", "15%", "A separate grade for the demo. Peer-check adjusts for unfair contribution.")], FOOT)
+notes(prs.slides[-1], "Grade = summary of the 4 Canvas checkpoints (25% project) + a separate 15% presentation grade. Ethical + individual reflections must be human-written.")
+
+content("LOGISTICS", "Demo night",
+    [[("Present on the monitors - prototype + slides. Demo from the HOSTED link, not localhost.", {"size": 21, "color": WHITE})],
+     [("", {})],
+     [("Keep a screen-recording backup in presentation/ in case the Wi-Fi drops.", {"size": 18, "color": MUTED})]], FOOT)
+
+content("THAT'S A WRAP", "Good code, good vibes",
+    [[("You learned to build fast with AI - and to build right: name the value, test with real people, and own the calls you made.", {"size": 22, "color": WHITE})],
      [("", {})],
      [("Now go make something the world keeps benefiting from.", {"size": 20, "color": GREEN, "bold": True})]], FOOT)
 

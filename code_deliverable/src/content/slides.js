@@ -20,8 +20,8 @@ export const SLIDE_DECKS = [
     { id: 'w2thu', week: 2, chip: 'W2 Thu', day: 'Thu · Jul 23', title: 'Project Day — Project 2', gsId: '1QmJdK_wHKG1nT7GPWvHe_VwFlnYLm48d' },
     { id: 'w3mon', week: 3, chip: 'W3 Mon', day: 'Mon · Jul 27', title: 'Usability Testing: Human & Agent', gsId: null },
     { id: 'w3tue', week: 3, chip: 'W3 Tue', day: 'Tue · Jul 28', title: 'Value Verification: Does the Design Actually Change Anything?', gsId: null },
-    { id: 'w3wed', week: 3, chip: 'W3 Wed', day: 'Wed · Jul 29', title: 'Working Day', gsId: null },
-    { id: 'w3thu', week: 3, chip: 'W3 Thu', day: 'Thu · Jul 30', title: 'Final Presentations', gsId: null },
+    { id: 'w3wed', week: 3, chip: 'W3 Wed', day: 'Wed · Jul 29', title: 'Planning Day: What\'s the Problem?', gsId: null },
+    { id: 'w3thu', week: 3, chip: 'W3 Thu', day: 'Thu · Jul 30', title: 'Demo Night: What\'s the Solution?', gsId: null },
 ]
 
 // `gsId` may be a bare presentation id OR a pasted docs.google.com sharing URL —
