@@ -69,21 +69,21 @@ SECTIONS = [
 
 
 def team_cover(team):
+    # For the final week, a team's NAME is the value it committed to.
     s = slide()
     rect(s, 0, 0, Inches(0.28), SLIDE_H, fill=GREEN)
-    text(s, Inches(0.9), Inches(1.75), Inches(11.5), Inches(0.5),
+    text(s, Inches(0.9), Inches(1.7), Inches(11.5), Inches(0.5),
          [[("VALUE VERIFICATION · TEAM RESEARCH DECK", {"size": 15, "color": GREEN, "bold": True, "font": F_MONO})]])
-    text(s, Inches(0.88), Inches(2.35), Inches(11.6), Inches(1.9),
-         [[(team["name"], {"size": 46, "bold": True, "color": WHITE})]], spacing=1.02)
+    has_val = bool(team["value"])
+    display = ("The " + team["value"].strip().title() + " Team") if has_val else "[ name your team after your value ]"
+    text(s, Inches(0.88), Inches(2.3), Inches(11.6), Inches(1.9),
+         [[(display, {"size": 46, "bold": True, "color": WHITE if has_val else MUTED})]], spacing=1.02)
     text(s, Inches(0.92), Inches(4.15), Inches(11.4), Inches(0.5),
          [[(" · ".join(team["roster"]), {"size": 18, "color": MUTED})]])
-    val = team["value"] or FILL
-    vcol = GREEN if team["value"] else MUTED
-    text(s, Inches(0.92), Inches(4.95), Inches(11.4), Inches(0.6),
-         [[("The value we're carrying:  ", {"size": 18, "color": WHITE}),
-           (val, {"size": 18, "color": vcol, "bold": True})]])
+    text(s, Inches(0.92), Inches(4.85), Inches(11.4), Inches(0.5),
+         [[("GitHub team: " + team["name"], {"size": 13, "color": DIM, "font": F_MONO})]])
     footer(s, FOOT)
-    notes(s, "Title slide. Confirm the value and the member list before presenting.")
+    notes(s, "Team name = the value you carry into the final. Confirm the value + members before presenting.")
     return s
 
 
