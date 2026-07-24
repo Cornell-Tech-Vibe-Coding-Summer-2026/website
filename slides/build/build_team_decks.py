@@ -24,19 +24,19 @@ SLIDE_W, SLIDE_H = Inches(13.333), Inches(7.5)
 # (most teams hadn't declared one yet — those show a fill-in placeholder).
 TEAMS = [
     dict(slug="super-duper-amazing-team", name="Super Duper Amazing Team",
-         members="Isa Offengenden · Om Ravula · Jason Chen", value="security"),
+         roster=["Isa Offengenden", "Om Ravula", "Jason Chen"], value="security"),
     dict(slug="jamins-2nd-team", name="Jamin's 2nd Team",
-         members="John Maida · Ajin Yohannan", value="safety"),
+         roster=["John Maida", "Ajin Yohannan"], value="safety"),
     dict(slug="chezborgar", name="Chezborgar",
-         members="Emily Tai · Kylie Cheung · Aria Sharma", value=None),
+         roster=["Emily Tai", "Kylie Cheung", "Aria Sharma"], value=None),
     dict(slug="guantanamo-bay-wendys", name="Guantanamo Bay Wendy's",
-         members="Evan Birnbaum · Derin Sezgin · Magnes Dugan · [ +1 — add your name ]", value=None),
+         roster=["Evan Birnbaum", "Derin Sezgin", "Magnes Dugan", "[ +1 — add your name ]"], value=None),
     dict(slug="were-always-two-steps-ahead", name="We're Always Two Steps Ahead",
-         members="Elaine Huang · Winnie Monroe · Vienna Carew", value=None),
+         roster=["Elaine Huang", "Winnie Monroe", "Vienna Carew"], value=None),
     dict(slug="the-professors-favorites", name="The Professor's Favorites",
-         members="Sebastien Gournay · Justin Ou", value=None),
+         roster=["Sebastien Gournay", "Justin Ou"], value=None),
     dict(slug="liam-justin-sebastien", name="Liam Justin Sebastien",
-         members="Liam Allen · [ add your teammates ]", value=None),
+         roster=["Liam Allen", "[ add your teammate ]"], value=None),
 ]
 
 SECTIONS = [
@@ -51,8 +51,8 @@ SECTIONS = [
         "The instrument we borrowed: UEQ · an HRI/SDT scale · the slop detector · a task design.",
     ]),
     ("03", "PART 2 — WHAT WE FOUND", "Insights from our own verification", [
-        "What WORKS in the current prototype — with evidence.",
-        "What does NOT work — with evidence. An evidenced 'it doesn't' beats a hopeful 'it does'.",
+        "Each team member presents their OWN slide — the named slides that follow.",
+        "What WORKS and what does NOT — with evidence. An evidenced \'it doesn\'t\' beats a hopeful \'it does\'.",
         "Across the lenses: behavior · understanding · affect — and which lenses did NOT fit this value.",
     ]),
     ("04", "PART 3 — OUTLOOK", "What related research has already found", [
@@ -76,7 +76,7 @@ def team_cover(team):
     text(s, Inches(0.88), Inches(2.35), Inches(11.6), Inches(1.9),
          [[(team["name"], {"size": 46, "bold": True, "color": WHITE})]], spacing=1.02)
     text(s, Inches(0.92), Inches(4.15), Inches(11.4), Inches(0.5),
-         [[(team["members"], {"size": 18, "color": MUTED})]])
+         [[(" · ".join(team["roster"]), {"size": 18, "color": MUTED})]])
     val = team["value"] or FILL
     vcol = GREEN if team["value"] else MUTED
     text(s, Inches(0.92), Inches(4.95), Inches(11.4), Inches(0.6),
@@ -94,9 +94,11 @@ def howto():
          [[("Keep the headers. Put your slides behind them.", {"size": 32, "bold": True, "color": WHITE})]])
     items = [
         "Five section headers follow — they are the spine of your talk.",
+        "Sections 01, 02, 04, 05 are the TEAM's. Section 03 has one named slide per person — that one is graded individually.",
         "Add your own slides AFTER each header. Don't delete the headers.",
         "Evidence beats assertion: screenshots, numbers, quotes from what you actually observed.",
         "Real citations only — if you can't find the paper, leave the claim out.",
+        "Your reflection is NOT a document — it goes in your own lane on the team FigJam canvas.",
         "Delete this slide before you present.",
     ]
     paras = [[("•  ", {"color": GREEN, "bold": True}), (i, {})] for i in items]
@@ -121,6 +123,30 @@ def team_section(num, kick, title, prompts):
     return s
 
 
+def member_slide(name, i):
+    """One named slide per team member - this is the individually graded section."""
+    s = slide()
+    kicker(s, f"03.{i}  ·  YOUR SECTION (graded individually)"); accent(s)
+    text(s, Inches(0.7), Inches(1.28), Inches(12), Inches(1.0),
+         [[(name, {"size": 36, "bold": True, "color": WHITE})]])
+    prompts = [
+        "The lens + method I ran, and why our reading demanded it",
+        "My evidence - what I actually observed or measured",
+        "What this says WORKS - and what does NOT",
+        "The paper I found (real citation) and what it changes",
+    ]
+    paras = [[("\u2192  ", {"color": GREEN, "bold": True}), (p, {})] for p in prompts]
+    text(s, Inches(0.72), Inches(2.5), Inches(11.9), Inches(3.1), paras, size=19, color=WHITE, spacing=1.34)
+    rect(s, Inches(0.7), Inches(5.95), Inches(11.9), Inches(0.72), fill=PANEL, line=GREEN, line_w=1.5, rounded=True)
+    text(s, Inches(1.0), Inches(5.95), Inches(11.3), Inches(0.72),
+         [[("\u25b8  ", {"color": GREEN, "bold": True, "size": 16}),
+           ("This slide is yours. Add more slides behind it if you need them - keep your name on them.", {"size": 15, "color": WHITE, "bold": True})]],
+         anchor=MSO_ANCHOR.MIDDLE)
+    footer(s, FOOT)
+    notes(s, f"{name}'s individually graded section. Their reflection lives in their own lane on the team FigJam canvas.")
+    return s
+
+
 def sources_slide():
     s = slide()
     kicker(s, "SOURCES"); accent(s)
@@ -142,6 +168,9 @@ for team in TEAMS:
     howto()
     for num, kick, title, prompts in SECTIONS:
         team_section(num, kick, title, prompts)
+        if num == "03":
+            for i, member in enumerate(team["roster"], start=1):
+                member_slide(member, i)
     sources_slide()
     path = os.path.join(OUT, f"Week3-Tue-{team['slug']}.pptx")
     n = save(path)
