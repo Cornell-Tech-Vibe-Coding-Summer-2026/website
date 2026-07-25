@@ -12,6 +12,7 @@ const BOOT_LINES = [
 export function LoadingOverlay() {
     const { progress, active } = useProgress()
     const [hidden, setHidden] = useState(false)
+    const [finishing, setFinishing] = useState(false)
     const [bootIndex, setBootIndex] = useState(0)
 
     // Cycle through boot lines while loading.
@@ -22,13 +23,22 @@ export function LoadingOverlay() {
         return () => clearInterval(t)
     }, [])
 
-    // Hide a moment after progress reaches 100, so the fade-out feels intentional.
+    // Once nothing is loading, sweep the bar to 100% and then fade out.
+    // When every asset is already in the loader cache (e.g. StrictMode's dev
+    // double-mount), useProgress never fires at all — progress stays 0 with
+    // nothing active — so "idle below 100%" must also count as done, with a
+    // grace period long enough for a real first load to kick in.
     useEffect(() => {
-        if (!active && progress >= 100) {
-            const t = setTimeout(() => setHidden(true), 350)
-            return () => clearTimeout(t)
-        }
+        if (active) return
+        const t = setTimeout(() => setFinishing(true), progress >= 100 ? 0 : 1200)
+        return () => clearTimeout(t)
     }, [active, progress])
+
+    useEffect(() => {
+        if (!finishing) return
+        const t = setTimeout(() => setHidden(true), 700)
+        return () => clearTimeout(t)
+    }, [finishing])
 
     return (
         <AnimatePresence>
@@ -99,13 +109,13 @@ export function LoadingOverlay() {
                         <motion.div
                             className="h-full bg-[#39ff14]"
                             initial={{ width: 0 }}
-                            animate={{ width: `${Math.max(2, progress)}%` }}
+                            animate={{ width: `${finishing ? 100 : Math.max(2, progress)}%` }}
                             transition={{ duration: 0.3, ease: 'easeOut' }}
                             style={{ boxShadow: '0 0 8px rgba(57,255,20,0.7)' }}
                         />
                     </div>
                     <div className="text-white/50 text-[10px] font-mono tracking-widest uppercase">
-                        loading {progress.toFixed(0)}%
+                        loading {(finishing ? 100 : progress).toFixed(0)}%
                     </div>
                 </motion.div>
             )}

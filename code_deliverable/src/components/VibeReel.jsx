@@ -73,7 +73,8 @@ export function VibeReel({ entry, scrollRoot }) {
                     loading="lazy"
                     // sandbox without `allow-popups` / `allow-top-navigation` blocks
                     // taps inside the embed from opening Instagram/TikTok in a new tab.
-                    sandbox="allow-scripts allow-same-origin allow-presentation"
+                    // (no `allow-presentation`: Safari rejects it as invalid)
+                    sandbox="allow-scripts allow-same-origin"
                     className="absolute inset-0 w-full h-full border-0"
                 />
             )}

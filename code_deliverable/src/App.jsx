@@ -233,7 +233,7 @@ export default function App() {
   return (
     <div className="relative h-full bg-[#050505] overflow-hidden" style={{ width: 'max(100vw, 1100px)' }}>
       <EvenPixelBox>
-      <Canvas shadows camera={{ position: config.defaultPos, fov: 50 }} gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.0 }}>
+      <Canvas shadows camera={{ position: config.defaultPos, fov: 50 }} gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.0 }} onCreated={({ scene, camera }) => { window.__scene = scene; window.__camera = camera }}>
 
         {/* Lights */}
         <ambientLight intensity={config.ambientIntensity} />

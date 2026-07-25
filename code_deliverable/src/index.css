@@ -52,3 +52,8 @@ canvas {
 .syllabus-md th { background: #ececec; font-weight: 700; }
 .syllabus-md hr { border: 0; border-top: 1px solid #d4d4d4; margin: 1em 0; }
 .syllabus-md img { max-width: 100%; height: auto; }
+/* WebKit: a CSS3D screen wrapper whose plane the camera nearly enters gets
+   mis-rasterized into a viewport-wide translucent smear. SceneLayout puts
+   this class on the monitor's drei <Html> wrapper during phone/notepad
+   views to keep the layer from painting at all. */
+.screen-html-off { display: none !important; }

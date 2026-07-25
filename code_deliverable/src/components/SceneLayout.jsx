@@ -1,12 +1,14 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef } from 'react'
 import { Html, TransformControls, Text } from '@react-three/drei'
 import { useControls, folder } from 'leva'
-import { useFrame } from '@react-three/fiber'
 import { MonitorContent } from './MonitorContent'
 import { PhoneContent } from './PhoneContent'
+import { FLAT_SCREENS, DEBUG_SCREENS, NO_PHONE_HTML, NO_MONITOR_HTML } from './screenFlags'
 
-import * as THREE from 'three'
-import { easing } from 'maath'
+// Screens render via drei <Html transform>. On WebKit, occlude="blending" is
+// broken (black screens — see screenFlags.js), so FLAT_SCREENS renders them
+// as plain overlays above the canvas instead.
+const OCCLUDE_MODE = FLAT_SCREENS ? undefined : 'blending'
 
 // --- Configuration Defaults ---
 const LAYOUT_DEFAULTS = {
@@ -128,20 +130,27 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
             ) : name === 'Phone' ? (
                 // Phone: only render Html when actively zoomed in.
                 // At distance, render a cheap black plane so the screen looks dark without any HTML cost.
-                view === 'phone' ? (
+                (view === 'phone' && !NO_PHONE_HTML) ? (
                     <Html
                         transform
                         distanceFactor={config.scale}
                         style={{
                             width: config.width || '320px',
                             height: config.height || '640px',
-                            background: config.bg || 'transparent',
+                            // Always paint a background + border: a CSS3D layer
+                            // with no guaranteed paint gets its compositing
+                            // backing store created late in WebKit and pops in
+                            // at a stale transform ("flies in"). Solid paint
+                            // from frame one keeps it rasterized and placed
+                            // correctly. Verified via ?debug-screens A/B.
+                            background: DEBUG_SCREENS ? 'rgba(255,0,0,0.6)' : '#000',
+                            border: DEBUG_SCREENS ? '6px solid red' : '6px solid #0b0b0b',
                             borderRadius: config.radius || '0px',
                             overflow: 'hidden',
                             pointerEvents: 'none'
                         }}
                         zIndexRange={[50, 0]}
-                        occlude="blending"
+                        occlude={OCCLUDE_MODE}
                     >
                         {/* Screen turn-on: inject keyframe style + overlay div that fades from black */}
                         <style>{`
@@ -157,7 +166,7 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                                 pointer-events: none;
                             }
                         `}</style>
-                        <div className="phone-screen-on-overlay" />
+                        <div className="phone-screen-on-overlay" style={DEBUG_SCREENS ? { background: '#00ff00' } : undefined} />
                         <div
                             className="w-full h-full"
                             style={{ pointerEvents: 'auto' }}
@@ -170,24 +179,37 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                     // Cheap black plane — no HTML, no raycasting, pure geometry
                     <mesh raycast={() => null}>
                         <planeGeometry args={[0.115, 0.22]} />
-                        <meshBasicMaterial color="#000000" />
+                        <meshBasicMaterial color={DEBUG_SCREENS ? '#0000ff' : '#000000'} />
                     </mesh>
                 )
-            ) : (
-                // Generic HTML plane for Monitor and any other planes
+            ) : NO_MONITOR_HTML ? null : (
+                // Generic HTML plane for Monitor and any other planes.
+                // WebKit-only: when the camera moves nearly into this plane
+                // (phone and notepad views), Safari mis-rasterizes the CSS3D
+                // layer into a huge translucent smear across the viewport —
+                // verified by hiding exactly this wrapper in live Safari via
+                // WebDriver. Hide the whole wrapper in those views.
                 <Html
                     transform
+                    // Always pass a truthy class: drei only assigns wrapperClass
+                    // when set and never clears it, so an undefined here would
+                    // leave the wrapper hidden forever after the first hide.
+                    wrapperClass={(FLAT_SCREENS && (view === 'phone' || view === 'notepad')) ? 'screen-html-off' : 'screen-html-on'}
                     distanceFactor={config.scale}
                     style={{
                         width: config.width || '1024px',
                         height: config.height || '768px',
                         background: config.bg || '#1a1a1a',
+                        // Painted border for the same WebKit reason as the
+                        // phone: keeps the CSS3D layer rasterized from frame
+                        // one so it can't pop in at a stale transform.
+                        border: DEBUG_SCREENS ? '6px solid orange' : '4px solid #101010',
                         borderRadius: config.radius || '8px',
                         overflow: 'hidden',
                         pointerEvents: 'none'
                     }}
                     zIndexRange={[10, 0]}
-                    occlude="blending"
+                    occlude={OCCLUDE_MODE}
                 >
                     <div
                         className="w-full h-full"

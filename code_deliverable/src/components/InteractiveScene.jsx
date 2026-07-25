@@ -5,6 +5,7 @@ import { useControls } from 'leva'
 import { easing } from 'maath'
 import * as THREE from 'three'
 import { SceneLayout } from './SceneLayout'
+import { DEBUG_SCREENS } from './screenFlags'
 import { PhoneAnimation } from './PhoneAnimation'
 import { FunkoPops } from './FunkoPops'
 import { Mug } from './Mug'
@@ -303,7 +304,7 @@ export function InteractiveScene({
                     child.userData.screenDarkened = true
                     child.userData.originalColor = child.material.color?.clone()
                     child.material = child.material.clone() // clone to avoid sharing
-                    child.material.color?.set('#020205')
+                    child.material.color?.set(DEBUG_SCREENS ? '#ff00ff' : '#020205')
                     child.material.emissive?.set('#000000')
                     child.material.needsUpdate = true
                 }
