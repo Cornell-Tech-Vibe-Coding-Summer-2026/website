@@ -91,6 +91,15 @@ function WelcomeTerminal() {
 
             <div className="space-y-5 mb-6 max-w-[640px]">
                 <div>
+                    <div className="text-[#ffd166] text-[11px] font-bold mb-1 tracking-wider">? ISN'T "ETHICAL VIBE CODING" AN OXYMORON</div>
+                    <div className="text-white/75 pl-3">
+                        Vibe coding is brain-<span className="text-[#00ff41]">off</span>: let the AI drive.<br />
+                        Ethics is brain-<span className="text-[#00ff41]">on</span>: stop and think hard.<br />
+                        This class is the experiment in marrying them —<br />
+                        shipping fast while staying awake to the harm.
+                    </div>
+                </div>
+                <div>
                     <div className="text-[#ffd166] text-[11px] font-bold mb-1 tracking-wider">? WHAT IS VIBE CODING</div>
                     <div className="text-white/75 pl-3">
                         Building software with AI as your co-author.<br />

@@ -298,7 +298,7 @@ content("THE TURN", "Tuesday told you IF it works. Today you decide what to buil
     [[("You verified your Project 2 and found where the design doesn't move the value. Today you plan the fix - for a real person ", {"size": 21, "color": WHITE}),
       ("outside this class.", {"size": 21, "color": GREEN, "bold": True})],
      [("", {})],
-     [("Open with the Figma guest talk, then find the real need.", {"size": 19, "color": MUTED})]], FOOT)
+     [("Open with Remy Stewart's Figma guest talk, then find the real need.", {"size": 19, "color": MUTED})]], FOOT)
 
 content("KEEP YOUR VALUE", "Change the design, not the commitment",
     [[("You already have a value and Tuesday's verdict. The final is the NEXT iteration of that value - not a new theme.", {"size": 21, "color": WHITE})],
@@ -345,7 +345,7 @@ discuss("ACTIVITY - TODAY (TEAM)", "Plan the next iteration of your value.",
 content("CARRY IT TO THURSDAY", "Your plan is your build",
     [[("Tomorrow you build straight from the prompts your value tree produced, test it, and present it in the evening.", {"size": 21, "color": WHITE})],
      [("", {})],
-     [("Guest lecture today: Figma. Bring your questions about design + prototyping.", {"size": 17, "color": MUTED})]], FOOT)
+     [("Guest lecture today: Remy Stewart (Figma). Bring your questions about design + prototyping.", {"size": 17, "color": MUTED})]], FOOT)
 
 save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week3-Wed-Working-Day.pptx"); prs = init_deck()
 # ===========================================================================
