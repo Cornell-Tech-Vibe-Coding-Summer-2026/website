@@ -6,6 +6,7 @@ import { Perf } from 'r3f-perf'
 import * as THREE from 'three'
 
 import { InteractiveScene } from './components/InteractiveScene'
+import { useWebkitZoomBroken } from './components/screenFlags'
 import { CameraController } from './components/CameraController'
 import { SuggestedReadingsView, ReadingView } from './components/ReadingViews'
 import { MobileView } from './components/MobileView'
@@ -92,6 +93,7 @@ function EvenPixelBox({ children }) {
 export default function App() {
   const isMobile = useIsMobile()
   const [lowRes, toggleLowRes] = useLowResMode()
+  const zoomBroken = useWebkitZoomBroken()
   const [view, setView] = useState('default')
   const [partnersOpen, setPartnersOpen] = useState(() => {
     if (typeof window === 'undefined') return false
@@ -305,6 +307,16 @@ export default function App() {
       </EvenPixelBox>
 
       <LoadingOverlay />
+
+      {/* Safari remembers per-site page zoom, and WebKit's CSS3D math breaks
+          at any zoom != 100% — the screen overlays would detach from their
+          bezels. SceneLayout hides them while zoomed; this hint tells the
+          visitor how to get them back. */}
+      {zoomBroken && (
+        <div className="fixed bottom-16 left-1/2 -translate-x-1/2 z-[300] px-4 py-2 bg-black/75 backdrop-blur-md text-white text-[11px] font-mono uppercase tracking-widest rounded-full border border-white/25 pointer-events-none">
+          Browser zoom detected — press ⌘0 to reset for the full 3D screens
+        </div>
+      )}
 
       <img
         src={`${import.meta.env.BASE_URL}cornell-tech-logo-optimized.png`}

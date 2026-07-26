@@ -3,7 +3,7 @@ import { Html, TransformControls, Text } from '@react-three/drei'
 import { useControls, folder } from 'leva'
 import { MonitorContent } from './MonitorContent'
 import { PhoneContent } from './PhoneContent'
-import { FLAT_SCREENS, DEBUG_SCREENS, NO_PHONE_HTML, NO_MONITOR_HTML } from './screenFlags'
+import { FLAT_SCREENS, DEBUG_SCREENS, NO_PHONE_HTML, NO_MONITOR_HTML, useWebkitZoomBroken } from './screenFlags'
 
 // Screens render via drei <Html transform>. On WebKit, occlude="blending" is
 // broken (black screens — see screenFlags.js), so FLAT_SCREENS renders them
@@ -90,6 +90,10 @@ function useLayoutPlane(name, defaults) {
 function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode, onClick, onHover, onUnhover, view }) {
     const offsetGroupRef = useRef()
 
+    // Safari page zoom breaks CSS3D placement — show clean dark screens
+    // instead of displaced overlays (App shows a ⌘0 hint alongside).
+    const zoomBroken = useWebkitZoomBroken()
+
     const handleTransformChange = () => {
         if (offsetGroupRef.current && setConfig) {
             const { position, rotation } = offsetGroupRef.current
@@ -130,7 +134,7 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
             ) : name === 'Phone' ? (
                 // Phone: only render Html when actively zoomed in.
                 // At distance, render a cheap black plane so the screen looks dark without any HTML cost.
-                (view === 'phone' && !NO_PHONE_HTML) ? (
+                (view === 'phone' && !NO_PHONE_HTML && !(FLAT_SCREENS && zoomBroken)) ? (
                     <Html
                         transform
                         distanceFactor={config.scale}
@@ -194,7 +198,7 @@ function ContentPlane({ children, name, config, setConfig, layoutMode, gizmoMode
                     // Always pass a truthy class: drei only assigns wrapperClass
                     // when set and never clears it, so an undefined here would
                     // leave the wrapper hidden forever after the first hide.
-                    wrapperClass={(FLAT_SCREENS && (view === 'phone' || view === 'notepad')) ? 'screen-html-off' : 'screen-html-on'}
+                    wrapperClass={(FLAT_SCREENS && (view === 'phone' || view === 'notepad' || zoomBroken)) ? 'screen-html-off' : 'screen-html-on'}
                     distanceFactor={config.scale}
                     style={{
                         width: config.width || '1024px',
