@@ -128,7 +128,7 @@ function WelcomeTerminal() {
                 <div>
                     <div className="text-[#ffd166] text-[11px] font-bold mb-1 tracking-wider">? WHAT DO WE STRIVE FOR</div>
                     <div className="text-white/75 pl-3">
-                        Software that's fast to build and slow to harm.<br />
+                        Software whose values are chosen, not defaulted.<br />
                         Engineers who ship, and who know when not to.<br />
                         A summer of making, breaking, and questioning.
                     </div>

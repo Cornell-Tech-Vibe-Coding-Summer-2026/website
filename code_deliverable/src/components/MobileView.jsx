@@ -80,7 +80,7 @@ function TerminalModal() {
                 <div>
                     <div className="text-[#ffd166] text-[10px] font-bold mb-1 tracking-wider">? WHAT DO WE STRIVE FOR</div>
                     <div className="text-white/75 text-[11px]">
-                        Software that's fast to build and slow to harm. Engineers who ship, and who know when not to. A summer of making, breaking, and questioning.
+                        Software whose values are chosen, not defaulted. Engineers who ship, and who know when not to. A summer of making, breaking, and questioning.
                     </div>
                 </div>
             </div>
@@ -386,7 +386,7 @@ export function MobileView() {
                     <div>
                         <p className="text-[#ffd166] text-[10px] font-mono font-bold tracking-widest mb-1">? WHAT DO WE STRIVE FOR</p>
                         <p className="text-white/70 text-[13px] leading-relaxed">
-                            Software that&rsquo;s fast to build and slow to harm. Engineers who ship, and who know when not to.
+                            Software whose values are chosen, not defaulted. Engineers who ship, and who know when not to.
                         </p>
                     </div>
                 </div>
