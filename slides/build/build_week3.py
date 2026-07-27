@@ -293,7 +293,7 @@ media("PITECH PROJECTS", "Fellows who ran the whole framework",
 # ---------- PART 6 - BACK TO YOUR ACTIVITY ----------
 s = discuss("NOW YOU (TEAM)", "Verify the value your Project 2 claims.",
     ["State how you operationalize your value - that definition decides the method.",
-     "Choose the lens + instrument that definition demands, and run a quick check.",
+     "No time to run tests: RESEARCH how each lens could be verified (behavior especially) + what design interventions have worked.",
      "Does it deliver the value - for whom, and who's left out? Then: what would you change?"],
     "A value-centered user RESEARCH deck + a reflection on FigJam - each person owns a slide + a lane - due today", FOOT)
 notes(s, "Hand back to the activity. Language note: no 'verdict' - just 'does it deliver the value, and for whom?'")

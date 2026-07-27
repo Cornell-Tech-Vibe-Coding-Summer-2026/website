@@ -38,39 +38,31 @@ TEAMS = [
     dict(slug="were-always-two-steps-ahead", name="We're Always Two Steps Ahead",
          roster=["Elaine Huang", "Winnie Monroe", "Vienna Carew"], value="care",
          app="MyPace - health + family connection for elderly adults living independently"),
-    dict(slug="the-professors-favorites", name="The Professor's Favorites",
-         roster=["Sebastien Gournay", "Justin Ou"], value="productivity",
-         app="Justina - focus for writers & students  (same project as liam-justin-sebastien)"),
-    dict(slug="liam-justin-sebastien", name="Liam Justin Sebastien",
+    dict(slug="justina", name="Justina (Liam · Justin · Sebastien)",
          roster=["Liam Allen", "Justin Ou", "Sebastien Gournay"], value="productivity",
          app="Justina - focus for writers & students"),
 ]
 
 SECTIONS = [
-    ("01", "THE VALUE & HOW WE DEFINE IT", "What we claimed — and how we operationalize it", [
-        "Our app, in one line — and the value it claims.",
-        "How do we operationalize / define the value? (e.g. privacy as control vs. security vs. contextual integrity)",
-        "If it's present, users will DO ___ / UNDERSTAND ___ / FEEL ___.",
+    ("01", "THE VALUE & HOW WE DEFINE IT", "Discovery - operationalize the value", [
+        "[ our app, in one line ]  -  and the value it claims.",
+        "How do we operationalize / define the value?  (privacy as control vs. security vs. contextual integrity)",
+        "If it is present, users will DO [ ___ ] / UNDERSTAND [ ___ ] / FEEL [ ___ ].",
     ]),
-    ("02", "PART 1 — WAYS TO VERIFY", "How can this value be verified at all?", [
-        "How have others measured this value? (Google Scholar + its AI search)",
-        "Which method did we choose — and why does our reading demand it?",
-        "The instrument we borrowed: UEQ · an HRI/SDT scale · the slop detector · a task design.",
+    ("02", "HOW WOULD WE VERIFY IT?", "Pick a method per lens - we won't run them all today", [
+        "BEHAVIOR - do users ACT differently?  ->  hard to test in class, so we RESEARCH it: [ method + what studies show ].",
+        "UNDERSTANDING - do they GRASP the value?  ->  a quick check with fellow students is possible: [ method ].",
+        "AFFECT - do they FEEL differently?  ->  a quick check with fellow students is possible: [ method ].",
     ]),
-    ("03", "PART 2 — WHAT WE FOUND", "Insights from our own verification", [
-        "Each team member presents their OWN slide — the named slides that follow.",
-        "What WORKS and what does NOT — with evidence. An evidenced \'it doesn\'t\' beats a hopeful \'it does\'.",
-        "Across the lenses: behavior · understanding · affect — and which lenses did NOT fit this value.",
+    ("03", "DESIGN INTERVENTIONS THAT MOVED THIS VALUE", "Research - what has actually worked? (each member owns a slide)", [
+        "Each member presents their OWN researched intervention - the named slides that follow.",
+        "A real design intervention tried for this value, and its result: worked / mixed / failed.",
+        "Real sources only - never invent a citation.",
     ]),
-    ("04", "PART 3 — OUTLOOK", "What related research has already found", [
-        "What have others tried in order to move this value?",
-        "What worked — and what failed?",
-        "2–3 REAL sources. Never invent a citation.",
-    ]),
-    ("05", "SO WHAT", "Our next design brief", [
-        "Verification opens the next design - it doesn't just grade this one.",
-        "What OTHER design could actually achieve this value?",
-        "What should the next cycle discover? (You carry this into Wednesday.)",
+    ("04", "OUR DESIGN DIRECTIONS", "Generative - where the evidence points (carry into Wednesday)", [
+        "2-3 design directions our research points to.",
+        "Which one has the strongest evidence behind it?",
+        "What would we still need to verify - and how?",
     ]),
 ]
 
@@ -104,10 +96,10 @@ def howto():
     text(s, Inches(0.7), Inches(1.3), Inches(12), Inches(1.0),
          [[("Keep the headers. Put your slides behind them.", {"size": 32, "bold": True, "color": WHITE})]])
     items = [
-        "Five section headers follow — they are the spine of your talk.",
-        "Sections 01, 02, 04, 05 are the TEAM's. Section 03 has one named slide per person — that one is graded individually.",
+        "Four section headers follow — they are the spine of your talk.",
+        "Sections 01, 02, 04 are the TEAM's. Section 03 has one named slide per person — your individual contribution.",
         "Add your own slides AFTER each header. Don't delete the headers.",
-        "Evidence beats assertion: screenshots, numbers, quotes from what you actually observed.",
+        "No time to run full tests today - so RESEARCH the method, and what interventions have actually moved this value.",
         "Real citations only — if you can't find the paper, leave the claim out.",
         "Your reflection is NOT a document — it goes in your own lane on the team FigJam canvas.",
         "Delete this slide before you present.",
@@ -135,16 +127,16 @@ def team_section(num, kick, title, prompts):
 
 
 def member_slide(name, i):
-    """One named slide per team member - this is the individually graded section."""
+    """One named slide per member - the design intervention they researched (their individual contribution)."""
     s = slide()
-    kicker(s, f"03.{i}  ·  YOUR SECTION (graded individually)"); accent(s)
+    kicker(s, f"03.{i}  ·  YOUR SLIDE (your individual contribution)"); accent(s)
     text(s, Inches(0.7), Inches(1.28), Inches(12), Inches(1.0),
          [[(name, {"size": 36, "bold": True, "color": WHITE})]])
     prompts = [
-        "The lens + method I ran, and why our reading demanded it",
-        "My evidence - what I actually observed or measured",
-        "What this says WORKS - and what does NOT",
-        "The paper I found (real citation) and what it changes",
+        "A design intervention someone tried to move THIS value - [ what they did ]",
+        "The result - [ worked / mixed / failed ] - and the real source [ author, year ]",
+        "How you'd test it - [ method ]  (behavior = research it; understanding/affect = quick student check)",
+        "Does it support or challenge our design direction? - [ ___ ]",
     ]
     paras = [[("\u2192  ", {"color": GREEN, "bold": True}), (p, {})] for p in prompts]
     text(s, Inches(0.72), Inches(2.5), Inches(11.9), Inches(3.1), paras, size=19, color=WHITE, spacing=1.34)
@@ -154,7 +146,7 @@ def member_slide(name, i):
            ("This slide is yours. Add more slides behind it if you need them - keep your name on them.", {"size": 15, "color": WHITE, "bold": True})]],
          anchor=MSO_ANCHOR.MIDDLE)
     footer(s, FOOT)
-    notes(s, f"{name}'s individually graded section. Their reflection lives in their own lane on the team FigJam canvas.")
+    notes(s, f"{name}'s individual contribution: the design intervention they researched. Reflection lives in their own FigJam lane.")
     return s
 
 
