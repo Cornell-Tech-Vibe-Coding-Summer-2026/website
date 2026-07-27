@@ -68,7 +68,7 @@ function TerminalModal() {
                 <div>
                     <div className="text-[#ffd166] text-[10px] font-bold mb-1 tracking-wider">? VIBE CODING <span className="italic">ETHICALLY</span>?</div>
                     <div className="text-white/75 text-[11px]">
-                        Stop. Look up from the prompt. Who is this for? Who could it harm? Whose values does it embed?
+                        Stop. Look up from the prompt. Who is this for? What values does it embed? What harms might it propagate?
                     </div>
                 </div>
                 <div>
@@ -374,7 +374,7 @@ export function MobileView() {
                     <div>
                         <p className="text-[#ffd166] text-[10px] font-mono font-bold tracking-widest mb-1">? VIBE CODING <span className="italic">ETHICALLY</span>?</p>
                         <p className="text-white/70 text-[13px] leading-relaxed">
-                            Stop. Look up from the prompt. Who is this for? Who could it harm? Whose values does it embed?
+                            Stop. Look up from the prompt. Who is this for? What values does it embed? What harms might it propagate?
                         </p>
                     </div>
                     <div>

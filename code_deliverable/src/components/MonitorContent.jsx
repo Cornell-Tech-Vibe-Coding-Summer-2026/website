@@ -96,7 +96,8 @@ function WelcomeTerminal() {
                         Vibe coding is brain-<span className="text-[#00ff41]">off</span>: let the AI drive.<br />
                         Ethics is brain-<span className="text-[#00ff41]">on</span>: stop and think hard.<br />
                         This class is the experiment in marrying them —<br />
-                        shipping fast while staying awake to the harm.
+                        shipping fast while staying awake to the values<br />
+                        your tech embeds, and the harms it may propagate.
                     </div>
                 </div>
                 <div>
@@ -113,8 +114,8 @@ function WelcomeTerminal() {
                     </div>
                     <div className="text-white/75 pl-3">
                         Stop. Look up from the prompt.<br />
-                        Who is this for? Who could it harm?<br />
-                        Whose values does it embed?
+                        Who is this for? What values does it embed?<br />
+                        What harms might it propagate?
                     </div>
                 </div>
                 <div>
