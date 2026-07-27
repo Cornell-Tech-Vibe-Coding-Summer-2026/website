@@ -61,7 +61,7 @@ SECTIONS = [
         "2–3 REAL sources. Never invent a citation.",
     ]),
     ("05", "SO WHAT", "Our next design brief", [
-        "Verification is a beginning, not a verdict.",
+        "Verification opens the next design - it doesn't just grade this one.",
         "What OTHER design could actually achieve this value?",
         "What should the next cycle discover? (You carry this into Wednesday.)",
     ]),
