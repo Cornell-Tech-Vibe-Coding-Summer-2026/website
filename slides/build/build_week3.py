@@ -191,6 +191,20 @@ photo_split("THE PRACTICAL TURN", "The conscientious designer",
      [("Values at Play is the method for doing that deliberately.", {"size": 18, "color": GREEN, "bold": True})]],
     "vap_book.png", "Flanagan & Nissenbaum, Values at Play (MIT Press) - VAP course, Engelmann & Nissenbaum, Cornell Tech", FOOT)
 
+section("QUIET READING", "20 minutes - read it yourself", color=GREEN,
+        sub="Phones away. No talking. This is protected, individual reading time.")
+
+content("WHILE YOU READ", "Read it - then we build the framework on top of it",
+    [[("Read: ", {"size": 22, "color": WHITE, "bold": True}),
+      ("[ Values at Play - the chapter your instructor assigns ]", {"size": 22, "color": GREEN, "bold": True})],
+     [("", {})],
+     [("Mark TWO things in the margin as you go:", {"size": 20, "color": WHITE})],
+     [("1.  where the author turns an abstract value into something concrete (operationalizes it)", {"size": 18, "color": MUTED})],
+     [("2.  one line that fits YOUR Project 2 value - or that you disagree with", {"size": 18, "color": MUTED})],
+     [("", {})],
+     [("Then 3 minutes: share one margin note with the person next to you.", {"size": 17, "color": DIM})]], FOOT)
+notes(prs.slides[-1], "Protected quiet reading time - keep it silent and individual. Set the exact chapter before class (VAP book is on the Drive). This grounds the operationalize + verify work that follows.")
+
 section("THE HEURISTIC", "Discovery -> Implementation -> Verification", sub="One loop, three moves - and it is cyclical")
 
 content("BREAK", "~10 minutes",
