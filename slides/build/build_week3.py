@@ -211,7 +211,7 @@ content("DISCOVERY II - OPERATIONALIZE", "A value is not one thing",
      [("Privacy", {"size": 19, "color": GREEN, "bold": True}), (" = control?  secrecy?  contextual integrity?", {"size": 19, "color": WHITE})],
      [("Fairness", {"size": 19, "color": GREEN, "bold": True}), (" = equal shares?  or proportional to merit / need?", {"size": 19, "color": WHITE})],
      [("", {})],
-     [("Your reading decides your design AND your test. (That is yesterday's move - and today's.)", {"size": 17, "color": MUTED})]], FOOT)
+     [("Your operational definition decides your design AND your test. (That is yesterday's move - and today's.)", {"size": 17, "color": MUTED})]], FOOT)
 
 columns("CASE - WHAT'S FAIR?", "One value, incompatible definitions", [
     ("THE SETUP", "Split a limited loan", "Person A repays 100%, Person B repays 20%. Identical otherwise. How do you split the money?"),
@@ -268,11 +268,11 @@ photo_split("EXAMPLE - BEHAVIOR", "Does the design change what people DO?",
      [("Verify how: prototype - A/B - before/after - task completion.", {"size": 16, "color": MUTED})]],
     "smart_meter.jpg", "Behavior verification (Values at Play) - smart-meter image, educational use", FOOT)
 
-bullets("MEASURE BEYOND USABILITY", "Instruments that make a value legible",
-    ["UEQ - attractiveness, novelty, stimulation, beyond just \"usable\".",
-     "HRI Scale Database / METUX + SDT scales - trust, autonomy, competence, relatedness.",
-     "Vibed Slop Detector - generic AI \"slop\" as a proxy for missing craft and care.",
-     "Match the instrument to your reading of the value - run the right one."], FOOT)
+bullets("PICK THE INSTRUMENT THAT FITS YOUR VALUE", "Examples - tie the tool to the value you are analyzing",
+    ["Beauty / craft / originality -> the Vibed Slop Detector (is it generic AI slop?), or UEQ attractiveness.",
+     "Autonomy / competence / wellbeing -> METUX + Self-Determination scales.",
+     "Trust / warmth / safety -> a validated scale from the HRI Scale Database.",
+     "Overall UX beyond usability -> UEQ. The instrument has to match the value - don't default to UEQ."], FOOT)
 
 quote("FROM OUR RESEARCH",
     "Persuasion-focused evaluation nearly DOUBLED how often professional designers rejected dark-pattern designs - and shifted their reasoning from business justifications toward user autonomy and well-being.",
@@ -292,10 +292,10 @@ media("PITECH PROJECTS", "Fellows who ran the whole framework",
 
 # ---------- PART 6 - BACK TO YOUR ACTIVITY ----------
 s = discuss("NOW YOU (TEAM)", "Verify the value your Project 2 claims.",
-    ["Pick the reading of your value you actually designed for - it decides the method.",
-     "Choose the lens + instrument that reading demands, and run a quick check.",
+    ["State how you operationalize your value - that definition decides the method.",
+     "Choose the lens + instrument that definition demands, and run a quick check.",
      "Does it deliver the value - for whom, and who's left out? Then: what would you change?"],
-    "Team research deck + verification canvas - each person owns a named slide + a lane - due today", FOOT)
+    "A value-centered user RESEARCH deck + a reflection on FigJam - each person owns a slide + a lane - due today", FOOT)
 notes(s, "Hand back to the activity. Language note: no 'verdict' - just 'does it deliver the value, and for whom?'")
 
 refs("SOURCES", "Read + cite", [

@@ -24,26 +24,33 @@ SLIDE_W, SLIDE_H = Inches(13.333), Inches(7.5)
 # (most teams hadn't declared one yet — those show a fill-in placeholder).
 TEAMS = [
     dict(slug="super-duper-amazing-team", name="Super Duper Amazing Team",
-         roster=["Isa Offengenden", "Om Ravula", "Jason Chen"], value="security"),
+         roster=["Isa Offengenden", "Om Ravula", "Jason Chen"], value="security",
+         app="a safety app for minors on social media - flags suspicious accounts"),
     dict(slug="jamins-2nd-team", name="Jamin's 2nd Team",
-         roster=["John Maida", "Ajin Yohannan"], value="safety"),
+         roster=["John Maida", "Ajin Yohannan"], value="safety",
+         app="Vault Notes - a locking journal for high-school students"),
     dict(slug="chezborgar", name="Chezborgar",
-         roster=["Emily Tai", "Kylie Cheung", "Aria Sharma"], value=None),
+         roster=["Emily Tai", "Kylie Cheung", "Aria Sharma"], value="sustainability & trust",
+         app="Borrow Board - borrow instead of buy, for college students"),
     dict(slug="guantanamo-bay-wendys", name="Guantanamo Bay Wendy's",
-         roster=["Evan Birnbaum", "Derin Sezgin", "Magnes Dugan", "[ +1 — add your name ]"], value=None),
+         roster=["Evan Birnbaum", "Derin Sezgin", "Magnes Dugan", "[ +1 - add your name ]"], value=None,
+         app="Fixr Findr"),
     dict(slug="were-always-two-steps-ahead", name="We're Always Two Steps Ahead",
-         roster=["Elaine Huang", "Winnie Monroe", "Vienna Carew"], value=None),
+         roster=["Elaine Huang", "Winnie Monroe", "Vienna Carew"], value="care",
+         app="MyPace - health + family connection for elderly adults living independently"),
     dict(slug="the-professors-favorites", name="The Professor's Favorites",
-         roster=["Sebastien Gournay", "Justin Ou"], value=None),
+         roster=["Sebastien Gournay", "Justin Ou"], value="productivity",
+         app="Justina - focus for writers & students  (same project as liam-justin-sebastien)"),
     dict(slug="liam-justin-sebastien", name="Liam Justin Sebastien",
-         roster=["Liam Allen", "[ add your teammate ]"], value=None),
+         roster=["Liam Allen", "Justin Ou", "Sebastien Gournay"], value="productivity",
+         app="Justina - focus for writers & students"),
 ]
 
 SECTIONS = [
-    ("01", "THE VALUE & THE READING", "What we claimed — and which reading we built for", [
+    ("01", "THE VALUE & HOW WE DEFINE IT", "What we claimed — and how we operationalize it", [
         "Our app, in one line — and the value it claims.",
-        "Which reading of the value did we actually design for? (e.g. privacy as control vs. security vs. contextual integrity)",
-        "Operationalized: if it's present, users will DO ___ / UNDERSTAND ___ / FEEL ___.",
+        "How do we operationalize / define the value? (e.g. privacy as control vs. security vs. contextual integrity)",
+        "If it's present, users will DO ___ / UNDERSTAND ___ / FEEL ___.",
     ]),
     ("02", "PART 1 — WAYS TO VERIFY", "How can this value be verified at all?", [
         "How have others measured this value? (Google Scholar + its AI search)",
@@ -73,14 +80,18 @@ def team_cover(team):
     s = slide()
     rect(s, 0, 0, Inches(0.28), SLIDE_H, fill=GREEN)
     text(s, Inches(0.9), Inches(1.7), Inches(11.5), Inches(0.5),
-         [[("VALUE VERIFICATION · TEAM RESEARCH DECK", {"size": 15, "color": GREEN, "bold": True, "font": F_MONO})]])
+         [[("VALUE-CENTERED USER RESEARCH DECK", {"size": 15, "color": GREEN, "bold": True, "font": F_MONO})]])
     has_val = bool(team["value"])
     display = ("The " + team["value"].strip().title() + " Team") if has_val else "[ name your team after your value ]"
     text(s, Inches(0.88), Inches(2.3), Inches(11.6), Inches(1.9),
          [[(display, {"size": 46, "bold": True, "color": WHITE if has_val else MUTED})]], spacing=1.02)
     text(s, Inches(0.92), Inches(4.15), Inches(11.4), Inches(0.5),
          [[(" · ".join(team["roster"]), {"size": 18, "color": MUTED})]])
-    text(s, Inches(0.92), Inches(4.85), Inches(11.4), Inches(0.5),
+    if team.get("app"):
+        text(s, Inches(0.92), Inches(4.6), Inches(11.6), Inches(0.5),
+             [[("Project 2:  ", {"size": 15, "color": GREEN, "bold": True, "font": F_MONO}),
+               (team["app"], {"size": 15, "color": MUTED})]])
+    text(s, Inches(0.92), Inches(5.15), Inches(11.4), Inches(0.5),
          [[("GitHub team: " + team["name"], {"size": 13, "color": DIM, "font": F_MONO})]])
     footer(s, FOOT)
     notes(s, "Team name = the value you carry into the final. Confirm the value + members before presenting.")
