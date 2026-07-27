@@ -330,6 +330,33 @@ columns("FIND THE NEED", "Talk to someone - don't guess", [
     ("PERSONA", "One specific human", "Name, situation, goal, frustration, context. Not 'students' - one person you design for."),
     ("THE NEED", "In their words", "Write the need the way they would say it. That sentence is what your design has to serve.")], FOOT)
 
+content("PERSONAS - WHY, AND THE RISK", "A persona is a tool to EMPATHIZE - not to stereotype",
+    [[("A persona holds one real user's needs in mind while you build - so you design for someone specific, not \"everyone.\"", {"size": 20, "color": WHITE})],
+     [("", {})],
+     [("The risk: personas flatten people into cliches. Used well they build empathy; used badly they just launder your own assumptions.", {"size": 18, "color": MUTED})]], FOOT)
+
+content("GET AS CLOSE TO THE PERSON AS YOU CAN", "Nothing beats real contact",
+    [[("Best: talk to a real person - a short interview. Better still: co-design, where the user helps make the thing.", {"size": 20, "color": WHITE})],
+     [("", {})],
+     [("We can't fully do participatory design here - so get as close as you can, and be honest about the gap.", {"size": 18, "color": MUTED})]], FOOT)
+
+s = discuss("AI PERSONAS - THEATER OR INSIGHT?", "Make an AI persona, then hold it against a real human.",
+    ["Generate a persona with AI - even \"chat\" with the simulated user.",
+     "Compare it to the real person you interviewed: what did each get right?",
+     "Does the AI theater help you empathize - or hand your own stereotypes back as if they were data?"],
+    "Bring BOTH into planning: the AI persona AND one real human's words", FOOT)
+notes(s, "AI personas are fast + frictionless but can launder assumptions back as 'data'. Comparing to a real human is the check.")
+
+media("SCREENSHOT SLOT", "AI persona vs. real interview",
+    "[ AI-generated persona + simulator chat, next to your real interview notes ]",
+    "add the two side by side - where did the AI flatten the person?", FOOT)
+
+content("KEEP THE VALUE IN THE FOREGROUND", "Values-conscientious planning",
+    [[("Put your value at the front of BOTH artifacts:", {"size": 20, "color": WHITE})],
+     [("", {})],
+     [("Persona", {"size": 19, "color": GREEN, "bold": True}), (" - where does this user MEET or LOSE the value in their day?", {"size": 19, "color": WHITE})],
+     [("Storyboard", {"size": 19, "color": GREEN, "bold": True}), (" - show the value living in each frame: the moment it's supported, defended, or repaired.", {"size": 19, "color": WHITE})]], FOOT)
+
 content("OPERATIONALIZE - THE VALUE TREE", "From value down to the prompts you'll build",
     [[("Break your value down until it becomes something you can actually build:", {"size": 20, "color": WHITE})],
      [("", {})],
