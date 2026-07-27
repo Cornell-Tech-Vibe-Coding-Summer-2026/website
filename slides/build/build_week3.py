@@ -32,14 +32,14 @@ def numbered_two_col(kick, title, items, foot=None):
 # ===========================================================================
 # MONDAY 7/27 - Usability Testing: Human & Agent (video deliverable)
 # ===========================================================================
-divider("WEEK 3 - MONDAY", "Usability Testing: Does It Work?",
+divider("WEEK 3 - MONDAY", "Usability Testing: Can People Use It?",
         "Human + agent testing on your Project 2 prototype")
 
 content("THE TURN", "You built it. Does it work - for someone who isn't you?",
     [[("Weeks 1-2 you built. This week you evaluate, then build the final. Two testing days on ", {"size": 21, "color": WHITE}),
       ("last week's Project 2 prototype:", {"size": 21, "color": WHITE, "bold": True})],
      [("", {})],
-     [("Today - ", {"size": 21}), ("does it work?", {"color": GREEN, "bold": True, "size": 21}),
+     [("Today - ", {"size": 21}), ("can people use it?", {"color": GREEN, "bold": True, "size": 21}),
       ("  (usability).    Tomorrow - ", {"size": 21}),
       ("does it do the right thing?", {"color": GREEN, "bold": True, "size": 21}), ("  (values).", {"size": 21})]], FOOT)
 
@@ -162,7 +162,7 @@ save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Wee
 divider("WEEK 3 - TUESDAY", "Values at Play: The Whole Framework",
         "Discovery -> Implementation -> Verification -> then verify your own")
 
-content("TODAY", "From \"does it work?\" to \"what values did we build in - and did they land?\"",
+content("TODAY", "From \"can people use it?\" to \"what values did we build in - and did they land?\"",
     [[("Monday asked whether people can use your Project 2. Today we go all the way around the Values at Play loop - the method behind everything you have been doing - and then you verify your own value.", {"size": 21, "color": WHITE})],
      [("", {})],
      [("Three parts, with breaks: Discovery (what values?) -> Implementation (build them in) -> Verification (did they land?). Then the canvas, real projects, and your activity.", {"size": 18, "color": MUTED})]], FOOT)
@@ -345,11 +345,11 @@ s = discuss("AI PERSONAS - THEATER OR INSIGHT?", "Make an AI persona, then hold 
      "Compare it to the real person you interviewed: what did each get right?",
      "Does the AI theater help you empathize - or hand your own stereotypes back as if they were data?"],
     "Bring BOTH into planning: the AI persona AND one real human's words", FOOT)
-notes(s, "AI personas are fast + frictionless but can launder assumptions back as 'data'. Comparing to a real human is the check.")
+notes(s, "AI personas are fast + frictionless but can launder assumptions back as 'data'. Comparing to a real human is the check. Ref: nngroup.com/articles/synthetic-users/")
 
 media("SCREENSHOT SLOT", "AI persona vs. real interview",
     "[ AI-generated persona + simulator chat, next to your real interview notes ]",
-    "add the two side by side - where did the AI flatten the person?", FOOT)
+    "add the two side by side - where did the AI flatten the person?  (skeptical take: NN/g - Synthetic Users)", FOOT)
 
 content("KEEP THE VALUE IN THE FOREGROUND", "Values-conscientious planning",
     [[("Put your value at the front of BOTH artifacts:", {"size": 20, "color": WHITE})],
