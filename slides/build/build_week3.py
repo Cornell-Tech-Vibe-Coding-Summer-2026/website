@@ -167,6 +167,21 @@ content("TODAY", "From \"can people use it?\" to \"what values did we build in -
      [("", {})],
      [("Three parts, with breaks: Discovery (what values?) -> Implementation (build them in) -> Verification (did they land?). Then the canvas, real projects, and your activity.", {"size": 18, "color": MUTED})]], FOOT)
 
+# ---------- FINAL PROJECT KICKOFF - join your team ----------
+content("FINAL PROJECT STARTS TODAY", "Commit to your value - then join your team",
+    [[("Your team name IS your value. We suggest carrying your Project 2 value through the final - but you can switch, or add a secondary value.", {"size": 21, "color": WHITE})],
+     [("", {})],
+     [("One person accepts on GitHub Classroom and creates the team with that exact name; everyone else JOINS it - no duplicates.", {"size": 19, "color": MUTED})]], FOOT)
+
+numbered_two_col("JOIN YOUR TEAM", "Six teams - named for the value you carry",
+    [("Security", "Isa . Om . Jason"),
+     ("Safety & Autonomy", "John . Ajin"),
+     ("Sustainability & Trust", "Emily . Kylie . Aria"),
+     ("Care & Wellbeing", "Elaine . Winnie . Vienna"),
+     ("Productivity", "Liam . Justin . Sebastien"),
+     ("Sustainability & Transparency", "Evan . Derin . Magnes . Oliver")], FOOT)
+notes(prs.slides[-1], "Two 'Sustainability' teams - check the second word (Trust vs Transparency). Full join table + links on the Final Project page: vibe-coding-ethics.tech.cornell.edu/projects/final.html")
+
 # ---------- PART 1 - FOUNDATIONS ----------
 section("PART 1 - FOUNDATIONS", "Do artifacts have politics?", sub="Before you design values IN, see that they are already there")
 
