@@ -359,37 +359,24 @@ content("KEEP YOUR VALUE", "Change the design, not the commitment",
      [("", {})],
      [("Today's job: name a specific beneficiary, and find what they actually need.", {"size": 19, "color": MUTED})]], FOOT)
 
-columns("FIND THE NEED", "Talk to someone - don't guess", [
-    ("INTERVIEW", "Ask, don't pitch", "A short conversation with a real person outside the class. Ask about their problem, not your idea."),
-    ("PERSONA", "One specific human", "Name, situation, goal, frustration, context. Not 'students' - one person you design for."),
-    ("THE NEED", "In their words", "Write the need the way they would say it. That sentence is what your design has to serve.")], FOOT)
-
-content("PERSONAS - WHY, AND THE RISK", "A persona is a tool to EMPATHIZE - not to stereotype",
-    [[("A persona holds one real user's needs in mind while you build - so you design for someone specific, not \"everyone.\"", {"size": 20, "color": WHITE})],
+content("BUILD YOUR PERSONA", "One specific human - not \"everyone\"",
+    [[("Name a specific beneficiary OUTSIDE this class, and build a persona: name, situation, goal, frustration, context - and where they MEET or LOSE your value in their day.", {"size": 20, "color": WHITE})],
      [("", {})],
-     [("The risk: personas flatten people into cliches. Used well they build empathy; used badly they just launder your own assumptions.", {"size": 18, "color": MUTED})]], FOOT)
+     [("Use a template: the Figma 'User Persona Template Set' (community) or a Google Slides deck. Add a photo/sketch so it feels like a person.", {"size": 18, "color": MUTED})]], FOOT)
+notes(prs.slides[-1], "Persona template: figma.com/community/file/1335748909887675654/user-persona-template-set - or a Google Slides deck. A persona is a tool to EMPATHIZE, not to stereotype.")
 
-content("GET AS CLOSE TO THE PERSON AS YOU CAN", "Nothing beats real contact",
-    [[("Best: talk to a real person - a short interview. Better still: co-design, where the user helps make the thing.", {"size": 20, "color": WHITE})],
+s = discuss("ELICIT THE NEED - INTERVIEW YOUR PERSONA AS A CHATBOT", "No time to find a stranger? Interview the persona you built.",
+    ["Turn your persona into an AI chatbot - give it RICH detail: its life, constraints, what it cares about.",
+     "Run a short interview about ITS problem, not your idea. Capture the need in its words.",
+     "Paste the SETUP PROMPT and the CONVERSATION into planning-report.md - that is your elicitation evidence."],
+    "The chatbot IS your persona, now interviewable - document the prompt + transcript", FOOT)
+notes(s, "Claude / ChatGPT. The persona chatbot embodies the chosen user persona. Document the exact setup prompt + the interview transcript in the planning report.")
+
+content("BE HONEST ABOUT THE SIMULATION", "It's an AI voiced by your own assumptions",
+    [[("A persona chatbot is fast and frictionless - but it can hand your stereotypes back as if they were data, and it tends to agree with you.", {"size": 20, "color": WHITE})],
      [("", {})],
-     [("We can't fully do participatory design here - so get as close as you can, and be honest about the gap.", {"size": 18, "color": MUTED})]], FOOT)
-
-s = discuss("AI PERSONAS - THEATER OR INSIGHT?", "Make an AI persona, then hold it against a real human.",
-    ["Generate a persona with AI - even \"chat\" with the simulated user.",
-     "Compare it to the real person you interviewed: what did each get right?",
-     "Does the AI theater help you empathize - or hand your own stereotypes back as if they were data?"],
-    "Bring BOTH into planning: the AI persona AND one real human's words", FOOT)
-notes(s, "AI personas are fast + frictionless but can launder assumptions back as 'data'. Comparing to a real human is the check. Ref: nngroup.com/articles/synthetic-users/")
-
-media("SCREENSHOT SLOT", "AI persona vs. real interview",
-    "[ AI-generated persona + simulator chat, next to your real interview notes ]",
-    "add the two side by side - where did the AI flatten the person?  (skeptical take: NN/g - Synthetic Users)", FOOT)
-
-content("KEEP THE VALUE IN THE FOREGROUND", "Values-conscientious planning",
-    [[("Put your value at the front of BOTH artifacts:", {"size": 20, "color": WHITE})],
-     [("", {})],
-     [("Persona", {"size": 19, "color": GREEN, "bold": True}), (" - where does this user MEET or LOSE the value in their day?", {"size": 19, "color": WHITE})],
-     [("Storyboard", {"size": 19, "color": GREEN, "bold": True}), (" - show the value living in each frame: the moment it's supported, defended, or repaired.", {"size": 19, "color": WHITE})]], FOOT)
+     [("Treat what it says as a HYPOTHESIS, not proof. Note where it might be flattering you. (Skeptical read: NN/g - Synthetic Users.)", {"size": 18, "color": MUTED})]], FOOT)
+notes(prs.slides[-1], "nngroup.com/articles/synthetic-users/ - synthetic users can launder assumptions. Being honest about the gap is the point.")
 
 content("OPERATIONALIZE - THE VALUE TREE", "From value down to the prompts you'll build",
     [[("Break your value down until it becomes something you can actually build:", {"size": 20, "color": WHITE})],
@@ -399,30 +386,31 @@ content("OPERATIONALIZE - THE VALUE TREE", "From value down to the prompts you'l
      [("", {})],
      [("The bottom of the tree IS your Thursday build plan - the exact prompts, grounded in the value.", {"size": 17, "color": MUTED})]], FOOT)
 
-s = bullets("STORYBOARD IT", "4-8 frames: the value in use",
-    ["Frame the user, their problem, where your thing enters, and what changes.",
-     "Hand-drawn (photograph it) or AI-assisted - rough is fine.",
-     "AI can sketch or fill frames fast - but keep YOUR story; the AI is a co-designer, not the author.",
-     "It doubles as your Thursday pitch skeleton - show the value living in the design, not just the copy."], FOOT)
-notes(s, "AI storyboarding / co-design: Sandhaus, Gu, Parreira & Ju 2025, 'Co-Designing with Transformers' (DIS '25) - GenAI helps generate + iterate frames, but can flatten the narrative if you let it drive. dl.acm.org/doi/10.1145/3715336.3735805")
+s = content("STORYBOARD - ROUGH, THEN REFINED", "Diverge to find ideas, converge to communicate one",
+    [[("ROUGH (each member): a quick 4-8 frame sketch of YOUR idea - the user, their problem, where your thing enters, what changes. Rough is the point; it helps you think.", {"size": 19, "color": WHITE})],
+     [("", {})],
+     [("REFINED (team): pick + combine the best into ONE clean storyboard that communicates the idea - your Thursday build plan + pitch skeleton.", {"size": 19, "color": GREEN, "bold": True})],
+     [("", {})],
+     [("Show the value living in each frame - not just in the copy.", {"size": 17, "color": MUTED})]], FOOT)
+notes(s, "One ROUGH storyboard per member (diverge/ideate), then one REFINED team storyboard (converge/communicate). AI storyboarding: Sandhaus, Gu, Parreira & Ju 2025 'Co-Designing with Transformers' (DIS '25). Template: figma.com/community/file/853170162772539008/storyboard-template")
 
-bullets("TOOLS FOR TODAY", "Storyboard + pitch",
-    ["Storyboard: FigJam / Figma, Canva, Google Slides (one frame per slide), or Storyboarder (free & open-source).",
-     "AI pitch video (for Thursday): Google Veo 3.1 (in Flow), Runway, Kling, or Pika.",
-     "Note: OpenAI retired the Sora app in April 2026 - use Veo / Runway / Kling / Pika instead.",
-     "Free tiers add watermarks + limits - fine for a class pitch.",
-     "Interview + persona: just talk to a person; capture notes in FigJam or a doc."], FOOT)
-notes(prs.slides[-1], "Sora web/app discontinued 2026-04-26. Recommend Veo 3.1 / Runway / Kling / Pika for pitch videos.")
+bullets("TEMPLATES + TOOLS", "Your persona + storyboard are LINKS in the report",
+    ["Persona: Figma 'User Persona Template Set' (community) or a Google Slides deck.",
+     "Storyboard: Figma 'Storyboard Template' (community), Google Slides (one frame / slide), Canva, or Storyboarder.",
+     "Persona chatbot: Claude or ChatGPT - give it rich detail, then interview it.",
+     "AI pitch video (Thursday): Google Veo 3.1 (Flow), Runway, Kling, or Pika. (Sora retired in 2026.)",
+     "Paste the Slides / Figma LINKS into planning-report.md - don't dump giant images."], FOOT)
+notes(prs.slides[-1], "Persona template: figma.com/community/file/1335748909887675654/user-persona-template-set. Storyboard template: figma.com/community/file/853170162772539008/storyboard-template. Sora discontinued 2026-04-26.")
 
-media("SCREENSHOT SLOT", "Show an example",
-    "[ example storyboard or persona goes here ]",
-    "a strong persona, a storyboard, or an AI-pitch still", FOOT)
+media("SCREENSHOT SLOT", "Persona + storyboard example",
+    "[ persona card + chatbot interview, next to the refined storyboard ]",
+    "show a filled persona, the AI interview transcript, and the team's refined storyboard", FOOT)
 
 discuss("ACTIVITY - TODAY (TEAM)", "Plan the next iteration of your value.",
-    ["Interview a real person outside the class -> build a persona + the need in their words.",
-     "Operationalize: value -> norms -> requirements -> features -> the prompts you'll build.",
-     "Storyboard the solution (4-8 frames) and scope the smallest real thing for Thursday."],
-    "Deliverable = planning-report.md + your storyboard - this is Checkpoint 2 of the final", FOOT)
+    ["Build a PERSONA -> interview it as an AI CHATBOT (paste the prompt + conversation).",
+     "Operationalize the value, then ROUGH storyboard each -> ONE REFINED team storyboard.",
+     "Scope the smallest real thing. Link persona + storyboard from the report."],
+    "Deliverable = planning-report.md - Checkpoint 2  (persona · interview · storyboards · scope)", FOOT)
 
 content("LAST 30 MINUTES - START VIBE CODING", "Don't wait for Thursday to open the repo",
     [[("Once the plan is locked, spend the final half hour getting a head start:", {"size": 21, "color": WHITE})],
