@@ -354,29 +354,49 @@ content("THE TURN", "Tuesday told you IF it works. Today you decide what to buil
      [("", {})],
      [("Open with Remy Stewart's Figma guest talk, then find the real need.", {"size": 19, "color": MUTED})]], FOOT)
 
+s = discuss("RESEARCH SHARE-OUT - CARRY-OVER FROM TUESDAY", "The teams we didn't hear yet - one minute each.",
+    ["Your value, and the STRONGEST thing your research said.",
+     "The design direction it points to - what would move the value?",
+     "Listen for approaches you could borrow for your own plan."],
+    "Quick round right after the guest talk - then we go straight into planning", FOOT)
+notes(s, "Carry-over from Tuesday's wrap - we ran out of time. Keep it to ~1 min/team, then transition to the planning mini-lecture.")
+
 content("KEEP YOUR VALUE", "Change the design, not the commitment",
     [[("You already have a value and what Tuesday's verification showed. The final is the NEXT iteration of that value - not a new theme.", {"size": 21, "color": WHITE})],
      [("", {})],
      [("Today's job: name a specific beneficiary, and find what they actually need.", {"size": 19, "color": MUTED})]], FOOT)
 
-content("BUILD YOUR PERSONA", "One specific human - not \"everyone\"",
-    [[("Name a specific beneficiary OUTSIDE this class, and build a persona: name, situation, goal, frustration, context - and where they MEET or LOSE your value in their day.", {"size": 20, "color": WHITE})],
-     [("", {})],
-     [("Use a template: the Figma 'User Persona Template Set' (community) or a Google Slides deck. Add a photo/sketch so it feels like a person.", {"size": 18, "color": MUTED})]], FOOT)
-notes(prs.slides[-1], "Persona template: figma.com/community/file/1335748909887675654/user-persona-template-set - or a Google Slides deck. A persona is a tool to EMPATHIZE, not to stereotype.")
+# ---- planning mini-lecture: three value-centric tools, traditional -> AI ----
+columns("THREE TOOLS, VALUE-FIRST", "Everything today points at your value", [
+    ("PERSONA", "Who, specifically", "One real person outside the class - and where they MEET or LOSE your value in their day."),
+    ("USER-NEED INTERVIEW", "Their problem, their words", "Ask about the problem, not your idea - the need your design has to serve."),
+    ("STORYBOARD", "The value in use", "Frame the moment your design supports / defends / repairs the value.")], FOOT)
 
-s = discuss("ELICIT THE NEED - INTERVIEW YOUR PERSONA AS A CHATBOT", "No time to find a stranger? Interview the persona you built.",
-    ["Turn your persona into an AI chatbot - give it RICH detail: its life, constraints, what it cares about.",
-     "Run a short interview about ITS problem, not your idea. Capture the need in its words.",
-     "Paste the SETUP PROMPT and the CONVERSATION into planning-report.md - that is your elicitation evidence."],
-    "The chatbot IS your persona, now interviewable - document the prompt + transcript", FOOT)
-notes(s, "Claude / ChatGPT. The persona chatbot embodies the chosen user persona. Document the exact setup prompt + the interview transcript in the planning report.")
+media("HOW THEY'VE TRADITIONALLY BEEN MADE", "Before AI - slower, but grounded in real people",
+    "[ your images: a persona doc  ·  a user interview  ·  a hand-drawn storyboard ]",
+    "Persona: desk research + real interviews -> a profile.   Need: recruit + interview real users.   Storyboard: hand-sketch the frames.", FOOT)
+notes(prs.slides[-1], "Add your own images. The traditional methods are slower but grounded in real contact - name that honestly before showing the AI shortcuts.")
+
+media("PERSONA - WITH AI", "Draft a rich persona in seconds",
+    "[ your screenshot: an AI-generated persona ]",
+    "From your value + beneficiary, AI drafts a persona fast. Use a template (Figma persona set / Slides). Keep it anchored to a real person - not a cliche.", FOOT)
+notes(prs.slides[-1], "Persona template: figma.com/community/file/1335748909887675654/user-persona-template-set. Add your screenshot. A persona is a tool to EMPATHIZE, not to stereotype.")
+
+media("USER-NEED INTERVIEW - WITH AI", "Interview the persona you built - as a chatbot",
+    "[ your screenshot: chatting with the persona-bot ]",
+    "Turn the persona into a chatbot (Claude / ChatGPT), interview it about ITS problem, and paste the setup prompt + transcript into planning-report.md.", FOOT)
+notes(prs.slides[-1], "The chatbot embodies the chosen persona - now interviewable. Ask about its problem, not your idea. Document the prompt + transcript as elicitation evidence.")
 
 content("BE HONEST ABOUT THE SIMULATION", "It's an AI voiced by your own assumptions",
     [[("A persona chatbot is fast and frictionless - but it can hand your stereotypes back as if they were data, and it tends to agree with you.", {"size": 20, "color": WHITE})],
      [("", {})],
      [("Treat what it says as a HYPOTHESIS, not proof. Note where it might be flattering you. (Skeptical read: NN/g - Synthetic Users.)", {"size": 18, "color": MUTED})]], FOOT)
 notes(prs.slides[-1], "nngroup.com/articles/synthetic-users/ - synthetic users can launder assumptions. Being honest about the gap is the point.")
+
+media("STORYBOARD - WITH AI", "Sketch or fill frames fast - keep YOUR story",
+    "[ your screenshot: an AI-assisted storyboard ]",
+    "ROUGH per member (diverge to find ideas) -> ONE REFINED team storyboard (converge to communicate). AI is a co-designer, not the author.", FOOT)
+notes(prs.slides[-1], "One rough storyboard per member, then one refined team storyboard. Show the value living in each frame. AI storyboarding: Sandhaus, Gu, Parreira & Ju 2025 (DIS '25). Template: figma.com/community/file/853170162772539008/storyboard-template")
 
 content("OPERATIONALIZE - THE VALUE TREE", "From value down to the prompts you'll build",
     [[("Break your value down until it becomes something you can actually build:", {"size": 20, "color": WHITE})],
@@ -386,14 +406,6 @@ content("OPERATIONALIZE - THE VALUE TREE", "From value down to the prompts you'l
      [("", {})],
      [("The bottom of the tree IS your Thursday build plan - the exact prompts, grounded in the value.", {"size": 17, "color": MUTED})]], FOOT)
 
-s = content("STORYBOARD - ROUGH, THEN REFINED", "Diverge to find ideas, converge to communicate one",
-    [[("ROUGH (each member): a quick 4-8 frame sketch of YOUR idea - the user, their problem, where your thing enters, what changes. Rough is the point; it helps you think.", {"size": 19, "color": WHITE})],
-     [("", {})],
-     [("REFINED (team): pick + combine the best into ONE clean storyboard that communicates the idea - your Thursday build plan + pitch skeleton.", {"size": 19, "color": GREEN, "bold": True})],
-     [("", {})],
-     [("Show the value living in each frame - not just in the copy.", {"size": 17, "color": MUTED})]], FOOT)
-notes(s, "One ROUGH storyboard per member (diverge/ideate), then one REFINED team storyboard (converge/communicate). AI storyboarding: Sandhaus, Gu, Parreira & Ju 2025 'Co-Designing with Transformers' (DIS '25). Template: figma.com/community/file/853170162772539008/storyboard-template")
-
 bullets("TEMPLATES + TOOLS", "Your persona + storyboard are LINKS in the report",
     ["Persona: Figma 'User Persona Template Set' (community) or a Google Slides deck.",
      "Storyboard: Figma 'Storyboard Template' (community), Google Slides (one frame / slide), Canva, or Storyboarder.",
@@ -402,15 +414,41 @@ bullets("TEMPLATES + TOOLS", "Your persona + storyboard are LINKS in the report"
      "Paste the Slides / Figma LINKS into planning-report.md - don't dump giant images."], FOOT)
 notes(prs.slides[-1], "Persona template: figma.com/community/file/1335748909887675654/user-persona-template-set. Storyboard template: figma.com/community/file/853170162772539008/storyboard-template. Sora discontinued 2026-04-26.")
 
-media("SCREENSHOT SLOT", "Persona + storyboard example",
-    "[ persona card + chatbot interview, next to the refined storyboard ]",
-    "show a filled persona, the AI interview transcript, and the team's refined storyboard", FOOT)
-
 discuss("ACTIVITY - TODAY (TEAM)", "Plan the next iteration of your value.",
     ["Build a PERSONA -> interview it as an AI CHATBOT (paste the prompt + conversation).",
      "Operationalize the value, then ROUGH storyboard each -> ONE REFINED team storyboard.",
      "Scope the smallest real thing. Link persona + storyboard from the report."],
     "Deliverable = planning-report.md - Checkpoint 2  (persona · interview · storyboards · scope)", FOOT)
+
+# ---- bonus before you start building: apps, not just websites ----
+section("BONUS - APPS, NOT JUST WEBSITES", "Ship a real app from what you vibe-code",
+        sub="A lot of you asked - yes. Prototype on the web first, then wrap it. Keep the setup simple.")
+
+content("THE RULE FOR THE FINAL", "Prototype with vibe coding - don't fight your tools",
+    [[("Build the smallest real thing on the WEB with vibe coding. No heavy compilers, no backend infrastructure, no complex dev setup - that is not where your time should go.", {"size": 20, "color": WHITE})],
+     [("", {})],
+     [("Want it to FEEL like an app? Wrap it (next slide). AI can even build a fully functional app for you. But the value + the prototype come first.", {"size": 18, "color": MUTED})]], FOOT)
+
+columns("WRAP YOUR WEB APP -> AN APP", "Easiest first", [
+    ("PWA", "Zero install", "Add a manifest + service worker (AI does it). 'Add to Home Screen', works offline. Easiest by far."),
+    ("CAPACITOR", "Web -> native mobile", "By the Ionic team - wraps your web app into a real iOS / Android app. Frontend-focused."),
+    ("ELECTRON / TAURI", "Web -> desktop", "Electron: mature, heavy (~85MB). Tauri v2: tiny + fast (~5MB) but needs the Rust toolchain.")], FOOT)
+notes(prs.slides[-1], "PWA is the easy default. Capacitor (Ionic) wraps web into native mobile. Electron/Tauri for desktop - Tauri ~3MB vs Electron ~85MB (2026). Heonjun likely used a web->native wrapper like Capacitor/Ionic.")
+
+columns("OR LET AI BUILD THE APP", "Prompt -> app", [
+    ("NATIVE FROM A PROMPT", "iOS / Android", "Google AI Studio (native Android), CatDoes / Nativly (native iOS + Android) - describe it, get an app."),
+    ("WEB APP -> WRAP IT", "Fastest to demo", "Lovable, Bolt.new, Replit, v0 build a web app from a prompt - then add a PWA / Capacitor wrapper."),
+    ("REACT NATIVE", "If you go mobile", "Expo (+ AI tools like Rork / a0.dev) for React Native - more power, more setup.")], FOOT)
+notes(prs.slides[-1], "AI app builders (2026): Google AI Studio native Android; CatDoes/Nativly native iOS+Android; Lovable/Bolt/Replit/v0 web (then wrap); Expo/Rork/a0.dev React Native.")
+
+content("GAMES & NATIVE: POSSIBLE - BUT NOT FOR THE FINAL", "Great, just not this week",
+    [[("Web game engines vibe-code nicely: ", {"size": 19, "color": WHITE}),
+      ("Phaser, Kaplay, Three.js (3D).", {"size": 19, "color": GREEN, "bold": True})],
+     [("", {})],
+     [("But games, native mobile builds, and engines like Godot / Unity need DIFFERENT dev + publishing setups - an extra time commitment we can't assume you have.", {"size": 18, "color": MUTED})],
+     [("", {})],
+     [("For the final: stick to the web prototype. Explore the rest after the course.", {"size": 18, "color": WHITE})]], FOOT)
+notes(prs.slides[-1], "Phaser 4 (2026), Kaplay/Kaboom, Three.js (WebGPU 2026) are web-native + easy. Godot/Unity web export + native toolchains need more setup - NOT recommended for the final's time budget.")
 
 content("LAST 30 MINUTES - START VIBE CODING", "Don't wait for Thursday to open the repo",
     [[("Once the plan is locked, spend the final half hour getting a head start:", {"size": 21, "color": WHITE})],
@@ -440,7 +478,8 @@ bullets("BUILD", "The smallest real thing - done well",
     ["Build from the prompts your value tree produced Wednesday.",
      "One complete action a stranger can finish - no broken buttons, no fake features.",
      "The value lives in the design, not just the copy.",
-     "Polish the happy path and get it hosted - a stranger will try it at the showcase."], FOOT)
+     "Polish the happy path and get it hosted - a stranger will try it at the showcase.",
+     "Want an app, not just a site? Wrap it (PWA / Capacitor / Electron) - see Wednesday's 'apps' slides."], FOOT)
 
 bullets("THE PITCH VIDEO", "Show the IDEA of your app - authentically",
     ["Make a short video that shows the idea of your app.",
