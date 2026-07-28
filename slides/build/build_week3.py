@@ -313,7 +313,7 @@ s = discuss("NOW YOU (TEAM)", "Verify the value your Project 2 claims.",
     "A value-centered user RESEARCH deck + a reflection on FigJam - each person owns a slide + a lane - due today", FOOT)
 notes(s, "Hand back to the activity. Language note: no 'verdict' - just 'does it deliver the value, and for whom?'")
 
-content("FIND YOUR PAPER - EACH PERSON", "Section 03 is individual: real evidence, found with AI search",
+content("FIND YOUR PAPER - EACH PERSON", "Section 04 is individual: real evidence, found with AI search",
     [[("For your named slide, find ONE real paper on a design intervention that tried to move your value:", {"size": 20, "color": WHITE})],
      [("", {})],
      [("Claude / ChatGPT (ask for real, citable papers - then open + check them), Elicit, Semantic Scholar, Google Scholar - and its new Scholar Labs.", {"size": 19, "color": GREEN, "bold": True})],
@@ -321,7 +321,7 @@ content("FIND YOUR PAPER - EACH PERSON", "Section 03 is individual: real evidenc
      [("Never invent a citation. Open the actual paper and confirm it says what you think.", {"size": 17, "color": MUTED})]], FOOT)
 
 section("QUIET READING", "15 minutes - read the paper YOU found", color=GREEN,
-        sub="Phones away. Individual. This is the discovery reading - it fills your section-03 slide.")
+        sub="Phones away. Individual. This is the discovery reading - it fills your section-04 slide (FigJam: 04 Outlook).")
 
 content("WHILE YOU READ", "Pull out what your slide needs",
     [[("From the paper you found, mark:", {"size": 20, "color": WHITE})],
@@ -329,7 +329,7 @@ content("WHILE YOU READ", "Pull out what your slide needs",
      [("2.  the result - did it move the value? worked / mixed / failed", {"size": 18, "color": MUTED})],
      [("3.  whether it supports OUR design direction", {"size": 18, "color": MUTED})],
      [("", {})],
-     [("Then put it on your named slide (03), with the citation.", {"size": 17, "color": DIM})]], FOOT)
+     [("Then put it on your named slide (section 04), with the citation.", {"size": 17, "color": DIM})]], FOOT)
 notes(prs.slides[-1], "Protected, individual reading of the paper each person found via AI academic search (Claude / ChatGPT / Elicit / Semantic Scholar / Google Scholar Labs). This is the discovery reading the timer is built around - keep it silent.")
 
 refs("SOURCES", "Read + cite", [
