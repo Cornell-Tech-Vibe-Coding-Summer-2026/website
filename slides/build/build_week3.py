@@ -180,7 +180,7 @@ numbered_two_col("JOIN YOUR TEAM", "Six teams - named for the value you carry",
      ("Care & Wellbeing", "Elaine . Winnie . Vienna"),
      ("Productivity", "Liam . Justin . Sebastien"),
      ("Sustainability & Transparency", "Evan . Derin . Magnes . Oliver")], FOOT)
-notes(prs.slides[-1], "Two 'Sustainability' teams - check the second word (Trust vs Transparency). Full join table + links on the Final Project page: vibe-coding-ethics.tech.cornell.edu/projects/final.html")
+notes(prs.slides[-1], "Two 'Sustainability' teams - check the second word (Trust vs Transparency). Accept + join: classroom.github.com/a/VTWqWkXg. Final Project page (per-team showcase): cornell-tech-vibe-coding-summer-2026.github.io/cornell-tech-vibe-coding-summer-2026-final-project-template/")
 
 # ---------- PART 1 - FOUNDATIONS ----------
 section("PART 1 - FOUNDATIONS", "Do artifacts have politics?", sub="Before you design values IN, see that they are already there")
