@@ -394,11 +394,12 @@ content("OPERATIONALIZE - THE VALUE TREE", "From value down to the prompts you'l
      [("", {})],
      [("The bottom of the tree IS your Thursday build plan - the exact prompts, grounded in the value.", {"size": 17, "color": MUTED})]], FOOT)
 
-bullets("STORYBOARD IT", "4-8 frames: the value in use",
+s = bullets("STORYBOARD IT", "4-8 frames: the value in use",
     ["Frame the user, their problem, where your thing enters, and what changes.",
      "Hand-drawn (photograph it) or AI-assisted - rough is fine.",
-     "It doubles as your Thursday pitch skeleton.",
-     "Show the value living in the design, not just in the copy."], FOOT)
+     "AI can sketch or fill frames fast - but keep YOUR story; the AI is a co-designer, not the author.",
+     "It doubles as your Thursday pitch skeleton - show the value living in the design, not just the copy."], FOOT)
+notes(s, "AI storyboarding / co-design: Sandhaus, Gu, Parreira & Ju 2025, 'Co-Designing with Transformers' (DIS '25) - GenAI helps generate + iterate frames, but can flatten the narrative if you let it drive. dl.acm.org/doi/10.1145/3715336.3735805")
 
 bullets("TOOLS FOR TODAY", "Storyboard + pitch",
     ["Storyboard: FigJam / Figma, Canva, Google Slides (one frame per slide), or Storyboarder (free & open-source).",
@@ -418,44 +419,51 @@ discuss("ACTIVITY - TODAY (TEAM)", "Plan the next iteration of your value.",
      "Storyboard the solution (4-8 frames) and scope the smallest real thing for Thursday."],
     "Deliverable = planning-report.md + your storyboard - this is Checkpoint 2 of the final", FOOT)
 
+content("LAST 30 MINUTES - START VIBE CODING", "Don't wait for Thursday to open the repo",
+    [[("Once the plan is locked, spend the final half hour getting a head start:", {"size": 21, "color": WHITE})],
+     [("", {})],
+     [("Open your team repo, run the FIRST prompt from your value tree, and get anything at all on screen.", {"size": 19, "color": GREEN, "bold": True})],
+     [("", {})],
+     [("Thursday has no lecture - it's all build - so every minute you start now is a minute you keep tomorrow.", {"size": 17, "color": MUTED})]], FOOT)
+
 content("CARRY IT TO THURSDAY", "Your plan is your build",
-    [[("Tomorrow you build straight from the prompts your value tree produced, test it, and present it in the evening.", {"size": 21, "color": WHITE})],
+    [[("Tomorrow is a full build day (no lecture): build straight from the prompts your value tree produced, then showcase it in the afternoon (3-5).", {"size": 21, "color": WHITE})],
      [("", {})],
      [("Guest lecture today: Remy Stewart (Figma). Bring your questions about design + prototyping.", {"size": 17, "color": MUTED})]], FOOT)
 
 save("/Users/haukesandhaus/Documents/GitHub/Vibe-Coding-Class/website/slides/Week3-Wed-Working-Day.pptx"); prs = init_deck()
 # ===========================================================================
-# THURSDAY 7/30 - Demo Night (Final Project, Day 3+4): What's the solution?
+# THURSDAY 7/30 - Build day + 3-5 Showcase (Final Project, Day 3+4): What's the solution?
 # ===========================================================================
-divider("WEEK 3 - THURSDAY", "Demo Night: What's the solution?",
-        "Build by day - present in the evening")
+divider("WEEK 3 - THURSDAY", "Build day: What's the solution?",
+        "No lecture - build all morning, showcase at 3-5")
 
-content("THE DAY", "Build in daylight. Show it tonight.",
-    [[("First half: build the smallest real thing from your storyboard. Evening: present it live on the monitors.", {"size": 21, "color": WHITE})],
+content("THE DAY", "No lecture. Heads-down build, then showcase.",
+    [[("You already tested Monday (usability) and researched the value Tuesday - today is NOT a new test day. Build the smallest real thing, and tell its story well.", {"size": 21, "color": WHITE})],
      [("", {})],
-     [("Everything you planned Wednesday becomes an artifact people can use.", {"size": 19, "color": MUTED})]], FOOT)
+     [("Everything you planned Wednesday becomes an artifact people can use. Showcase runs 3-5.", {"size": 19, "color": MUTED})]], FOOT)
 
 bullets("BUILD", "The smallest real thing - done well",
     ["Build from the prompts your value tree produced Wednesday.",
      "One complete action a stranger can finish - no broken buttons, no fake features.",
      "The value lives in the design, not just the copy.",
-     "Test with a couple of real people; change ONE thing on the evidence, and commit it."], FOOT)
+     "Polish the happy path and get it hosted - a stranger will try it at the showcase."], FOOT)
 
-bullets("THE PITCH VIDEO", "Short - and it showcases the artifact",
-    ["Make a short pitch that shows your vibe-coded thing in action.",
-     "AI video: Google Veo 3.1 (Flow), Runway, Kling, or Pika. (OpenAI retired the Sora app in 2026.)",
-     "Or an animated walkthrough, or a plain screen recording - the artifact is the star.",
-     "Put it in presentation/ and link it in your report."], FOOT)
+bullets("THE PITCH VIDEO", "Show the IDEA of your app - authentically",
+    ["Make a short video that shows the idea of your app.",
+     "It does NOT have to be AI: a screen recording, an acted skit, or a hand-animated walkthrough all work.",
+     "AI video is fine too: Google Veo 3.1 (Flow), Runway, Kling, Pika. (OpenAI retired the Sora app in 2026.)",
+     "Pick whatever feels AUTHENTIC to your team. Put it in presentation/ AND embed it in your final slides."], FOOT)
 
 media("SCREENSHOT SLOT", "Show a build / pitch still",
     "[ demo screenshot or pitch still goes here ]",
     "the app in use, or a frame from the pitch video", FOOT)
 
-bullets("HOW TO PRESENT", "Five beats on the monitor",
-    ["The artifact - a live demo of the happy path.",
-     "The value - what it operationalizes, and for whom outside the class.",
-     "The evidence - what you tested (Mon usability, Tue value) and what changed.",
-     "The pitch - your video.",
+bullets("HOW TO PRESENT", "Tell the arc of your value - not a test report",
+    ["The artifact - a live demo of the happy path, value living in the design.",
+     "The value + who - what it operationalizes and for whom, with your PERSONA and STORYBOARD.",
+     "The journey - your research findings, the design ALTERNATIVES you considered, how the design PROGRESSED from Project 2.",
+     "The pitch - your embedded video.",
      "The afterlife - who keeps using or maintaining it."], FOOT)
 
 columns("HOW IT'S GRADED", "Four checkpoints, one grade", [
@@ -463,16 +471,16 @@ columns("HOW IT'S GRADED", "Four checkpoints, one grade", [
     ("WED - PLAN", "Checkpoint 2", "Value-centered planning: planning report + storyboard."),
     ("THU - BUILD", "Checkpoint 3", "Hosted app + project report + pitch.")], FOOT)
 
-columns("HOW IT'S GRADED", "...and the evening", [
-    ("THU EVE - PRESENT", "Checkpoint 4", "The live demo on the monitors."),
+columns("HOW IT'S GRADED", "...and the showcase", [
+    ("THU 3-5 - SHOWCASE", "Checkpoint 4", "The live demo + slides at the afternoon showcase."),
     ("PROJECT", "25%", "Summary of the four Canvas checkpoints, against the project rubric."),
-    ("PRESENTATION", "15%", "A separate grade for the demo. Peer-check adjusts for unfair contribution.")], FOOT)
+    ("PRESENTATION", "15%", "A separate grade for the showcase. Peer-check adjusts for unfair contribution.")], FOOT)
 notes(prs.slides[-1], "Grade = summary of the 4 Canvas checkpoints (25% project) + a separate 15% presentation grade. Ethical + individual reflections must be human-written.")
 
-content("LOGISTICS", "Demo night",
-    [[("Present on the monitors - prototype + slides. Demo from the HOSTED link, not localhost.", {"size": 21, "color": WHITE})],
+content("LOGISTICS", "Afternoon showcase (3-5)",
+    [[("A shared showcase - you present alongside other classes' work, with a keynote for families. Prototype + slides on the monitors; demo from the HOSTED link, not localhost.", {"size": 21, "color": WHITE})],
      [("", {})],
-     [("Keep a screen-recording backup in presentation/ in case the Wi-Fi drops.", {"size": 18, "color": MUTED})]], FOOT)
+     [("Keep a screen-recording backup in presentation/ in case the Wi-Fi drops. Final tweaks + submission can come after the showcase.", {"size": 18, "color": MUTED})]], FOOT)
 
 content("THAT'S A WRAP", "Good code, good vibes",
     [[("You learned to build fast with AI - and to build right: name the value, test with real people, and own the calls you made.", {"size": 22, "color": WHITE})],
