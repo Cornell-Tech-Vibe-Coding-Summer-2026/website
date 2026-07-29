@@ -349,7 +349,7 @@ divider("WEEK 3 - WEDNESDAY", "Planning Day: What's the problem?",
         "Final project - value-centered need finding + storyboard")
 
 content("THE TURN", "Tuesday told you IF it works. Today you decide what to build.",
-    [[("You verified your Project 2 and know what your value needs. Today you plan what to build for that value - continue Project 2, or a new idea - for a real person ", {"size": 21, "color": WHITE}),
+    [[("You verified your Project 2 and found where the design doesn't move the value. Today you plan the fix - for a real person ", {"size": 21, "color": WHITE}),
       ("outside this class.", {"size": 21, "color": GREEN, "bold": True})],
      [("", {})],
      [("Open with Remy Stewart's Figma guest talk, then find the real need.", {"size": 19, "color": MUTED})]], FOOT)
@@ -361,8 +361,8 @@ s = discuss("RESEARCH SHARE-OUT - CARRY-OVER FROM TUESDAY", "The teams we didn't
     "Quick round right after the guest talk - then we go straight into planning", FOOT)
 notes(s, "Carry-over from Tuesday's wrap - we ran out of time. Keep it to ~1 min/team, then transition to the planning mini-lecture.")
 
-content("KEEP THE VALUE - CHANGE ANYTHING ELSE", "Your value is fixed. The project is not.",
-    [[("You carry your value and Tuesday's learnings. The final can be the next iteration of Project 2 - OR a brand-new idea for the same value.", {"size": 21, "color": WHITE})],
+content("KEEP YOUR VALUE", "Change the design, not the commitment",
+    [[("You already have a value and what Tuesday's verification showed - the final is a different design for the same value.", {"size": 21, "color": WHITE})],
      [("", {})],
      [("Today's job: name a specific beneficiary, and find what they actually need.", {"size": 19, "color": MUTED})]], FOOT)
 
