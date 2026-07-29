@@ -24,7 +24,6 @@ export const SLIDE_DECKS = [
     { id: 'w3wed', week: 3, chip: 'W3 Wed', day: 'Wed · Jul 29', title: 'Planning Day: What\'s the Problem?', gsId: '1728Z5jMtZ8Ak7qPxW2EwQyOvPT0_UE5w' },
     { id: 'w3wedguest', week: 3, chip: 'W3 Wed ✦', day: 'Wed · Jul 29 · guest', title: 'Guest Speaker — AI Data in Big Tech (Remy Stewart, Figma)', gsId: 'https://www.figma.com/deck/pXhKZMbZRP4hTx0z1gl5zs/Ethical-Vibe-Coding-Class-Presentation?node-id=1-70' },
     { id: 'w3thu', week: 3, chip: 'W3 Thu', day: 'Thu · Jul 30', title: 'Demo Night: What\'s the Solution?', gsId: '127ZGiUFTUUZGwPA09bHn0Fjihs1U1-TB' },
-    { id: 'w3thu', week: 3, chip: 'W3 Thu', day: 'Thu · Jul 30', title: 'Demo Night: What\'s the Solution?', gsId: null },
 ]
 
 // `gsId` may be a bare presentation id OR a pasted docs.google.com sharing URL —
