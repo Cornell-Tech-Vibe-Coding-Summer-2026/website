@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
-import { SUBMISSION_SETS, hasEntries } from '../content/submissions'
+import { SUBMISSION_SETS, FEATURED_SET, hasEntries } from '../content/submissions'
+
+// "★ Picks" (pinned standouts) leads; the day-by-day sets follow.
+const ALL_SETS = hasEntries(FEATURED_SET) ? [FEATURED_SET, ...SUBMISSION_SETS] : SUBMISSION_SETS
 
 // Some deliverables are a testing VIDEO, not a live site (see week3-7_27).
 // Those entries carry `video` (a YouTube watch/share URL) instead of `url`;
@@ -15,16 +18,17 @@ const ytEmbed = (u) => { const id = ytId(u); return id ? `https://www.youtube.co
 // Activities list one entry per student; group projects add team members and a
 // one-line blurb of what the team built, since a title alone doesn't say much.
 export function SubmissionsBrowser() {
-    const firstLive = SUBMISSION_SETS.find(hasEntries) || SUBMISSION_SETS[0]
+    const firstLive = ALL_SETS.find(hasEntries) || ALL_SETS[0]
     const [setId, setSetId] = useState(firstLive.id)
-    const set = SUBMISSION_SETS.find((s) => s.id === setId) || SUBMISSION_SETS[0]
+    const set = ALL_SETS.find((s) => s.id === setId) || ALL_SETS[0]
     const [entryId, setEntryId] = useState(set.entries[0]?.id)
     // Several activities have an index page linking to per-attempt files, so you
     // can navigate *into* a submission. We can't read a cross-origin iframe's
     // history, so "back" = remount the iframe at the entry URL (bump the key).
     const [nonce, setNonce] = useState(0)
-    // The report opens in this same iframe (it's just another page), not a new tab.
-    const [view, setView] = useState('site') // 'site' | 'report'
+    // The report (and a team's pitch deck) open in this same iframe — they're
+    // just other pages, not new tabs.
+    const [view, setView] = useState('site') // 'site' | 'report' | 'deck'
     const backToStart = () => { setView('site'); setNonce((n) => n + 1) }
 
     // Keep the selected entry valid when the set changes, and reset to the site view.
@@ -40,15 +44,18 @@ export function SubmissionsBrowser() {
     // A video entry has no live site — its "site" view is the embedded player.
     const hasVideo = !!entry?.video
     const siteSrc = hasVideo ? ytEmbed(entry.video) : entry?.url
-    const frameUrl = view === 'report' && entry?.report ? entry.report : siteSrc
+    const frameUrl = view === 'report' && entry?.report ? entry.report
+        : view === 'deck' && entry?.deck ? entry.deck : siteSrc
     // Opening in a new tab should go to the real YouTube page, not the embed.
-    const openHref = view === 'report' && entry?.report ? entry.report : (hasVideo ? entry.video : entry?.url)
+    const openHref = view === 'report' && entry?.report ? entry.report
+        : view === 'deck' && entry?.deck ? entry.deck
+        : (hasVideo ? entry.video : entry?.url)
 
     return (
         <div className="flex flex-col h-full bg-[#0a0c12] font-mono">
             {/* Activity / project picker */}
             <div className="shrink-0 flex gap-1.5 items-center overflow-x-auto px-2 py-2 bg-[#0e101a] border-b border-white/10">
-                {SUBMISSION_SETS.map((s) => (
+                {ALL_SETS.map((s) => (
                     <button
                         key={s.id}
                         onClick={() => setSetId(s.id)}
@@ -95,9 +102,9 @@ export function SubmissionsBrowser() {
                             {isProject ? entry.team : entry.title || label(entry)}
                         </p>
                         <p className="text-white/35 text-[10px] truncate">
-                            {isProject ? entry.members : `${entry.student} · ${set.title}`}
+                            {isProject ? entry.members : `${entry.student} · ${entry.context || set.title}`}
                         </p>
-                        {isProject && entry.blurb && (
+                        {entry.blurb && (
                             <p className="text-white/55 text-[11px] mt-1 leading-snug">{entry.blurb}</p>
                         )}
                     </div>
@@ -110,6 +117,20 @@ export function SubmissionsBrowser() {
                         >
                             ↺ {view === 'report' ? 'Site' : 'Back'}
                         </button>
+                        {entry.deck && (
+                            <button
+                                onClick={() => setView((v) => (v === 'deck' ? 'site' : 'deck'))}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                title="Watch this team's pitch deck"
+                                className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border transition-colors ${
+                                    view === 'deck'
+                                        ? 'bg-[#00ff41]/15 text-[#00ff41] border-[#00ff41]/40'
+                                        : 'bg-white/5 text-white/70 border-white/15 hover:bg-white/10'
+                                }`}
+                            >
+                                Deck
+                            </button>
+                        )}
                         {entry.report && (
                             <button
                                 onClick={() => setView((v) => (v === 'report' ? 'site' : 'report'))}

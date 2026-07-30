@@ -33,8 +33,8 @@ ACTIVITIES = [
     ("week2/7_20", "W2 Mon", "Mon · Jul 20", "AI as Moral Assistant"),
     ("week2/7_21", "W2 Tue", "Tue · Jul 21", "Red-Teaming Dark Patterns"),
     ("week2/7_22", "W2 Wed", "Wed · Jul 22", "AI Against AI"),
-    ("week3/7_27", "W3 Mon", "Mon · Jul 27", "User Testing I"),
-    ("week3/7_28", "W3 Tue", "Tue · Jul 28", "User Testing II"),
+    ("week3/7_27", "W3 Mon", "Mon · Jul 27", "Usability Testing"),
+    ("week3/7_28", "W3 Tue", "Tue · Jul 28", "Value Verification"),
 ]
 
 # Instructor/TA/faculty repos stay out of the student showcase.
