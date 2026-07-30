@@ -1,8 +1,5 @@
 import { useState, useEffect } from 'react'
-import { SUBMISSION_SETS, FEATURED_SET, hasEntries } from '../content/submissions'
-
-// "★ Picks" (pinned standouts) leads; the day-by-day sets follow.
-const ALL_SETS = hasEntries(FEATURED_SET) ? [FEATURED_SET, ...SUBMISSION_SETS] : SUBMISSION_SETS
+import { SUBMISSION_SETS, hasEntries } from '../content/submissions'
 
 // Some deliverables are a testing VIDEO, not a live site (see week3-7_27).
 // Those entries carry `video` (a YouTube watch/share URL) instead of `url`;
@@ -18,9 +15,9 @@ const ytEmbed = (u) => { const id = ytId(u); return id ? `https://www.youtube.co
 // Activities list one entry per student; group projects add team members and a
 // one-line blurb of what the team built, since a title alone doesn't say much.
 export function SubmissionsBrowser() {
-    const firstLive = ALL_SETS.find(hasEntries) || ALL_SETS[0]
+    const firstLive = SUBMISSION_SETS.find(hasEntries) || SUBMISSION_SETS[0]
     const [setId, setSetId] = useState(firstLive.id)
-    const set = ALL_SETS.find((s) => s.id === setId) || ALL_SETS[0]
+    const set = SUBMISSION_SETS.find((s) => s.id === setId) || SUBMISSION_SETS[0]
     const [entryId, setEntryId] = useState(set.entries[0]?.id)
     // Several activities have an index page linking to per-attempt files, so you
     // can navigate *into* a submission. We can't read a cross-origin iframe's
@@ -55,7 +52,7 @@ export function SubmissionsBrowser() {
         <div className="flex flex-col h-full bg-[#0a0c12] font-mono">
             {/* Activity / project picker */}
             <div className="shrink-0 flex gap-1.5 items-center overflow-x-auto px-2 py-2 bg-[#0e101a] border-b border-white/10">
-                {ALL_SETS.map((s) => (
+                {SUBMISSION_SETS.map((s) => (
                     <button
                         key={s.id}
                         onClick={() => setSetId(s.id)}
@@ -102,7 +99,7 @@ export function SubmissionsBrowser() {
                             {isProject ? entry.team : entry.title || label(entry)}
                         </p>
                         <p className="text-white/35 text-[10px] truncate">
-                            {isProject ? entry.members : `${entry.student} · ${entry.context || set.title}`}
+                            {isProject ? entry.members : `${entry.student} · ${set.title}`}
                         </p>
                         {entry.blurb && (
                             <p className="text-white/55 text-[11px] mt-1 leading-snug">{entry.blurb}</p>

@@ -277,39 +277,19 @@ export const SUBMISSION_SETS = [
     },
 ]
 
-// ★ Pinned picks — standout submissions surfaced as the first chip ("★ Picks")
-// so visitors see the best work without digging. Reference by set id + entry id
-// and add a one-line `note` saying why it's worth a look. Swap these freely —
-// they live BELOW the generated array, so refresh_submissions.py never touches
-// them (a pick whose entry disappears on refresh is silently skipped).
-// A pick may add `url`/`title` to deep-link a specific page inside the
-// submission, or skip `set`/`entry` entirely for a standalone link (then give
-// student, title, url, and context yourself). No picks from W1 Mon on purpose —
-// we don't play favorites with personal portfolio pages.
-const FEATURED_PICKS = [
-    { set: 'week1-7_15', entry: 'oliverc70', title: "Comparing AI Tools — Claude version",
-      url: "https://cornell-tech-vibe-coding-summer-2026.github.io/class-repo-oliverc70/week1/7_15/code_deliverable/code_deliverable/claude/Claude.html",
-      note: "The Claude build from his three-tool comparison." },
-    { set: 'week2-7_21', entry: 'kc2386-rgb', note: "Picked for the write-up — open the Report for a sharp red-teaming reflection." },
-    { set: 'week2-7_21', entry: 'oujustinou', title: "Hard Unsubscribe",
-      url: "https://cornell-tech-vibe-coding-summer-2026.github.io/class-repo-oujustinou/week2/7_21/code_deliverable/part2-hard-unsubscribe.html",
-      note: "The hard-unsubscribe flow — infuriating by design, which is the point." },
-    { set: 'week2-7_21', entry: 'et483-sys', note: "Documents the requests the AI actually rejected — read the write-up." },
-    { student: "Aria Sharma", title: "Course repo — all write-ups", context: "Overall",
-      url: "https://cornell-tech-vibe-coding-summer-2026.github.io/class-repo-as4663-hash/",
-      note: "Consistently great write-ups across the whole course." },
-]
-
 // ★ Per-day picks (Hauke's grading favorites): starred and sorted first inside
 // their day's row. Keyed by set id → student handles; handles that aren't in
 // the set (page not live) are simply ignored, so this survives refreshes.
 // Deliberately no W1 Mon list — we don't play favorites with personal portfolios.
+// Trimmed to ≤4/day (Jul 30) by actually screenshotting every candidate and
+// keeping the ones whose landing pages present best to an outside visitor.
+// Hauke's longer shortlists are in the git history if a swap is wanted.
 const DAY_PICKS = {
-    'week1-7_14': ['jason-chen3968', 'oliverc70', 'or2270', 'kc2386-rgb', 'vienna-carew'],
-    'week1-7_15': ['as4663-hash', 'ds2553', 'c28eh-eng', 'eb886-ops', 'oujustinou', 'la523-tech', 'or2270', 'vienna-carew', 'winnie-monroe', 'oliverc70'],
-    'week2-7_20': ['as4663-hash', 'c28eh-eng', 'et483-sys', 'eb886-ops', 'isaiah-coder11', 'br478-spec', 'JohnM-code', 'oujustinou', 'la523-tech', 'md2367-888', 'vienna-carew', 'winnie-monroe'],
-    'week2-7_21': ['isaiah-coder11', 'br478-spec', 'JohnM-code', 'oujustinou', 'la523-tech', 'oliverc70', 'vienna-carew', 'winnie-monroe', 'kc2386-rgb', 'et483-sys'],
-    'week2-7_22': ['ay487-maker', 'as4663-hash', 'c28eh-eng', 'br478-spec', 'oujustinou', 'kc2386-rgb', 'vienna-carew', 'winnie-monroe'],
+    'week1-7_14': ['jason-chen3968', 'kc2386-rgb', 'oliverc70', 'vienna-carew'],
+    'week1-7_15': ['as4663-hash', 'oujustinou', 'la523-tech', 'vienna-carew'],
+    'week2-7_20': ['as4663-hash', 'et483-sys', 'JohnM-code', 'winnie-monroe'],
+    'week2-7_21': ['br478-spec', 'oujustinou', 'vienna-carew', 'winnie-monroe'],
+    'week2-7_22': ['as4663-hash', 'oujustinou', 'c28eh-eng', 'br478-spec'],
 }
 for (const [setId, handles] of Object.entries(DAY_PICKS)) {
     const set = SUBMISSION_SETS.find((s) => s.id === setId)
@@ -317,17 +297,6 @@ for (const [setId, handles] of Object.entries(DAY_PICKS)) {
     set.entries.forEach((e) => { e.featured = handles.includes(e.id) })
     // Stable sort: picks lead the row, alphabetical order kept within each half.
     set.entries.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0))
-}
-
-export const FEATURED_SET = {
-    id: 'featured', kind: 'featured', chip: '★ Picks', day: 'Instructor picks', title: "Some favorites from the class",
-    entries: FEATURED_PICKS.flatMap((p, i) => {
-        if (!p.set) return [{ id: `pick-${i}`, student: p.student, title: p.title, url: p.url, blurb: p.note, context: p.context }]
-        const src = SUBMISSION_SETS.find((s) => s.id === p.set)
-        const e = src?.entries.find((x) => x.id === p.entry)
-        return e ? [{ ...e, ...(p.url && { url: p.url }), ...(p.title && { title: p.title }),
-                      id: `pick-${i}`, student: e.student || e.team, blurb: p.note, context: `${src.chip} · ${src.title}` }] : []
-    }),
 }
 
 // Sets with no entries yet render a "posted after class" placeholder.
