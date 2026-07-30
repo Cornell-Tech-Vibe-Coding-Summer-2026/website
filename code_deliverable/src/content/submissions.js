@@ -159,11 +159,6 @@ export const SUBMISSION_SETS = [
         ],
     },
     {
-        id: "week3-7_28", kind: 'activity', chip: "W3 Tue", day: "Tue · Jul 28", title: "Value Verification",
-        entries: [
-        ],
-    },
-    {
         id: 'project1', kind: 'project', chip: 'Proj 1', day: 'Due Mon · Jul 20', title: "Project 1 — Vibe code something your team wants",
         entries: [
             { id: 'meet-in-the-middle', team: "Meet in the Middle", members: "Evan Birnbaum · Derin Sezgin · Magnes Dugan · Oliver Chung",
