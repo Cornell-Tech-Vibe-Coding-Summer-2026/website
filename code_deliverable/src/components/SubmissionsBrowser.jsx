@@ -86,9 +86,9 @@ export function SubmissionsBrowser() {
                                     ? 'bg-white/15 text-white border-white/30'
                                     : 'bg-transparent text-white/50 border-transparent hover:text-white/80 hover:bg-white/5'
                             }`}
-                            title={e.title || e.blurb || label(e)}
+                            title={(e.featured ? '★ Instructor pick — ' : '') + (e.title || e.blurb || label(e))}
                         >
-                            {label(e)}
+                            {e.featured && <span className="text-[#00ff41]">★ </span>}{label(e)}
                         </button>
                     ))}
                 </div>

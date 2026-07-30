@@ -287,29 +287,37 @@ export const SUBMISSION_SETS = [
 // student, title, url, and context yourself). No picks from W1 Mon on purpose —
 // we don't play favorites with personal portfolio pages.
 const FEATURED_PICKS = [
-    // Tue — prompt engineering
-    { set: 'week1-7_14', entry: 'jason-chen3968', note: "One of Tuesday's strongest prompt-engineering labs." },
-    { set: 'week1-7_14', entry: 'oliverc70', note: "Chill Clock Toggle — a small, tight take on the prompt lab." },
-    { set: 'week1-7_14', entry: 'or2270', note: "A thorough prompt-engineering lab with clear before/after comparisons." },
-    { set: 'week1-7_14', entry: 'kc2386-rgb', note: "A standout Tuesday prompt lab." },
-    { set: 'week1-7_14', entry: 'vienna-carew', note: "Rainy Café Prompt Gallery — same brief, wildly different vibes." },
-    // Wed — bias in vibe coding / comparing tools
     { set: 'week1-7_15', entry: 'oliverc70', title: "Comparing AI Tools — Claude version",
       url: "https://cornell-tech-vibe-coding-summer-2026.github.io/class-repo-oliverc70/week1/7_15/code_deliverable/code_deliverable/claude/Claude.html",
       note: "The Claude build from his three-tool comparison." },
-    { set: 'week1-7_15', entry: 'oujustinou', note: "A clean side-by-side of the same to-do app from three tools." },
-    { set: 'week1-7_15', entry: 'as4663-hash', note: "Turns a tool comparison into a question about whose defaults get built in." },
-    // W2 Tue — red-teaming dark patterns
     { set: 'week2-7_21', entry: 'kc2386-rgb', note: "Picked for the write-up — open the Report for a sharp red-teaming reflection." },
     { set: 'week2-7_21', entry: 'oujustinou', title: "Hard Unsubscribe",
       url: "https://cornell-tech-vibe-coding-summer-2026.github.io/class-repo-oujustinou/week2/7_21/code_deliverable/part2-hard-unsubscribe.html",
       note: "The hard-unsubscribe flow — infuriating by design, which is the point." },
     { set: 'week2-7_21', entry: 'et483-sys', note: "Documents the requests the AI actually rejected — read the write-up." },
-    // Overall
     { student: "Aria Sharma", title: "Course repo — all write-ups", context: "Overall",
       url: "https://cornell-tech-vibe-coding-summer-2026.github.io/class-repo-as4663-hash/",
       note: "Consistently great write-ups across the whole course." },
 ]
+
+// ★ Per-day picks (Hauke's grading favorites): starred and sorted first inside
+// their day's row. Keyed by set id → student handles; handles that aren't in
+// the set (page not live) are simply ignored, so this survives refreshes.
+// Deliberately no W1 Mon list — we don't play favorites with personal portfolios.
+const DAY_PICKS = {
+    'week1-7_14': ['jason-chen3968', 'oliverc70', 'or2270', 'kc2386-rgb', 'vienna-carew'],
+    'week1-7_15': ['as4663-hash', 'ds2553', 'c28eh-eng', 'eb886-ops', 'oujustinou', 'la523-tech', 'or2270', 'vienna-carew', 'winnie-monroe', 'oliverc70'],
+    'week2-7_20': ['as4663-hash', 'c28eh-eng', 'et483-sys', 'eb886-ops', 'isaiah-coder11', 'br478-spec', 'JohnM-code', 'oujustinou', 'la523-tech', 'md2367-888', 'vienna-carew', 'winnie-monroe'],
+    'week2-7_21': ['isaiah-coder11', 'br478-spec', 'JohnM-code', 'oujustinou', 'la523-tech', 'oliverc70', 'vienna-carew', 'winnie-monroe', 'kc2386-rgb', 'et483-sys'],
+    'week2-7_22': ['ay487-maker', 'as4663-hash', 'c28eh-eng', 'br478-spec', 'oujustinou', 'kc2386-rgb', 'vienna-carew', 'winnie-monroe'],
+}
+for (const [setId, handles] of Object.entries(DAY_PICKS)) {
+    const set = SUBMISSION_SETS.find((s) => s.id === setId)
+    if (!set) continue
+    set.entries.forEach((e) => { e.featured = handles.includes(e.id) })
+    // Stable sort: picks lead the row, alphabetical order kept within each half.
+    set.entries.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0))
+}
 
 export const FEATURED_SET = {
     id: 'featured', kind: 'featured', chip: '★ Picks', day: 'Instructor picks', title: "Some favorites from the class",
