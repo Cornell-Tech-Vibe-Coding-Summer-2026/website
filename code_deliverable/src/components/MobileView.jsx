@@ -302,7 +302,7 @@ export function MobileView() {
         if (h === 'syllabus' || h === 'activities' || h === 'projects') { setDesktopTab(h); setOpen('desktop') }
         else if (h === 'readings' || h === 'papers') setOpen('papers')
         else if (h === 'slides' || h === 'decks') setOpen('slides')
-        else if (h === 'submissions' || h === 'gallery') setOpen('submissions')
+        else if (h === 'submissions' || h === 'gallery' || h.startsWith('submissions/') || h === 'final') setOpen('submissions')
         else if (h === 'notepad') setOpen('notepad')
         else if (h === 'phone') setOpen('phone')
         else if (h === 'book' || h === 'values') setOpen('book')

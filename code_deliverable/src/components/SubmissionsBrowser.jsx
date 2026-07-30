@@ -16,7 +16,13 @@ const ytEmbed = (u) => { const id = ytId(u); return id ? `https://www.youtube.co
 // one-line blurb of what the team built, since a title alone doesn't say much.
 export function SubmissionsBrowser() {
     const firstLive = SUBMISSION_SETS.find(hasEntries) || SUBMISSION_SETS[0]
-    const [setId, setSetId] = useState(firstLive.id)
+    // Deep link straight to a tab: #submissions/<set id> (e.g. #submissions/final), or #final.
+    const hashSet = (() => {
+        const h = (window.location.hash || '').replace('#', '').toLowerCase()
+        const id = h.startsWith('submissions/') ? h.slice('submissions/'.length) : h === 'final' ? 'final' : null
+        return id && SUBMISSION_SETS.some((s) => s.id === id) ? id : null
+    })()
+    const [setId, setSetId] = useState(hashSet || firstLive.id)
     const set = SUBMISSION_SETS.find((s) => s.id === setId) || SUBMISSION_SETS[0]
     const [entryId, setEntryId] = useState(set.entries[0]?.id)
     // Several activities have an index page linking to per-attempt files, so you
