@@ -282,21 +282,43 @@ export const SUBMISSION_SETS = [
 // and add a one-line `note` saying why it's worth a look. Swap these freely —
 // they live BELOW the generated array, so refresh_submissions.py never touches
 // them (a pick whose entry disappears on refresh is silently skipped).
+// A pick may add `url`/`title` to deep-link a specific page inside the
+// submission, or skip `set`/`entry` entirely for a standalone link (then give
+// student, title, url, and context yourself). No picks from W1 Mon on purpose —
+// we don't play favorites with personal portfolio pages.
 const FEATURED_PICKS = [
+    // Tue — prompt engineering
+    { set: 'week1-7_14', entry: 'jason-chen3968', note: "One of Tuesday's strongest prompt-engineering labs." },
+    { set: 'week1-7_14', entry: 'oliverc70', note: "Chill Clock Toggle — a small, tight take on the prompt lab." },
+    { set: 'week1-7_14', entry: 'or2270', note: "A thorough prompt-engineering lab with clear before/after comparisons." },
+    { set: 'week1-7_14', entry: 'kc2386-rgb', note: "A standout Tuesday prompt lab." },
+    { set: 'week1-7_14', entry: 'vienna-carew', note: "Rainy Café Prompt Gallery — same brief, wildly different vibes." },
+    // Wed — bias in vibe coding / comparing tools
+    { set: 'week1-7_15', entry: 'oliverc70', title: "Comparing AI Tools — Claude version",
+      url: "https://cornell-tech-vibe-coding-summer-2026.github.io/class-repo-oliverc70/week1/7_15/code_deliverable/code_deliverable/claude/Claude.html",
+      note: "The Claude build from his three-tool comparison." },
+    { set: 'week1-7_15', entry: 'oujustinou', note: "A clean side-by-side of the same to-do app from three tools." },
     { set: 'week1-7_15', entry: 'as4663-hash', note: "Turns a tool comparison into a question about whose defaults get built in." },
-    { set: 'week1-7_14', entry: 'vienna-carew', note: "A prompt gallery with real atmosphere — same brief, wildly different vibes." },
-    { set: 'week2-7_20', entry: 'et483-sys', note: "A genuinely useful decision guide: keep, donate, recycle — with reasons." },
-    { set: 'week2-7_21', entry: 'md2367-888', note: "A full fake gym signup flow — dark patterns you'll recognize from real sites." },
-    { set: 'week2-7_22', entry: 'c28eh-eng', note: "AI defending against AI — a bot blocker built and then attacked." },
-    { set: 'project2', entry: 'mypace', note: "Built for elderly adults living independently — care as a design value." },
+    // W2 Tue — red-teaming dark patterns
+    { set: 'week2-7_21', entry: 'kc2386-rgb', note: "Picked for the write-up — open the Report for a sharp red-teaming reflection." },
+    { set: 'week2-7_21', entry: 'oujustinou', title: "Hard Unsubscribe",
+      url: "https://cornell-tech-vibe-coding-summer-2026.github.io/class-repo-oujustinou/week2/7_21/code_deliverable/part2-hard-unsubscribe.html",
+      note: "The hard-unsubscribe flow — infuriating by design, which is the point." },
+    { set: 'week2-7_21', entry: 'et483-sys', note: "Documents the requests the AI actually rejected — read the write-up." },
+    // Overall
+    { student: "Aria Sharma", title: "Course repo — all write-ups", context: "Overall",
+      url: "https://cornell-tech-vibe-coding-summer-2026.github.io/class-repo-as4663-hash/",
+      note: "Consistently great write-ups across the whole course." },
 ]
 
 export const FEATURED_SET = {
     id: 'featured', kind: 'featured', chip: '★ Picks', day: 'Instructor picks', title: "Some favorites from the class",
-    entries: FEATURED_PICKS.flatMap(({ set: setId, entry: entryId, note }) => {
-        const src = SUBMISSION_SETS.find((s) => s.id === setId)
-        const e = src?.entries.find((x) => x.id === entryId)
-        return e ? [{ ...e, id: `${setId}:${entryId}`, student: e.student || e.team, blurb: note, context: `${src.chip} · ${src.title}` }] : []
+    entries: FEATURED_PICKS.flatMap((p, i) => {
+        if (!p.set) return [{ id: `pick-${i}`, student: p.student, title: p.title, url: p.url, blurb: p.note, context: p.context }]
+        const src = SUBMISSION_SETS.find((s) => s.id === p.set)
+        const e = src?.entries.find((x) => x.id === p.entry)
+        return e ? [{ ...e, ...(p.url && { url: p.url }), ...(p.title && { title: p.title }),
+                      id: `pick-${i}`, student: e.student || e.team, blurb: p.note, context: `${src.chip} · ${src.title}` }] : []
     }),
 }
 
