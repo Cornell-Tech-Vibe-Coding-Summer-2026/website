@@ -25,22 +25,22 @@ OUT = Path(__file__).parent
 # name = big headline (app name once known, else the team's value),
 # value = the value chip, members = EXACT display names from the roster.
 TEAMS = [
-    dict(name="AI Footprint Lens", value="sustainability & transparency",
+    dict(name="Carbon Clock", value="sustainability & transparency",
          members=["Evan Birnbaum", "Derin Sezgin", "Magnes Dugan", "Oliver Chung"],
          url=f"{BASE}/final-project-templated-sustainability-transparency/code_deliverable/"),
-    dict(name="Care & Wellbeing", value="care & wellbeing",
+    dict(name="Pace", value="care & wellbeing",
          members=["Elaine Huang", "Winnie Monroe", "Vienna Carew"],
          url=f"{BASE}/final-project-templated-care-wellbeing/code_deliverable/"),
-    dict(name="Productivity", value="productivity",
+    dict(name="JSTNA", value="productivity",
          members=["Liam Allen", "Justin Ou", "Sebastien Gournay"],
          url=f"{BASE}/final-project-templated-productivity/code_deliverable/"),
-    dict(name="Security", value="security",
+    dict(name="SelfShift", value="security",
          members=["Isa Offengenden", "Om Ravula", "Jason Chen"],
          url=f"{BASE}/final-project-templated-security/code_deliverable/"),
-    dict(name="Safety & Autonomy", value="safety & autonomy",
+    dict(name="VaultNotes V2", value="safety & autonomy",
          members=["Jamin Rose", "John Maida", "Ajin Yohannan"],
          url=f"{BASE}/final-project-templated-safety-autonomy/code_deliverable/"),
-    dict(name="Sustainability & Trust", value="sustainability & trust",
+    dict(name="Borrow Board", value="sustainability & trust",
          members=["Emily Tai", "Kylie Cheung", "Aria Sharma"],
          url=f"{BASE}/final-project-templated-sustainability-trust/code_deliverable/"),
 ]
@@ -83,7 +83,7 @@ def page(title, sub, people_label, people, url, cta, footer):
         <img class="mini" src="{qr_data_uri(CLASS_SITE)}" alt="">
         <div>
           <p class="flbl">EVERY PROJECT · EVERY SUBMISSION · SYLLABUS</p>
-          <p class="furl">{CLASS_SITE}</p>
+          <p class="furl">https://vibe-coding-ethics.tech.cornell.edu/website/</p>
         </div>
         <p class="tag">good code,<br>good vibes</p>
       </footer>
@@ -91,10 +91,10 @@ def page(title, sub, people_label, people, url, cta, footer):
 
 
 pages = [
-    page(t["name"], f"a final project built for the value of {t['value']}",
+    page(t["name"], f"a final project built for the value of <strong>{t['value']}</strong>",
          "BUILT BY", t["members"], t["url"],
          "Come in — the demo is running. Try it yourself, ask the builders anything.",
-         "Scan to open this project on your phone")
+         "Scan to try it on your phone")
     for t in TEAMS
 ]
 pages.append(
@@ -117,7 +117,8 @@ html = f"""<!doctype html><html><head><meta charset="utf-8"><title>Door notes �
                letter-spacing: 2pt; color: #0a0c12; border: 1.5pt solid #0a0c12; border-radius: 6pt;
                padding: 6pt; }}
   main {{ flex: 1; display: flex; flex-direction: column; justify-content: center; }}
-  .value {{ font: 600 14pt "JetBrains Mono", monospace; color: #0f7d2e; margin-bottom: 10pt; }}
+  .value {{ font: 600 14pt "JetBrains Mono", monospace; color: #555; margin-bottom: 10pt; }}
+  .value strong {{ color: #0f7d2e; font-size: 16pt; }}
   h1 {{ font-size: 44pt; font-weight: 800; line-height: 1.05; letter-spacing: -0.5pt; }}
   .cta {{ font-size: 15.5pt; color: #333; margin: 16pt 0 26pt; max-width: 6.2in; line-height: 1.45; }}
   .cols {{ display: flex; justify-content: space-between; align-items: flex-start; gap: 0.4in; }}
