@@ -60,6 +60,12 @@ function TerminalModal() {
 
             <div className="space-y-4 mb-5">
                 <div>
+                    <div className="text-[#ffd166] text-[10px] font-bold mb-1 tracking-wider">? ISN'T "ETHICAL VIBE CODING" AN OXYMORON</div>
+                    <div className="text-white/75 text-[11px]">
+                        Vibe coding is brain-<span className="text-[#00ff41]">off</span>: let the AI drive. Ethics is brain-<span className="text-[#00ff41]">on</span>: stop and think hard. This class is the experiment in marrying them — shipping fast while staying awake to the values your tech embeds, and the harms it may propagate.
+                    </div>
+                </div>
+                <div>
                     <div className="text-[#ffd166] text-[10px] font-bold mb-1 tracking-wider">? WHAT IS VIBE CODING</div>
                     <div className="text-white/75 text-[11px]">
                         Building software with AI as your co-author. Push a button, generate an app. But — just because you can, should you?
@@ -365,6 +371,12 @@ export function MobileView() {
                 </div>
 
                 <div className="space-y-4">
+                    <div>
+                        <p className="text-[#ffd166] text-[10px] font-mono font-bold tracking-widest mb-1">? ISN'T &ldquo;ETHICAL VIBE CODING&rdquo; AN OXYMORON</p>
+                        <p className="text-white/70 text-[13px] leading-relaxed">
+                            Vibe coding is brain-<span className="text-[#00ff41]">off</span>: let the AI drive. Ethics is brain-<span className="text-[#00ff41]">on</span>: stop and think hard. This class is the experiment in marrying them — shipping fast while staying awake to the values your tech embeds, and the harms it may propagate.
+                        </p>
+                    </div>
                     <div>
                         <p className="text-[#ffd166] text-[10px] font-mono font-bold tracking-widest mb-1">? WHAT IS VIBE CODING</p>
                         <p className="text-white/70 text-[13px] leading-relaxed">
