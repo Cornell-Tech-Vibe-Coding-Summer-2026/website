@@ -257,7 +257,7 @@ export const SUBMISSION_SETS = [
               finalDeck: 'https://drive.google.com/file/d/1TgneTSBwho1pKvYgrThEgyw-bZ-_SEaU/preview',
               report: 'https://vibe-coding-ethics.tech.cornell.edu/instructions.html?file=https%3A%2F%2Fcornell-tech-vibe-coding-summer-2026.github.io%2Ffinal-project-templated-productivity%2Fproject-report.md&title=JSTNA+%E2%80%94+project+report' },
             { id: 'security', team: "SelfShift", members: "Isa Offengenden · Om Ravula · Jason Chen",
-              blurb: "Deploying today — live at the showcase. · value: security",
+              blurb: "A browser extension that helps teens use social media more safely and mindfully — grounding check-ins, a future-self reflection, and a fake/unsafe-account finder. · value: security & wellbeing",
               url: 'https://cornell-tech-vibe-coding-summer-2026.github.io/final-project-templated-security/code_deliverable/',
               repo: 'https://github.com/Cornell-Tech-Vibe-Coding-Summer-2026/final-project-templated-security',
               finalDeck: 'https://drive.google.com/file/d/1JEBk3VDrXkEpSzc2E6Apnuzh-z6aWdM1/preview',
