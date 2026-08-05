@@ -48,10 +48,12 @@ export function SubmissionsBrowser() {
     const hasVideo = !!entry?.video
     const siteSrc = hasVideo ? ytEmbed(entry.video) : entry?.url
     const frameUrl = view === 'report' && entry?.report ? entry.report
+        : view === 'planning' && entry?.planningReport ? entry.planningReport
         : view === 'deck' && entry?.deck ? entry.deck
         : view === 'finalDeck' && entry?.finalDeck ? entry.finalDeck : siteSrc
     // Opening in a new tab should go to the real YouTube page, not the embed.
     const openHref = view === 'report' && entry?.report ? entry.report
+        : view === 'planning' && entry?.planningReport ? entry.planningReport
         : view === 'deck' && entry?.deck ? entry.deck
         : view === 'finalDeck' && entry?.finalDeck ? entry.finalDeck
         : (hasVideo ? entry.video : entry?.url)
@@ -122,11 +124,12 @@ export function SubmissionsBrowser() {
                         >
                             ↺ {view === 'report' ? 'Site' : 'Back'}
                         </button>
+                        {/* Deliverables in checkpoint order: Verify → Plan → Build → Present */}
                         {entry.deck && (
                             <button
                                 onClick={() => setView((v) => (v === 'deck' ? 'site' : 'deck'))}
                                 onPointerDown={(e) => e.stopPropagation()}
-                                title="This team's user-research deck (Tuesday's value verification)"
+                                title="Verify (Tue) — value-verification research deck"
                                 className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border transition-colors ${
                                     view === 'deck'
                                         ? 'bg-[#00ff41]/15 text-[#00ff41] border-[#00ff41]/40'
@@ -136,25 +139,25 @@ export function SubmissionsBrowser() {
                                 Research
                             </button>
                         )}
-                        {entry.finalDeck && (
+                        {entry.planningReport && (
                             <button
-                                onClick={() => setView((v) => (v === 'finalDeck' ? 'site' : 'finalDeck'))}
+                                onClick={() => setView((v) => (v === 'planning' ? 'site' : 'planning'))}
                                 onPointerDown={(e) => e.stopPropagation()}
-                                title="This team's final presentation deck"
+                                title="Plan (Wed) — planning report: persona, storyboard, scope"
                                 className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border transition-colors ${
-                                    view === 'finalDeck'
+                                    view === 'planning'
                                         ? 'bg-[#00ff41]/15 text-[#00ff41] border-[#00ff41]/40'
                                         : 'bg-white/5 text-white/70 border-white/15 hover:bg-white/10'
                                 }`}
                             >
-                                Final deck
+                                Planning
                             </button>
                         )}
                         {entry.report && (
                             <button
                                 onClick={() => setView((v) => (v === 'report' ? 'site' : 'report'))}
                                 onPointerDown={(e) => e.stopPropagation()}
-                                title="Read this submission's vibe report"
+                                title="Build (Thu) — project report: what they built + testing"
                                 className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border transition-colors ${
                                     view === 'report'
                                         ? 'bg-[#00ff41]/15 text-[#00ff41] border-[#00ff41]/40'
@@ -162,6 +165,20 @@ export function SubmissionsBrowser() {
                                 }`}
                             >
                                 Report
+                            </button>
+                        )}
+                        {entry.finalDeck && (
+                            <button
+                                onClick={() => setView((v) => (v === 'finalDeck' ? 'site' : 'finalDeck'))}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                title="Present (Thu) — final showcase deck"
+                                className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border transition-colors ${
+                                    view === 'finalDeck'
+                                        ? 'bg-[#00ff41]/15 text-[#00ff41] border-[#00ff41]/40'
+                                        : 'bg-white/5 text-white/70 border-white/15 hover:bg-white/10'
+                                }`}
+                            >
+                                Final deck
                             </button>
                         )}
                         <a
