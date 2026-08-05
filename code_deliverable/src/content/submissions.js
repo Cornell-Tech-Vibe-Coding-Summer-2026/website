@@ -248,6 +248,7 @@ export const SUBMISSION_SETS = [
               blurb: "Track medications, health, and appointments on your own terms — sharing only what you choose with family. · value: care & wellbeing",
               url: 'https://cornell-tech-vibe-coding-summer-2026.github.io/final-project-templated-care-wellbeing/code_deliverable/',
               repo: 'https://github.com/Cornell-Tech-Vibe-Coding-Summer-2026/final-project-templated-care-wellbeing',
+              pitch: 'https://www.youtube.com/watch?v=axyv_pXki0M',
               deck: 'https://docs.google.com/presentation/d/1IGt0Swp9Jab8dfQ55K_Sd0ZVqQqBg-KQ/preview',
               finalDeck: 'https://docs.google.com/presentation/d/1E1nk_Vn53lY8r0aauHv4ZWXFEoiFwz_i5kcvkllK4rY/preview',
               planningReport: 'https://vibe-coding-ethics.tech.cornell.edu/instructions.html?file=https%3A%2F%2Fcornell-tech-vibe-coding-summer-2026.github.io%2Ffinal-project-templated-care-wellbeing%2Fplanning-report.md&title=Pace+%E2%80%94+planning+report',
