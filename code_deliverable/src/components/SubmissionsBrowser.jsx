@@ -6,6 +6,9 @@ import { SUBMISSION_SETS, hasEntries } from '../content/submissions'
 // we embed the player and the open link points at YouTube.
 const ytId = (u = '') => (u.match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/)([\w-]{11})/) || [])[1]
 const ytEmbed = (u) => { const id = ytId(u); return id ? `https://www.youtube.com/embed/${id}` : u }
+// A pitch video may be YouTube or a Google Drive file — embed either as a player.
+const drivePreview = (u = '') => { const m = (u || '').match(/\/file\/d\/([\w-]+)/); return m ? `https://drive.google.com/file/d/${m[1]}/preview` : u }
+const pitchEmbed = (u = '') => (ytId(u) ? ytEmbed(u) : drivePreview(u))
 
 // Student submissions browser: used inside the 3D monitor's SUBMISSIONS window
 // and the lite-mode Submissions modal. Same three-band shape as SlidesBrowser —
@@ -49,11 +52,13 @@ export function SubmissionsBrowser() {
     const siteSrc = hasVideo ? ytEmbed(entry.video) : entry?.url
     const frameUrl = view === 'report' && entry?.report ? entry.report
         : view === 'planning' && entry?.planningReport ? entry.planningReport
+        : view === 'pitch' && entry?.pitch ? pitchEmbed(entry.pitch)
         : view === 'deck' && entry?.deck ? entry.deck
         : view === 'finalDeck' && entry?.finalDeck ? entry.finalDeck : siteSrc
     // Opening in a new tab should go to the real YouTube page, not the embed.
     const openHref = view === 'report' && entry?.report ? entry.report
         : view === 'planning' && entry?.planningReport ? entry.planningReport
+        : view === 'pitch' && entry?.pitch ? entry.pitch
         : view === 'deck' && entry?.deck ? entry.deck
         : view === 'finalDeck' && entry?.finalDeck ? entry.finalDeck
         : (hasVideo ? entry.video : entry?.url)
@@ -165,6 +170,20 @@ export function SubmissionsBrowser() {
                                 }`}
                             >
                                 Report
+                            </button>
+                        )}
+                        {entry.pitch && (
+                            <button
+                                onClick={() => setView((v) => (v === 'pitch' ? 'site' : 'pitch'))}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                title="Present (Thu) — the team's pitch video"
+                                className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider border transition-colors ${
+                                    view === 'pitch'
+                                        ? 'bg-[#00ff41]/15 text-[#00ff41] border-[#00ff41]/40'
+                                        : 'bg-white/5 text-white/70 border-white/15 hover:bg-white/10'
+                                }`}
+                            >
+                                Pitch
                             </button>
                         )}
                         {entry.finalDeck && (
